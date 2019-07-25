@@ -3,8 +3,16 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+//全局引入axios
 import axios from 'axios'
 Vue.prototype.$axios= axios
+//全局引入公共header和footer
+import commonHeader from '@/commons/header'
+Vue.component("commonHeader", commonHeader)
+import commonFooter from '@/commons/footer'
+Vue.component("commonFooter", commonFooter)
+
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
