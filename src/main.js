@@ -11,7 +11,8 @@ import commonHeader from '@/commons/header'
 Vue.component("commonHeader", commonHeader)
 import commonFooter from '@/commons/footer'
 Vue.component("commonFooter", commonFooter)
-
+//全局引入iconfont
+import './assets/iconfont/iconfont.css'
 
 Vue.config.productionTip = false
 

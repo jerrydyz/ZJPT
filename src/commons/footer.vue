@@ -10,7 +10,7 @@
         >豫ICP备0506172869号-2</a>
       </div>
     </div>
-    <div class="btn-top" style="top: 540px;"></div>
+    <router-link to="/personal" class="btn-top"></router-link>
   </div>
 </template>
 
@@ -42,5 +42,15 @@ export default {
     padding-top: 20px;
     a{color: #898989;}
   }
+  .btn-top {
+    width: 56px;
+    height: 56px;
+    position: fixed;
+    right: 0;
+    top: 400px;
+    background-image: url(/static/images/index/btn-top.png);
+    cursor: pointer;
+    z-index: 2;
+}
 }
 </style>
