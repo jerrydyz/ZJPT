@@ -3,14 +3,18 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+
 //全局引入axios
 import axios from 'axios'
+//axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 Vue.prototype.$axios= axios
 //全局引入公共header和footer
-import commonHeader from '@/commons/header'
-Vue.component("commonHeader", commonHeader)
-import commonFooter from '@/commons/footer'
-Vue.component("commonFooter", commonFooter)
+// import commonHeader from '@/commons/header'
+// Vue.component("commonHeader", commonHeader)
+// import commonFooter from '@/commons/footer'
+// Vue.component("commonFooter", commonFooter)
+
+
 //全局引入iconfont
 import './assets/iconfont/iconfont.css'
 

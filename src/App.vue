@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <commonHeader></commonHeader>
+    <router-view name='comheader'></router-view>
     <router-view/>
-    <commonFooter></commonFooter>
+    <router-view name='comfooter'></router-view>
   </div>
 </template>
 

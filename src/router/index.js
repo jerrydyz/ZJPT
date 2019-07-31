@@ -8,9 +8,13 @@ import courses from '@/pages/courses'
 import helps from '@/pages/helps'
 import aboutus from '@/pages/aboutus'
 import personal from '@/pages/personal'
+import login from '@/pages/login'
+import findpw from '@/pages/findpw'
+import register from '@/pages/register'
 
 import HelloWorld from '@/components/HelloWorld'
 import newsDetails from '@/commons/newsDetails'
+import courseDetails from '@/commons/courseDetails'
 
 import basicinfo from '@/components/basicinfo'
 import pxcourses from '@/components/pxcourses'
@@ -20,7 +24,8 @@ import testrecord from '@/components/testrecord'
 import filerecord from '@/components/filerecord'
 import allorders from '@/components/allorders'
 
-
+import commonHeader from '@/commons/header'
+import commonFooter from '@/commons/footer'
 
 Vue.use(Router)
 
@@ -32,8 +37,119 @@ export default new Router({
       component: HelloWorld
     },
     {
+      path: '/index',
+      name: 'index',
+      components: {
+        comheader:commonHeader,
+        default:index,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      components: {
+        default:login,
+      }
+    },
+    {
+      path: '/findpw',
+      name: 'findpw',
+      components: {
+        comheader:commonHeader,
+        default:findpw,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      components: {
+        comheader:commonHeader,
+        default:register,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/works',
+      name: 'works',
+      components: {
+        comheader:commonHeader,
+        default:works,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/news',
+      name: 'news',
+      components: {
+        comheader:commonHeader,
+        default:news,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/laws',
+      name: 'laws',
+      components: {
+        comheader:commonHeader,
+        default:laws,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/courses',
+      name: 'courses',
+      components: {
+        comheader:commonHeader,
+        default:courses,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/helps',
+      name: 'helps',
+      components: {
+        comheader:commonHeader,
+        default:helps,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/aboutus',
+      name: 'aboutus',
+      components: {
+        comheader:commonHeader,
+        default:aboutus,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/newsDetails/:newsId',
+      name: 'newsDetails',
+      components: {
+        comheader:commonHeader,
+        default:newsDetails,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/courseDetails/:courseId',
+      name: 'courseDetails',
+      components: {
+        comheader:commonHeader,
+        default:courseDetails,
+        comfooter:commonFooter,
+      }
+    },
+    {
       path: '/personal',
-      component: personal,
+      components: {
+        comheader:commonHeader,
+        default:personal,
+        comfooter:commonFooter,
+      },
+      redirect:'/personal/basicinfo',
       children:[
         {path:'pxcourses',name:'pxcourses',component:pxcourses},
         {path:'basicinfo',name:'basicinfo',component:basicinfo},
@@ -43,46 +159,6 @@ export default new Router({
         {path:'filerecord',name:'filerecord',component:filerecord},
         {path:'allorders',name:'allorders',component:allorders},
       ]
-    },
-    {
-      path: '/index',
-      name: 'index',
-      component: index
-    },
-    {
-      path: '/works',
-      name: 'works',
-      component: works
-    },
-    {
-      path: '/news',
-      name: 'news',
-      component: news
-    },
-    {
-      path: '/laws',
-      name: 'laws',
-      component: laws
-    },
-    {
-      path: '/courses',
-      name: 'courses',
-      component: courses
-    },
-    {
-      path: '/helps',
-      name: 'helps',
-      component: helps
-    },
-    {
-      path: '/aboutus',
-      name: 'aboutus',
-      component: aboutus
-    },
-    {
-      path: '/newsDetails/:newsId',
-      name: 'newsDetails',
-      component: newsDetails
     },
     
   ]

@@ -3,11 +3,8 @@
     <div class="swiper-news-login">
       <swiper :options="swiperOption" ref="mySwiper" class="myswiper">
         <!-- slides -->
-        <swiper-slide class="slider"><img src="/static/images/index/index-banner1.jpg"></swiper-slide>
-        <swiper-slide class="slider"><img src="/static/images/index/index-banner2.jpg"></swiper-slide>
-        <swiper-slide class="slider"><img src="/static/images/index/index-banner3.jpg"></swiper-slide>
-        <swiper-slide class="slider"><img src="/static/images/index/index-banner4.jpg"></swiper-slide>
-        <swiper-slide class="slider"><img src="/static/images/index/index-banner5.jpg"></swiper-slide>
+        <swiper-slide v-for="(item,index) in swiperdata" :key="index" class="slider"><img :src="item.img_url"></swiper-slide>
+        
         <!-- Optional controls -->
         <div class="swiper-pagination"  slot="pagination"></div>
         <!-- <div class="swiper-button-prev" slot="button-prev"></div>
@@ -17,94 +14,50 @@
       <div class="news-box">
         <div class="news-title-box">
           <div class="news-title-top">
-              <div class="news-title">新闻资讯</div>
+              <div class="news-title">{{newsjson.title}}</div>
               <router-link to="/news" class="more-news">更多>></router-link>
           </div>
           <div class="news-title-bottom">
               <div class="redsqure"></div>
-              <div class="english-title">NEWS INFORMATION</div>
+              <div class="english-title">{{newsjson.englishTitle}}</div>
               <div class="ellipsis"></div>
           </div>
         </div>
-        <div class="news-content-box" data-id="70">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/70.html" target="_blank">
-                        <div class="item-title">未来教师的角色与素养</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="69">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/69.html" target="_blank">
-                        <div class="item-title">一图看懂《中国教育现代化2035》</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="68">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/68.html" target="_blank">
-                        <div class="item-title">学习贯彻习近平总书记全国教育大会重要讲话精神心得体会</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="67">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/67.html" target="_blank">
-                        <div class="item-title">全面加强师德师风建设</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="66">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/66.html" target="_blank">
-                        <div class="item-title">吹响全面提高义务教育质量号角</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="65">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/65.html" target="_blank">
-                        <div class="item-title">深化教育教学改革全面提高义务教育质量</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="64">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/64.html" target="_blank">
-                        <div class="item-title">中共中央 国务院关于深化教育教学改革全面提高义务教育质量...</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div><div class="news-content-box" data-id="63">
-                <div class="item">
-                    <a href="http://ceshi2.jxjyedu.club/news/63.html" target="_blank">
-                        <div class="item-title">深化教育教学改革 提升义务教育质量</div>
-                    </a>
-                    <div class="item-time">2019-07-09</div>
-                </div>
-            </div>
+        <div class="news-content-box" v-for="item in newsjson.list" :key="item.id">
+          <div class="item">
+            <router-link :to="'/newsDetails/' + item.id" >
+              <div class="item-title">{{item.title}}</div>
+            </router-link>
+            <div class="item-time">{{item.time.split(" ")[0]}}</div>
+          </div>
+        </div>
       </div>
-      <div class="login-box">
+      <div class="login-box" v-show="login1==0">
           <div class="login-title-box">
               <div class="login-title"></div>
           </div>
-          <form id="ajax_login_form" method="POST">
-              <div class="info-box">
-                  <input type="text" placeholder="请输入身份证号" maxlength="18" class="register_content_input" v-model= "LUserPhone"><br>
-                  <!-- <span class="tishixiaoxi disappear">请输入手机号。</span> -->
-                  <input type="password" placeholder="请输入密码" class="register_content_input input-pw" v-model="LUserPsd"><br>
-                  <!-- <span class="tishixiaoxi disappear">请输入密码。</span> -->
-                  <input type="text" placeholder="请输入验证码" maxlength="4" class="yanzhengma_input" @blur="checkLpicma" v-model="picLyanzhengma">
-                  <input type="button" id="code" @click="createCode"  class="verification1" v-model="checkCode"/> <br>
-                  <!-- <span class="tishixiaoxi disappear">请输入验证码。</span> -->
-                  <a class="user_login" @click="Login">登录</a>
-
-                  <div class="btns-box">
-                      <router-link to="" class="find-pw">找回密码</router-link>
-                      <router-link to="" class="btn-regin">注册账号</router-link>
-                  </div>
-              </div>
-          </form>
+            <div class="info-box">
+                <input type="text" placeholder="请输入身份证号" maxlength="18" class="register_content_input" v-model= "idcard"><br>
+                <!-- <span class="tishixiaoxi disappear">请输入手机号。</span> -->
+                <input type="password" placeholder="请输入密码" class="register_content_input input-pw" v-model="UserPsd"><br>
+                <!-- <span class="tishixiaoxi disappear">请输入密码。</span> -->
+                <input type="text" placeholder="请输入验证码" maxlength="4" class="yanzhengma_input" @blur="checkLpicma" v-model="picLyanzhengma">
+                <input type="button" id="code" @click="createCode"  class="verification1" v-model="checkCode"/> <br>
+                <!-- <span class="tishixiaoxi disappear">请输入验证码。</span> -->
+                <a class="user_login" @click="Login">登录</a>
+                <div class="btns-box">
+                    <router-link to="/findpw" class="find-pw">找回密码</router-link>
+                    <router-link to="/register" class="btn-regin">注册账号</router-link>
+                </div>
+            </div>
+      </div>
+      <div class="login-index-success" v-show="login1==1">
+          <img class="user-image" src="/static/images/personal/man.png" v-show="sex==1" />
+          <img class="user-image" src="/static/images/personal/women.png" v-show="sex==0"/>
+          <div class="user-name">{{name}}</div>
+          <div class="title"> </div>
+          <div class="btn-personal"><router-link to="/personal">个人中心</router-link></div>
+          <div class="btn-login"><span @click="logout">退出登陆</span></div>
       </div>
     </div>
     <router-link to="" class="procedure-box"></router-link>
@@ -118,53 +71,51 @@
           <div class="year-choose">
               <div class="year-title">培训年度:</div>
               <ul class="year">
-                  <li class="on">全部</li>
-                  <li>2019</li>
+                  <li :class="{on:yeartabState==''}" @click="courseYear()">全部</li>
+                  <li :class="{on:yeartabState==item}" v-for="(item,index) in kecheng_year" :key="index" @click="courseYear(item)">{{item}}</li>
               </ul>
           </div>
           <div class="course-choose">
               <div class="course-title">课程类型:</div>
               <ul class="course">
-                  <li class="on">全部</li>
-                  <li>教育类</li>
+                  <li :class="{on:typetabState==''}" @click="courseType()">全部</li>
+                  <li :class="{on:typetabState==item.id}" v-for="(item,index) in kecheng_type" :key="index" @click="courseType(item.id)">{{item.name}}</li>
               </ul>
           </div>
           <div class="kinds-choose">
               <div class="kinds-title">课程分类:</div>
               <ul class="kinds">
-                  <li class="on">全部</li>
-                  <li >高等教师</li>
-                  <li >中小学教师</li>
-                  <li >中职教师</li>
-                  <li >学前教育教师</li>
+                  <li :class="{on:categorytabState==''}" @click="courseCategory()">全部</li>
+                  <li :class="{on:categorytabState==item.id}" v-for="(item,index) in kecheng_category" :key="index" @click="courseCategory(item.id)">{{item.name}}</li>
               </ul>
           </div>
     </div>
     <div class="course-box">
-        <div class="course-item">
-            <div class="item-img"><img src="http://ceshi2.jxjyedu.club/data/upload/2019/0718/10/5d2fe0addbe1b_540_338_540_338.png"></div>
-            <p class="item-name">新时代教师能力素质发展</p>
+        <router-link :to="'/courseDetails/' + item.id" v-for="item in courseslist" :key="item.id" class="course-item" >
+            <div class="item-img"><img :src="item.img_url"></div>
+            <p class="item-name">{{item.title}}</p>
             <div class="item-other">
-                <div class="item-time">30学时</div>
-                <div class="item-teacher">主讲：<span class="teacher-name">马陆亭</span></div>
+                <div class="item-time">{{item.kecheng_jie_num}}学时</div>
+                <div class="item-teacher">主讲：<span class="teacher-name">{{item.jiangshi.name}}</span></div>
             </div>  
-        </div>   
+        </router-link>   
     </div>
     <div class="friend-link-box wrap">
         <div class="friend-link-title"></div>
         <div class="links-box">
-            <a class="item-link" href="https://www.hnzjgl.gov.cn/" target="_blank"><img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/2019/images/index/10.png"></a>
-            <a class="item-link" href="http://www.hnjxedu.org.cn/" target="_blank"><img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/2019/images/index/1.png"></a>
-            <a href="http://www.haedu.gov.cn/" target="_blank" class="item-link"><img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/2019/images/index/6.png"></a>
+            <a v-for="(item,index) in linkdata" :key="index" class="item-link" :href="item.href" target="_blank"><img :src="item.img_url"></a>
         </div>
     </div>
-
+    <div class="pop" v-show="popShow">
+      <img src="/static/images/index/floatbox.png">
+      <span class="btn-close" @click="closePop">X</span>
+  </div>
   </div>
 </template>
 
 <script>
 import $jquery from 'jquery'
-
+import qs from 'qs'
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import indexnews from "@/components/indexnews.vue";
@@ -177,6 +128,13 @@ export default {
   },
   data () {
     return {
+      apiurl:"",
+      newsjson:{
+          title:'新闻咨询',
+          englishTitle:'NEWS INFORMATION',
+          path:'/news',
+          list:''
+      },
       lawsjson:{
           title:'政策法规',
           englishTitle:'POLICIES REGULATIONS',
@@ -203,28 +161,195 @@ export default {
             clickable: true,
           },
       },
-      LUserPhone:'',
-      LUserPsd:'',
+      idcard:'',
+      UserPsd:'',
       picLyanzhengma:'',
-      checkCode:''
+      checkCode:'',
+      //首页弹窗状态值  true 开启  false 关闭
+      popShow:'true',
+      //课程列表
+      courseslist:'',
+      //轮播图
+      swiperdata:'',
+      //友情链接
+      linkdata:'',
+      //课程年份
+      kecheng_year:'',
+      //课程类型
+      kecheng_type:'',
+      //课程分类
+      kecheng_category:'',
+      //课程年份参数
+      yearid:'',
+      //课程类型参数
+      typeid:'',
+      //课程分类参数
+      categoryid:'',
+      //yeartabState
+      yeartabState:'',
+      //yeartabState
+      typetabState:'',
+      //yeartabState
+      categorytabState:'',
+      //登陆状态
+      login1:localStorage.getItem("login1"),
+      //根据性别显示图片
+      sex:localStorage.getItem("sex"),
+      //name
+      name:localStorage.getItem("name"),
     }
   },
   created(){
     this.createCode();
+    localStorage.setItem("login1","0");
+    localStorage.setItem("sex","1");
+    localStorage.setItem("name","XXX");
   },
 
   mounted() {
-    console.log($jquery(".find-pw").html());
-    this.$axios.post("https://www.easy-mock.com/mock/5d303349a6ecd97aa68d2ab7/example/test").then(response => {
-        console.log(response.data.data);
-        this.lawsjson.list=response.data.data;
-        this.worksjson.list=response.data.data;
-        this.helpsjson.list=response.data.data;
+    
+    let that = this
+    //轮播图
+    this.$axios({
+      method: 'get',
+      url: 'http://jixujiaoyu_api.songlongfei.club/lunbotu/get_list'
+    }).then(function (response) {
+      if(response.data.status=="ok"){
+        console.log("轮播图")
+        console.log(response.data)
+        that.swiperdata=response.data.data;
+      }else{
         
-      })
-      .catch(response => {
-        console.log(response);
+      }
+    });
+    //友情链接
+    this.$axios({
+      method: 'get',
+      url: 'http://jixujiaoyu_api.songlongfei.club/link/get_list'
+    }).then(function (response) {
+      if(response.data.status=="ok"){
+        console.log("友情链接")
+        console.log(response.data.data)
+        that.linkdata=response.data.data;
+      }else{
+        
+      }
+    });
+    //请求新闻news
+    let datanews={type_id:'1',page:'1',num:'7'}
+    this.$axios({
+      method: 'post',
+      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      data: qs.stringify(datanews) 
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("news")
+          that.newsjson.list=response.data.data.data
+          console.log(response.data.data.data)
+        }else{
+          
+        }
       });
+      //请求政策法规laws
+    let datalaws={type_id:'2',page:'1',num:'7'}
+    this.$axios({
+      method: 'post',
+      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      data: qs.stringify(datalaws) 
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("laws")
+          that.lawsjson.list=response.data.data.data
+          console.log(response.data.data.data)
+        }else{
+          
+        }
+      });
+      //请求工作动态works
+    let dataworks={type_id:'3',page:'1',num:'7'}
+    this.$axios({
+      method: 'post',
+      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      data: qs.stringify(dataworks) 
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("works")
+          that.worksjson.list=response.data.data.data
+          console.log(response.data.data.data)
+        }else{
+          
+        }
+      });
+      //请求帮助中心helps
+    let datahelps={type_id:'4',page:'1',num:'7'}
+    this.$axios({
+      method: 'post',
+      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      data: qs.stringify(datahelps) 
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("helps")
+          that.helpsjson.list=response.data.data.data
+          console.log(response.data.data.data)
+        }else{
+          
+        }
+      });
+    //获取课程年份 
+    this.$axios({
+      method: 'get',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_year',
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("课程年份")
+          console.log(response.data.data)
+          that.kecheng_year=response.data.data;
+        }else{
+          
+        }
+      });
+     //获取课程类型 
+    this.$axios({
+      method: 'get',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_type',
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("课程类型")
+          console.log(response.data.data)
+          that.kecheng_type=response.data.data;
+        }else{
+          
+        }
+      });
+      //获取课程分类 
+    this.$axios({
+      method: 'get',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_category',
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("课程分类")
+          console.log(response.data.data)
+          that.kecheng_category=response.data.data;
+        }else{
+          
+        }
+      });
+     //获取课程列表 
+    let datacourse={year:'2019', type_id:'',category_id:''}
+    this.$axios({
+      method: 'post',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+      data: qs.stringify(datacourse) 
+      }).then(function (response) {
+        if(response.data.status=="ok"){
+          console.log("课程列表")
+          console.log(response.data.data.data)
+          that.courseslist=response.data.data.data;
+        }else{
+          
+        }
+      });
+      
   },
   methods:{
       // 图片验证码
@@ -252,18 +377,84 @@ export default {
               return true;
           } 
       },
+      //用户登录 
       Login(){
-          if(this.checkLpicma() == true){
-              this.$axios.post("https://www.easy-mock.com/mock/5d303349a6ecd97aa68d2ab7/example/test").then(response => {
-                console.log(response.data.data);
-                
-                
-              })
-              .catch(response => {
-                console.log(response);
-              });
-          }
-      } 
+        let that=this;
+        if(this.idcard==''){
+          alert("身份证号不能为空")
+        }else if(!this.idcard.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)){
+          alert("请输入正确的身份证号")
+        }else if(this.UserPsd==''){
+            alert("密码不能为空") 
+        }else if(this.checkLpicma() == true){
+          let userinfo={id_card:this.idcard, password:this.UserPsd}
+          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
+            console.log(response.data);
+            if(response.data.status=='ok'){
+              localStorage.setItem("uid", response.data.data.uid);
+              localStorage.setItem("token", response.data.data.token);
+              localStorage.setItem("login1", "1");
+              this.login1=1;
+              localStorage.setItem("sex", response.data.data.sex);
+              this.sex=response.data.data.sex;
+              localStorage.setItem("name", response.data.data.name);
+              this.name=response.data.data.name;
+              // localStorage.setItem("mobile", response.data.data.mobile);
+              // localStorage.setItem("id_card", response.data.data.id_card);
+              
+            }
+            
+          })
+          .catch(response => {
+            console.log(response);
+          });
+        }
+      },
+      //用户退出 
+      logout(){
+        localStorage.setItem("login1", "0");
+        this.login1=0;
+      },
+      closePop(){
+        this.popShow=false;
+      },
+      courseYear(id) {
+        this.yeartabState=id;
+        this.yearid=id;
+        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+      }, 
+      courseType(id){
+        this.typetabState=id;
+        this.typeid=id;
+        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+      },  
+      courseCategory(id){
+        this.categorytabState=id;
+        this.categoryid=id;
+        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+      },
+
+      //点击标签选项后获取课程列表 
+      getCourseList(yearid,typeid,categoryid){
+        let that = this;
+        let datacourse={year:yearid, type_id:typeid,category_id:categoryid,page:'1',num:'10'}
+        this.$axios({
+          method: 'post',
+          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+          data: qs.stringify(datacourse) 
+          }).then(function (response) {
+            if(response.data.status=="ok"){
+              console.log("课程列表")
+              console.log(response.data.data.data)
+              that.courseslist=response.data.data.data;
+            }else{
+              
+            }
+          });
+      },
+  
+
+
   },
 }
 </script>
@@ -358,7 +549,7 @@ export default {
              }
         }
         .course-box{display: flex;flex-wrap:wrap;justify-content: flex-start;
-          .course-item{width: 225px;height: 225px;margin-top: 20px;margin-left: 15px;
+          .course-item{width: 225px;height: 225px;margin-top: 20px;margin-left: 15px;display:block;
             &:hover{box-shadow: 0 0 10px #c1c1c1;cursor: pointer;}
             &:nth-child(5n+1){margin-left: 0;}
             .item-img{width: 225px;height: 126px;
@@ -385,4 +576,15 @@ export default {
 .yanzhengma_input{width: 130px;height: 40px;font-size: 14px;box-sizing: border-box;padding-left: 15px;border-radius: 5px;border: 1px solid #c1c1c1;display: inline-block;vertical-align: middle;margin-top: 12px;}
 .verification1{width: 100px;height: 40px;font-size: 18px;letter-spacing:3px;color: #c60404;background: #f2f2f5;border-radius: 5px;border: 1px solid #c1c1c1;margin-left: 20px;display: inline-block;vertical-align: middle;margin-top: 12px;cursor: pointer;}
 .user_login{display: block;width: 252px;height: 48px;font-size: 18px;text-align: center;line-height: 50px;color: #fff;background-color: #c60404;border-radius: 5px;margin-top: 12px;cursor:pointer;}
+.pop{width: 172px;position: fixed;right: 0;top: 275px;z-index: 100;}
+.pop .btn-close{ width: 22px; height: 22px;line-height: 22px; font-size: 14px; margin: 0 auto; cursor: pointer;text-align: center; color: #c1c1c1; border-radius: 22px;border: 1px solid #c1c1c1;display: block;}
+
+.login-index-success{ width: 292px;height: 336px;position: relative;float: left;background-color: #fff;padding-top: 30px;border: 1px solid #c6c6c6;box-sizing: border-box;}
+.login-index-success .user-image{width: 90px;height: 90px;border-radius: 90px;border:1px solid #1379c4;margin: 0 auto;background-size: 100% 100%;display: block;}
+.login-index-success .user-name{width: 240px;height: 20px;font-size: 16px;margin: 10px auto;text-align: center;}
+.login-index-success .title{width: 240px;height: 30px;font-size: 14px;margin: 10px auto;text-align: center;}
+.login-index-success .btn-personal{width: 240px;height: 45px;background-color: #c60406;margin: 15px auto 0;cursor: pointer;}
+.login-index-success .btn-login{width: 240px;height: 45px;background-color: #c60406;margin: 15px auto 0;cursor: pointer;}
+.login-index-success .btn-personal a {width: 100%;height: 100%; color:#fff;text-align: center;line-height: 45px;display: block;font-size: 12px;}
+.login-index-success .btn-login span{width: 100%;height: 100%; color:#fff;text-align: center;line-height: 45px;display: block;font-size: 12px;}
 </style>
