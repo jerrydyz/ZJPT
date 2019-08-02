@@ -38,12 +38,9 @@
           </div>
             <div class="info-box">
                 <input type="text" placeholder="请输入身份证号" maxlength="18" class="register_content_input" v-model= "idcard"><br>
-                <!-- <span class="tishixiaoxi disappear">请输入手机号。</span> -->
                 <input type="password" placeholder="请输入密码" class="register_content_input input-pw" v-model="UserPsd"><br>
-                <!-- <span class="tishixiaoxi disappear">请输入密码。</span> -->
                 <input type="text" placeholder="请输入验证码" maxlength="4" class="yanzhengma_input" @blur="checkLpicma" v-model="picLyanzhengma">
                 <input type="button" id="code" @click="createCode"  class="verification1" v-model="checkCode"/> <br>
-                <!-- <span class="tishixiaoxi disappear">请输入验证码。</span> -->
                 <a class="user_login" @click="Login">登录</a>
                 <div class="btns-box">
                     <router-link to="/findpw" class="find-pw">找回密码</router-link>
@@ -239,7 +236,7 @@ export default {
     let datanews={type_id:'1',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
       data: qs.stringify(datanews) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -254,7 +251,7 @@ export default {
     let datalaws={type_id:'2',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
       data: qs.stringify(datalaws) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -269,7 +266,7 @@ export default {
     let dataworks={type_id:'3',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
       data: qs.stringify(dataworks) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -284,7 +281,7 @@ export default {
     let datahelps={type_id:'4',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/newspc/get_news_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
       data: qs.stringify(datahelps) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -419,19 +416,34 @@ export default {
         this.popShow=false;
       },
       courseYear(id) {
-        this.yeartabState=id;
-        this.yearid=id;
-        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        if(id){
+          this.yeartabState=id;
+          this.yearid=id;
+          this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        }else{
+          this.yeartabState='';
+        }
+        
       }, 
       courseType(id){
-        this.typetabState=id;
-        this.typeid=id;
-        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        if(id){
+          this.typetabState=id;
+          this.typeid=id;
+          this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        }else{
+          this.typetabState='';
+        }
+        
       },  
       courseCategory(id){
-        this.categorytabState=id;
-        this.categoryid=id;
-        this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        if(id){
+          this.categorytabState=id;
+          this.categoryid=id;
+          this.getCourseList(this.yearid,this.typeid,this.categoryid);
+        }else{
+          this.categorytabState='';
+        }
+        
       },
 
       //点击标签选项后获取课程列表 

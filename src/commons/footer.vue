@@ -10,7 +10,7 @@
         >豫ICP备0506172869号-2</a>
       </div>
     </div>
-    <router-link to="/personal" class="btn-top"></router-link>
+    <span class="btn-top" @click="toPersonal"></span>
   </div>
 </template>
 
@@ -21,6 +21,16 @@ export default {
     return {
       msg: "footer"
     };
+  },
+  methods:{
+    toPersonal:function(){
+      if(localStorage.getItem("login1")==1){
+        this.$router.push({ path: '/personal' })
+      }else{
+        alert("您还未登陆");
+      }
+        
+    },
   }
 };
 </script>
