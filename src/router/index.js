@@ -27,6 +27,7 @@ import allorders from '@/components/allorders'
 import commonHeader from '@/commons/header'
 import commonFooter from '@/commons/footer'
 
+
 Vue.use(Router)
 
 export default new Router({

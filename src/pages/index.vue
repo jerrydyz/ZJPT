@@ -4,7 +4,6 @@
       <swiper :options="swiperOption" ref="mySwiper" class="myswiper">
         <!-- slides -->
         <swiper-slide v-for="(item,index) in swiperdata" :key="index" class="slider"><img :src="item.img_url"></swiper-slide>
-        
         <!-- Optional controls -->
         <div class="swiper-pagination"  slot="pagination"></div>
         <!-- <div class="swiper-button-prev" slot="button-prev"></div>
@@ -23,7 +22,8 @@
               <div class="ellipsis"></div>
           </div>
         </div>
-        <div class="news-content-box" v-for="item in newsjson.list" :key="item.id">
+        <loading v-show="newsjson.state==0"></loading>
+        <div class="news-content-box" v-for="item in newsjson.list" :key="item.id" v-show="newsjson.state==1">
           <div class="item">
             <router-link :to="'/newsDetails/' + item.id" >
               <div class="item-title">{{item.title}}</div>
@@ -130,24 +130,29 @@ export default {
           title:'新闻咨询',
           englishTitle:'NEWS INFORMATION',
           path:'/news',
-          list:''
+          state:0,
+          list:'',
+          
       },
       lawsjson:{
           title:'政策法规',
           englishTitle:'POLICIES REGULATIONS',
           path:'/laws',
+          state:0,
           list:''
       },
       worksjson:{
           title:'工作动态',
           englishTitle:'WORK DYNAMICS',
           path:'/works',
+          state:0,
           list:''
       },
       helpsjson:{
           title:'帮助中心',
           englishTitle:'HELP CENTER',
           path:'/helps',
+          state:0,
           list:''
       },
       swiperOption: {
@@ -194,6 +199,7 @@ export default {
       sex:localStorage.getItem("sex"),
       //name
       name:localStorage.getItem("name"),
+      loadingState:'',
     }
   },
   created(){
@@ -240,6 +246,7 @@ export default {
       data: qs.stringify(datanews) 
       }).then(function (response) {
         if(response.data.status=="ok"){
+          that.newsjson.state=1;
           console.log("news")
           that.newsjson.list=response.data.data.data
           console.log(response.data.data.data)

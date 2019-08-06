@@ -14,7 +14,9 @@ Vue.prototype.$axios= axios
 // import commonFooter from '@/commons/footer'
 // Vue.component("commonFooter", commonFooter)
 
-
+//全局引入loading
+import loading from '@/commons/loading'
+Vue.component("loading", loading)
 //全局引入iconfont
 import './assets/iconfont/iconfont.css'
 
