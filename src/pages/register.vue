@@ -814,6 +814,7 @@ export default {
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/reg",qs.stringify(userinfo)).then(response => {
               if(response.data.status=='ok'){
                   console.log(response.data);
+                  that.$router.push({ path: 'index' });
               }
           })
           .catch(response => {
