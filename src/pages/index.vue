@@ -194,19 +194,19 @@ export default {
       //yeartabState
       categorytabState:'',
       //登陆状态
-      login1:localStorage.getItem("login1"),
+      login1:sessionStorage.getItem("login1"),
       //根据性别显示图片
-      sex:localStorage.getItem("sex"),
+      sex:sessionStorage.getItem("sex"),
       //name
-      name:localStorage.getItem("name"),
+      name:sessionStorage.getItem("name"),
       loadingState:'',
     }
   },
   created(){
     this.createCode();
-    localStorage.setItem("login1","0");
-    localStorage.setItem("sex","1");
-    localStorage.setItem("name","XXX");
+    sessionStorage.setItem("login1","0");
+    sessionStorage.setItem("sex","1");
+    sessionStorage.setItem("name","XXX");
   },
 
   mounted() {
@@ -395,17 +395,17 @@ export default {
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
             console.log(response.data);
             if(response.data.status=='ok'){
-              localStorage.setItem("uid", response.data.data.uid);
-              localStorage.setItem("token", response.data.data.token);
-              localStorage.setItem("login1", "1");
+              sessionStorage.setItem("uid", response.data.data.uid);
+              sessionStorage.setItem("token", response.data.data.token);
+              sessionStorage.setItem("login1", "1");
               this.login1=1;
-              localStorage.setItem("sex", response.data.data.sex);
+              sessionStorage.setItem("sex", response.data.data.sex);
               this.sex=response.data.data.sex;
-              localStorage.setItem("name", response.data.data.name);
+              sessionStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
               that.$router.push({ path: 'my' });
-              // localStorage.setItem("mobile", response.data.data.mobile);
-              // localStorage.setItem("id_card", response.data.data.id_card);
+              // sessionStorage.setItem("mobile", response.data.data.mobile);
+              // sessionStorage.setItem("id_card", response.data.data.id_card);
               
             }
             
@@ -417,7 +417,7 @@ export default {
       },
       //用户退出 
       logout(){
-        localStorage.setItem("login1", "0");
+        sessionStorage.setItem("login1", "0");
         this.login1=0;
       },
       closePop(){
