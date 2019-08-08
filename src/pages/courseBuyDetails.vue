@@ -85,7 +85,7 @@
             <div class="class_order_bot">
               <div class="custom-box">
                 <label class="check">
-                  <input type="checkbox" id="check_xy" checked />我已阅读并同意
+                  <input type="checkbox" class="check_xy" checked />我已阅读并同意
                   <a target="_blank" href="http://ceshi2.jxjyedu.club/single/buy.html" style="color: #188eee;">《河南省继续教育在线公共服务平台购买条款》</a>
                 </label>
                   <div class="btn">
@@ -154,7 +154,7 @@ export default {
           this.selectstate=2;
       },
       useCardPay:function(){
-            let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId,code:this.xueshika}
+            let buycourse={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"),type:'2',type_id:this.buycourseId,code:this.xueshika}
             this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/xueshika",qs.stringify(buycourse))
             .then(response => {
                 if(response.data.status=="ok"){
@@ -174,7 +174,7 @@ export default {
           let that = this;
           if(this.selectstate==1){
               //alipay
-              let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId}
+              let buycourse={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"),type:'2',type_id:this.buycourseId}
                 this.$axios.get("http://jixujiaoyu_api.songlongfei.club/pay/alipay",qs.stringify(buycourse))
                 .then(response => {
                     if(response.data.status=="ok"){
@@ -192,7 +192,7 @@ export default {
 
           }else if(this.selectstate==2){
               //wxpay
-                let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId}
+                let buycourse={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"),type:'2',type_id:this.buycourseId}
                 this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/wxpay",qs.stringify(buycourse))
                 .then(response => {
                     if(response.data.status=="ok"){
@@ -263,6 +263,7 @@ export default {
 .class_order_pay dd span.selected{border-color:#06f;background:url(/static/images/coursedetails/slected.png) right bottom no-repeat;}
 .class_order_bot .custom-box{width:100%;display: inline-block;line-height: 80px;margin-top: 20px;border-top: solid 1px #ededed;}
 .class_order_bot .custom-box .check{float: left}
+.class_order_bot .custom-box .check .check_xy{width: 13px;height: 13px;border: 1px solid #ccc;}
 .class_order_bot .custom-box form{float: right;}
 .class_order_bot .info{line-height:32px;}
 .class_order_bot .item{color:#999;font-size:14px;}
@@ -276,8 +277,8 @@ export default {
 .pay_number{float: left;padding: 0 10px;width: 370px;height: 35px;margin-top: 10px;border: solid 1px #b6c7d6;border-radius: 4px;}
 .pay_use_draw{display: block;width: 70px;height: 35px;margin: 10px 0 0 10px;border: solid 1px #E82F24;border-radius: 4px;background-color: #E82F24;color: #fff;text-align: center;font-size: 14px;line-height: 35px;float: left;cursor: pointer;}
 .WXbox{position: absolute;left: 0;top:0;width: 100%;height: 100%;background-color: rgba(0,0,0,.5);}
-.WXbox .shang-box{width: 300px;height: 300px;padding: 10px;background-color: #fff; border-radius: 10px; position: fixed;z-index: 9999;left: 59%;top: 50%;margin-left: -280px;margin-top: -280px; border: 1px dotted #dedede;}
+.WXbox .shang-box{width: 300px;height: 315px;padding: 10px;background-color: #fff; border-radius: 10px; position: fixed;z-index: 9999;left: 59%;top: 50%;margin-left: -280px;margin-top: -280px; border: 1px dotted #dedede;}
 .WXbox .shang-close{float: right;cursor: pointer;}
-.WXbox .shang-payimg{width: 230px;height: 230px;padding: 10px;margin: 20px auto 0;border-radius: 3px;}
+.WXbox .shang-payimg{width: 250px;height: 250px;padding: 10px;margin: 20px auto 0;border-radius: 3px;}
 .WXbox .shang-info p{ color: #C3C3C3;text-align: center;font-size: 16px;}
 </style>
