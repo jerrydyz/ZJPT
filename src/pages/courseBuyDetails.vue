@@ -7,12 +7,7 @@
               <div class="info" style="width:50%;">
                 <div class="tit">课程详情</div>
                 <a class="kechenglink">
-                  <img
-                    src="http://ceshi2.jxjyedu.club/data/upload/2019/0718/17/5d303be57e46c_220_130_220_130.png"
-                    width="220"
-                    height="130"
-                    alt="国际商务与国际营销(43课时)"
-                  />
+                  <img :src="courseImg"  alt="国际商务与国际营销(43课时)"/>
                   <h3>国际商务与国际营销(43课时)</h3>
                 </a>
                 <div class="item">
@@ -74,8 +69,8 @@
               <div class="relCard">
                 <p>学时卡密码：</p>
                 <div style="height: 66px">
-                  <input name="card" type="text" class="pay_number" placeholder="请输入学时卡密码" value />
-                  <span class="pay_use_draw" @click="useCard">使用</span>
+                  <input name="card" type="text" class="pay_number" placeholder="请输入学时卡密码" v-model="xueshika" />
+                  <span class="pay_use_draw" @click="useCardPay">使用</span>
                 </div>
               </div>
             </div>
@@ -105,6 +100,15 @@
             </div>
           </div>
         </div>
+        <div class="WXbox" v-show="wxpaybox==1">
+            <div class="shang-box">
+                <span class="shang-close" @click="closeWXpay" title="关闭">关闭</span>
+                <div class="shang-payimg"><img :src="wxPayQRcode"></div>
+                <div class="shang-info">
+                    <p>打开微信扫一扫，即可进行扫码支付哦</p>
+                </div>
+            </div>
+        </div>
   </div>
 </template>
 
@@ -116,6 +120,10 @@ export default {
     return {
       selectstate: 1,
       buycourseId:'',
+      xueshika:'',
+      wxpaybox:0,
+      wxPayQRcode:'',
+      courseImg:'',
     };
   },
   mounted () {
@@ -125,9 +133,12 @@ export default {
     this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_info",qs.stringify(courseId))
       .then(response => {
         if(response.data.status=="ok"){
-          console.log(response.data.data);
-          
-          
+          console.log(response.data.data.img_url);
+          that.courseImg=response.data.data.img_url;
+        }else if(response.data.status=="error"){
+
+        }else if(response.data.status=="relogin"){
+
         }
         
       })
@@ -142,18 +153,68 @@ export default {
       wxpay:function(){
           this.selectstate=2;
       },
-      useCard:function(){
+      useCardPay:function(){
+            let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId,code:this.xueshika}
+            this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/xueshika",qs.stringify(buycourse))
+            .then(response => {
+                if(response.data.status=="ok"){
+                    console.log(response.data.data);
+                }else if(response.data.status=="error"){
 
+                }else if(response.data.status=="relogin"){
+
+                }
+                
+            })
+            .catch(response => {
+                console.log(response);
+            });
       },
       nowPay:function(){
+          let that = this;
           if(this.selectstate==1){
               //alipay
+              let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId}
+                this.$axios.get("http://jixujiaoyu_api.songlongfei.club/pay/alipay",qs.stringify(buycourse))
+                .then(response => {
+                    if(response.data.status=="ok"){
+                        console.log(response.data.data);
+                    }else if(response.data.status=="error"){
+
+                    }else if(response.data.status=="relogin"){
+
+                    }
+                    
+                })
+                .catch(response => {
+                    console.log(response);
+                });
 
           }else if(this.selectstate==2){
               //wxpay
+                let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId}
+                this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/wxpay",qs.stringify(buycourse))
+                .then(response => {
+                    if(response.data.status=="ok"){
+                        that.wxpaybox=1;
+                        that.wxPayQRcode=response.data.data.url;
+                        console.log(response.data.data.url);
 
+                    }else if(response.data.status=="error"){
+
+                    }else if(response.data.status=="relogin"){
+
+                    }
+                    
+                })
+                .catch(response => {
+                    console.log(response);
+                });
           }
       },
+      closeWXpay:function(){
+          this.wxpaybox=0;
+      }
   },
 };
 </script>
@@ -178,6 +239,7 @@ export default {
 .class_order_box .info .item span{margin-right:30px;}
 .class_order_box .info .item a{color:#06f;}
 .class_order_box .info .kechenglink{display: block;}
+.class_order_box .info .kechenglink img{float: left;margin-right: 20px;width: 120px;height: 80px;}
 .class_order_card{padding:20px 0;border-top:solid 1px #ededed;border-bottom:solid 1px #ededed;}
 .class_order_card dt{font-size:14px;line-height:40px;color: #333}
 .class_order_card dt span{cursor:pointer;}
@@ -213,5 +275,9 @@ export default {
 .class_order_bot .btn .now-pay{margin-top:12px;display:inline-block;width:140px;border-radius:2px;background-color:#E82F24;color:#fff;text-align:center;font-size:14px;line-height:40px;cursor: pointer;}
 .pay_number{float: left;padding: 0 10px;width: 370px;height: 35px;margin-top: 10px;border: solid 1px #b6c7d6;border-radius: 4px;}
 .pay_use_draw{display: block;width: 70px;height: 35px;margin: 10px 0 0 10px;border: solid 1px #E82F24;border-radius: 4px;background-color: #E82F24;color: #fff;text-align: center;font-size: 14px;line-height: 35px;float: left;cursor: pointer;}
-
+.WXbox{position: absolute;left: 0;top:0;width: 100%;height: 100%;background-color: rgba(0,0,0,.5);}
+.WXbox .shang-box{width: 300px;height: 300px;padding: 10px;background-color: #fff; border-radius: 10px; position: fixed;z-index: 9999;left: 59%;top: 50%;margin-left: -280px;margin-top: -280px; border: 1px dotted #dedede;}
+.WXbox .shang-close{float: right;cursor: pointer;}
+.WXbox .shang-payimg{width: 230px;height: 230px;padding: 10px;margin: 20px auto 0;border-radius: 3px;}
+.WXbox .shang-info p{ color: #C3C3C3;text-align: center;font-size: 16px;}
 </style>
