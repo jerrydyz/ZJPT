@@ -21,7 +21,7 @@
         <li>
           <span>常用邮箱 :</span>
           <span>
-            <input type="text" placeholder="请填写邮箱" />
+            <input type="email" placeholder="请填写邮箱" />
           </span>
         </li>
         <li>
@@ -31,29 +31,6 @@
               <option value>请选择性别</option>
               <option value>男</option>
               <option value>女</option>
-            </select>
-          </span>
-        </li>
-        <li>
-          <span>人员类别 :</span>
-          <span>
-            <select name id>
-              <option value>请输入专业分类</option>
-              <option value="1">大专</option>
-              <option value="2">本科</option>
-              <option value="3">硕士研究生</option>
-              <option value="4">博士研究生</option>
-            </select>
-          </span>
-        </li>
-        <li>
-          <span>专业分类 :</span>
-          <span>
-            <select name id>
-              <option value="1">大专</option>
-              <option value="2">本科</option>
-              <option value="3">硕士研究生</option>
-              <option value="4">博士研究生</option>
             </select>
           </span>
         </li>
@@ -126,12 +103,12 @@
             <input type="text" placeholder="请输入通信地址" />
           </span>
         </li>
-        <li>
+        <!-- <li>
           <span>邮政编码 :</span>
           <span>
             <input type="text" placeholder="请输入邮政编码" />
           </span>
-        </li>
+        </li> -->
         <li>
           <span>联系电话 :</span>
           <span>
@@ -176,6 +153,7 @@
 
 <script>
 import qs from 'qs'
+import { Message } from 'element-ui';
 export default {
   name: "changemsg",
   data() {
@@ -187,11 +165,20 @@ export default {
       newpwd:'',
       surpwd:'',
       uid:'',
+      name:'',
+      idcode:'',
+      phone:'',
+
     };
+  },
+  created (){
+      this.tab(sessionStorage.getItem('lin'))
+
   },
   methods: {
     tab(val) {
       this.line = val;
+      sessionStorage.setItem('lin',this.line)
       if(val=='a'){
           this.basedata=true
           this.changepwd=false
@@ -200,28 +187,38 @@ export default {
            this.basedata=false
       }
     },
-    savepw:function(){
+    savepw () {
       let that = this;
       if(this.oldpwd==''){
-          alert("请输入旧密码")
-      }else if(this.newpwd==''){
-          alert("请输入新密码")
-      }else if(this.surpwd!=this.newpwd){
-          alert("密码不一致")
+          this.$message.error({message: '请输入旧密码',duration:1600});
+      }
+      else if(this.newpwd==''){
+           this.$message.error({message: '请输入新密码',duration:1600});
+      } else if(this.surpwd==''){
+           this.$message.error({message: '请输入确认密码',duration:1600});
+      }
+      else if(this.surpwd!=this.newpwd){
+          this.$message.error({message: '两次输入的密码不一致',duration:1600});
       }else{
-          let userinfo={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"), old_password:this.oldpwd,new_password:this.newpwd,}
+          let userinfo={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"), old_password:this.oldpwd,new_password:this.newpwd,}
           this.$axios({
           method: 'post',
           url: 'http://jixujiaoyu_api.songlongfei.club/user/update_password',
           data: qs.stringify(userinfo) 
           }).then(function (response) {
+            console.log(response)
               if(response.data.status=="ok"){
-                  alert("密码修改成功")
+                  that.$message.success({message: '密码修改成功',duration:1600});
+                  that.$router.push('/login')
               }else{
-              
+                 that.$message.error({message: response.data.errormsg,duration:1600});
               }
           });
       }
+    },
+    baseData (){
+       var that=this
+
     }
   }
 };

@@ -7,40 +7,19 @@
             <div class="top">
                 <ul class="clearfix">
                     <li class="fl l1">试卷名称</li>
-                    <li class="fr l2">操作</li>
-                    <li class="fr l3">正确率</li>
+                    <li class="fr l2">状态</li>
+                    <li class="fr l3">总分数</li>
                     <li class="fr l4" >进度</li>
                     <li class="fr l5">考试时间</li>
                 </ul>
             </div>
              <div class="topcon">
-                <ul class="clearfix" v-show="!nodata">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">50%</li>
-                    <li class="fr l4">60%</li>
-                     <li class="fr l5"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix" v-show="!nodata">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">50%</li>
-                    <li class="fr l4">60%</li>
-                     <li class="fr l5"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix" v-show="!nodata">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">50%</li>
-                    <li class="fr l4">60%</li>
-                     <li class="fr l5"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix" v-show="!nodata">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">50%</li>
-                    <li class="fr l4">60%</li>
-                     <li class="fr l5"> 2019-7-17-2019-12-18</li>
+                <ul class="clearfix" v-show="!nodata" v-for="(item,index) in data" :key="index">
+                    <li class="fl l1">{{item.shijuan_title}}</li>
+                    <li class="fr l2">{{item.is_pass=='1'?'没通过':'通过'}}</li>
+                    <li class="fr l3">{{item.zong_score}}</li>
+                    <li class="fr l4">{{item.score}}</li>
+                     <li class="fr l5"> {{item.time}}</li>
                 </ul>
             </div>
             <div class="nodata" v-show="nodata">
@@ -52,11 +31,50 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
     data(){
         return{
-            nodata:false
+            nodata:false,
+            uid:'',
+            token:'',
+            page:'1',
+            num:'10',
+            data:[]
         }
+    },
+    created (){
+            this.uid=sessionStorage.getItem('uid')
+          this.token=sessionStorage.getItem('token')
+          this.kaoshi()
+    },
+    methods:{
+          kaoshi (){
+           //获取课程包信息
+            var that=this 
+            var data={
+                year:this.page,
+                uid:this.uid,
+                token:this.token,
+                num:this.num
+            }
+                this.$axios({
+                method: 'post',
+                url: 'http://jixujiaoyu_api.songlongfei.club/kaoshi/get_kaoshi_log',
+                data:qs.stringify(data)
+                }).then(res => {
+                    console.log(res)
+                    if(res.data.status){
+                        that.data =res.data.data.data
+                        if(res.data.data.data){
+                            that.nodata=true
+                        }else{
+                            that.nodata=false
+                        }
+                    }
+
+            });
+      },   
     }
 
 }
@@ -135,7 +153,6 @@ export default {
                      text-overflow: ellipsis;
                       white-space: nowrap;
                       &.l1{
-                          padding-left:10px;
                           box-sizing: border-box;
                       }
                      &.l2{

@@ -404,8 +404,8 @@ export default {
               sessionStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
               that.$router.push({ path: 'my' });
-              // sessionStorage.setItem("mobile", response.data.data.mobile);
-              // sessionStorage.setItem("id_card", response.data.data.id_card);
+              sessionStorage.setItem("mobile", response.data.data.mobile);
+              sessionStorage.setItem("id_card", response.data.data.id_card);
               
             }
             

@@ -5,74 +5,39 @@
     </div>
     <div class="content">
       <ul>
-        <li class="clearfix">
+        <li class="clearfix" v-for="(item,index) in list" :key="index">
           <div class="left fl">
-            <img src="../assets/package.png" alt />
+            <img :src="item.img_url" alt />
           </div>
           <div class="item-content fl">
-            <div class="item-title">国际商务与国际营销</div>
+            <div class="item-title">{{item.title}}</div>
             <div class="item-time clearfix">
-              <span class="fl">完成进度：</span>
+              <!-- <span class="fl">完成进度：</span>
               <div class="progress-box fl">
                 <div class="progress" style="width: 0.00%;"></div>
               </div>
-              <span class="fl">0.00%</span>
+              <span class="fl">0.00%</span> -->
             </div>
             <div class="total-time">
               目标学时：
               <span>
-                必修43
-                <span class="line getcoursr-time">|</span>
-                选修0
+                 {{item.xueshi_num}}
               </span>
               <span class="getcoursr-time">已获学时：</span>
               <span>
-                必修0
-                <span class="line">|</span>选修0
+                {{item.kecheng_num}}
               </span>
+                
             </div>
           </div>
           <div class="price-box fr">
             <div class="price">
-              <span class="rmb">￥180.00 元</span>
+              <span class="rmb">￥{{item.price}} 元</span>
             </div>
-            <div type="button" class="btn-now">继续学习</div>
+            <div type="button" class="btn-now" @click="xuexi">继续学习</div>
           </div>
         </li>
-        <li class="clearfix">
-          <div class="left fl">
-            <img src="../assets/package.png" alt />
-          </div>
-          <div class="item-content fl">
-            <div class="item-title">国际商务与国际营销</div>
-            <div class="item-time clearfix">
-              <span class="fl">完成进度：</span>
-              <div class="progress-box fl">
-                <div class="progress" style="width: 0.00%;"></div>
-              </div>
-              <span class="fl">0.00%</span>
-            </div>
-            <div class="total-time">
-              目标学时：
-              <span>
-                必修43
-                <span class="line getcoursr-time">|</span>
-                选修0
-              </span>
-              <span class="getcoursr-time">已获学时：</span>
-              <span>
-                必修0
-                <span class="line">|</span>选修0
-              </span>
-            </div>
-          </div>
-          <div class="price-box fr">
-            <div class="price">
-              <span class="rmb">￥180.00 元</span>
-            </div>
-            <div type="button" class="btn-now">继续学习</div>
-          </div>
-        </li>
+        
 
       </ul>
     </div>
@@ -80,8 +45,38 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
-  name: "package"
+  name: "package",
+  data (){
+    return {
+      list:[]
+        
+    }
+  },
+  created (){
+    this.kechengbao()
+  },
+  methods:{
+      kechengbao (){
+           //获取课程包信息
+       var that=this 
+        this.$axios({
+          method: 'post',
+          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list',
+          }).then(res => {
+            console.log(res)
+            if(res.data.status=="ok"){
+               that.list=res.data.data
+            }else{
+              
+            }
+      });
+      },
+      xuexi (){
+         this.$emit('more','mykecheng')
+      }
+  }
 };
 </script>
 

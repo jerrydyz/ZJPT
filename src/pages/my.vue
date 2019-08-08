@@ -15,8 +15,8 @@
           <div class="one">
             <img src="../assets/my01.png" alt />
           </div>
-          <p class="p1">catherine</p>
-          <p class="p2">410123********1234</p>
+          <p class="p1">{{name}}</p>
+          <p class="p2">{{id_card}}</p>
           <p class="p3" @click="more('changemsg')">个人设置</p>
         </div>
         <div class="leftbot">
@@ -83,14 +83,17 @@ export default {
     data (){
       return{
          con:'rate',//组件名
-         bgcolor:''
+         bgcolor:'',
+         name:'',
+         id_card:''
       }
     },
     created(){
-      console.log(sessionStorage.getItem('type'))
       if(sessionStorage.getItem('type')){
          this.more( sessionStorage.getItem('type'))
       }
+     this.name= sessionStorage.getItem('name')
+      this.id_card=sessionStorage.getItem('id_card')
       
     },
     methods:{

@@ -7,84 +7,50 @@
             <div class="top">
                 <ul class="clearfix">
                     <li class="l1">年度</li>
-                    <li>必修学时</li>
-                    <li>选修学时</li>
-                    <li>总学时</li>
-                    <li>状态</li>
+                    <li>姓名</li>
+                    <li>身份证号</li>
+                    <li>学时</li>
                     <li class="l6">操作</li>
                 </ul>
             </div>
              <div class="topcon">
-               <ul v-show="!nodata">
-                    <li class="l1">2019</li>
-                    <li>60/0</li>
-                    <li>0/0</li>
-                    <li>60/0</li>
-                    <li>不通过</li>
-                    <li class="l6">查看详情</li>
-                </ul>
-               <ul v-show="!nodata">
-                    <li class="l1">2019</li>
-                    <li>60/0</li>
-                    <li>0/0</li>
-                    <li>60/0</li>
-                    <li>不通过</li>
-                    <li class="l6">查看详情</li>
-                </ul>
-              <ul v-show="!nodata">
-                    <li class="l1">2019</li>
-                    <li>60/0</li>
-                    <li>0/0</li>
-                    <li>60/0</li>
-                    <li>不通过</li>
-                    <li class="l6">查看详情</li>
-                </ul>
-                <ul v-show="!nodata">
-                    <li class="l1">2019</li>
-                    <li>60/0</li>
-                    <li>0/0</li>
-                    <li>60/0</li>
-                    <li>不通过</li>
-                    <li class="l6" @click="look">查看详情</li>
+               <ul v-show="!nodata" v-for="(item,index) in list" :key="index">
+                    <li class="l1">{{item.year}}</li>
+                    <li>{{name}}</li>
+                    <li>{{id_card}}</li>
+                    <li>{{item.xueshi_num}}</li>
+                    <li class="l6">下载证书</li>
                 </ul>
             </div>
             <div class="nodata" v-show="nodata">
 
             </div>
         </div>
-    <div class="msgbox" v-show="msgtip">
-            <div class="conbigbox">
-                <div class="titlebox clearfix">
-                <span class="fl">学习详情</span>
-                <span class="btnclose fr" @click="closetip">x</span>
-            </div>
-            <div class="conbox">
-                <div class="topcon bg">
-                    <span class="spn1 spn">培训项目</span>
-                    <span class="spn2 spn">是否通过考核</span>
-                    <span class="spn3 spn">通过考核时间</span>
-                    <span class="spn4 spn">操作</span>
-                </div>
-                <div class="topcon borcon">
-                    <span class="spn1">国际商务与国际营销</span>
-                    <span class="spn2">不通过</span>
-                    <span class="spn3">无</span>
-                    <span class="spn4 load">下载证书</span>
-                </div>
-            </div>
-            </div>
-        </div>
-        
     </div>
 </template>
 
 <script>
+import qs from 'qs'
 export default {
     data(){
         return{
-            nodata:false,
+            nodata:true,
             msgtip:false,
+            uid:'',
+            token:'',
+            year:2019,
+            list:[],//返回来的数据
+            name:'',
+            id_card:''
         }
+    },
+    created (){
+        this.uid=sessionStorage.getItem('uid')
+        this.token=sessionStorage.getItem('token')
+         this.name= sessionStorage.getItem('name')
+         this.id_card=sessionStorage.getItem('id_card')
+           console.log(this.name,this.id_card)
+        this.dangan()
     },
     methods:{
         look (){
@@ -92,7 +58,30 @@ export default {
         },
         closetip (){
              this.msgtip=false
-        }
+        },
+        dangan (){
+           //获取课程包信息
+            var that=this 
+            var data={
+                year:this.year,
+                uid:this.uid,
+                token:this.token
+            }
+                this.$axios({
+                method: 'post',
+                url: 'http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi',
+                data:qs.stringify(data)
+                }).then(res => {
+                    console.log(res)
+                    console.log('档案记录')
+                    that.list=res.data.data
+                    if(res.data.data){
+                        that.nodata=false
+                    }else{
+                        that.nodata=true
+                    }
+      });
+      },
     }
 
 }
@@ -130,7 +119,7 @@ export default {
                    
                 li{
                     // width: 910px;
-                    width: 16.6%;
+                    width: 20%;
                     height: 35px;
                     line-height: 35px;
                     font-size:14px;
@@ -161,7 +150,7 @@ export default {
                    
                 li{
                     // width: 910px;
-                    width: 16.6%;
+                    width: 20%;
                     height: 35px;
                     line-height: 35px;
                     font-size:14px;
