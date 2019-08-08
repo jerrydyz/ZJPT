@@ -83,13 +83,18 @@ export default {
               localStorage.setItem("uid", response.data.data.uid);
               localStorage.setItem("token", response.data.data.token);
               localStorage.setItem("login1", "1");
-              that.login1=1;
               localStorage.setItem("sex", response.data.data.sex);
               that.sex=response.data.data.sex;
+              localStorage.setItem("name", response.data.data.name);
+              this.name=response.data.data.name;
               // localStorage.setItem("mobile", response.data.data.mobile);
               // localStorage.setItem("name", response.data.data.name);
               // localStorage.setItem("id_card", response.data.data.id_card);
-              that.$router.push({ path: 'index' });
+              that.$router.push({ path: 'personal' });
+            }else if(response.data.status=='error'){
+              alert(response.data.msg)
+            }else{
+
             }
             
           })

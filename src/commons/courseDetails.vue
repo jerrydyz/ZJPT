@@ -142,6 +142,7 @@ export default {
       checkCode:'',
       //点击购买未登录显示登陆弹窗
       loginstate:0,
+      buyCourseId:'',
     };
   },
   created(){
@@ -149,10 +150,11 @@ export default {
   },
   mounted() {
     let that =this;
-    //url里传递过来的新闻唯一id this.$route.params  
+    //url里传递过来的课程唯一id this.$route.params  
     console.log(this.$route.params.courseId);
+    that.buyCourseId=this.$route.params.courseId;
     let courseId={kecheng_id:this.$route.params.courseId}
-    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_info",qs.stringify(courseId))
+    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_info",qs.stringify(courseId))
       .then(response => {
         if(response.data.status=="ok"){
           console.log(response.data.data);
@@ -197,7 +199,7 @@ export default {
       //立即购买
       nowbuy(){
         if(localStorage.getItem("login1")=="1"){
-
+          this.$router.push({ name:'courseBuyDetails',query:{id:this.buyCourseId} });
         }else{
           this.loginstate=1;
         }
@@ -227,6 +229,7 @@ export default {
               this.sex=response.data.data.sex;
               localStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
+              that.loginstate=0;
               // localStorage.setItem("mobile", response.data.data.mobile);
               // localStorage.setItem("id_card", response.data.data.id_card);
               

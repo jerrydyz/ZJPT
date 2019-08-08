@@ -31,7 +31,7 @@
         </div>
     </div>
     <div class="course-box">
-        <router-link :to="'/courseDetails/' + item.id" v-for="item in courseslist" :key="item.id" class="course-item" >
+        <router-link :to="'/courseDetails/' + item.id" v-for="(item,index) in courseslist" :key="index" class="course-item" >
             <div class="item-img"><img :src="item.img_url"></div>
             <p class="item-name">{{item.title}}</p>
             <div class="item-other">
@@ -116,7 +116,7 @@ export default {
     let datacourse={year:'2019', type_id:'',category_id:''}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
       data: qs.stringify(datacourse) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -166,7 +166,7 @@ export default {
         let datacourse={year:yearid, type_id:typeid,category_id:categoryid,page:'1',num:'10'}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
           data: qs.stringify(datacourse) 
           }).then(function (response) {
             if(response.data.status=="ok"){

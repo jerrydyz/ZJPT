@@ -11,6 +11,8 @@ import personal from '@/pages/personal'
 import login from '@/pages/login'
 import findpw from '@/pages/findpw'
 import register from '@/pages/register'
+import courseBuyDetails from '@/pages/courseBuyDetails'
+
 
 import HelloWorld from '@/components/HelloWorld'
 import newsDetails from '@/commons/newsDetails'
@@ -122,6 +124,15 @@ export default new Router({
       components: {
         comheader:commonHeader,
         default:aboutus,
+        comfooter:commonFooter,
+      }
+    },
+    {
+      path: '/courseBuyDetails',
+      name: 'courseBuyDetails',
+      components: {
+        comheader:commonHeader,
+        default:courseBuyDetails,
         comfooter:commonFooter,
       }
     },

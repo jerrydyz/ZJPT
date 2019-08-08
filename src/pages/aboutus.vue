@@ -30,7 +30,7 @@ export default {
     let datamark={mark:'guanyuwomen'};
     this.$axios.post("http://jixujiaoyu_api.songlongfei.club/html/index",qs.stringify(datamark)).then(response => {    
       if(response.data.status=="ok"){
-      console.log(response.data.data)  
+        console.log(response.data.data)  
       }else{
         alert("mark")
       } 

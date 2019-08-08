@@ -215,7 +215,7 @@ export default {
     //轮播图
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/lunbotu/get_list'
+      url: 'http://jixujiaoyu_api.songlongfei.club/lunbotu/get_lunbotu_list'
     }).then(function (response) {
       if(response.data.status=="ok"){
         console.log("轮播图")
@@ -232,7 +232,7 @@ export default {
     }).then(function (response) {
       if(response.data.status=="ok"){
         console.log("友情链接")
-        console.log(response.data.data)
+        console.log(response.data)
         that.linkdata=response.data.data;
       }else{
         
@@ -342,7 +342,7 @@ export default {
     let datacourse={year:'2019', type_id:'',category_id:''}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
       data: qs.stringify(datacourse) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -403,6 +403,7 @@ export default {
               this.sex=response.data.data.sex;
               localStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
+              that.$router.push({ path: 'personal' });
               // localStorage.setItem("mobile", response.data.data.mobile);
               // localStorage.setItem("id_card", response.data.data.id_card);
               
@@ -459,7 +460,7 @@ export default {
         let datacourse={year:yearid, type_id:typeid,category_id:categoryid,page:'1',num:'10'}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_list',
+          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
           data: qs.stringify(datacourse) 
           }).then(function (response) {
             if(response.data.status=="ok"){
