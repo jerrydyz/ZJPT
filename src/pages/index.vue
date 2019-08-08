@@ -403,7 +403,7 @@ export default {
               this.sex=response.data.data.sex;
               localStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
-              that.$router.push({ path: 'personal' });
+              that.$router.push({ path: 'my' });
               // localStorage.setItem("mobile", response.data.data.mobile);
               // localStorage.setItem("id_card", response.data.data.id_card);
               

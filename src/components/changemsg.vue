@@ -153,25 +153,21 @@
         <li>
           <span class="redstar">*</span>
           <span>旧密码 :</span>
-          <input type="text" placeholder="请输入旧密码"  v-model="oldpwd"/>
+          <input type="password" placeholder="请输入旧密码"  v-model="oldpwd"/>
         </li>
         <li>
         <span class="redstar">*</span>
           <span>新密码 :</span>
-          <input type="text"  placeholder="请输入新密码" v-model="newpwd"/>
+          <input type="password"  placeholder="请输入新密码" v-model="newpwd"/>
         </li>
         <li>
         <span class="redstars">*</span>
           <span>确认密码 :</span>
-          <input type="text"  placeholder="请输入确认新密码" v-model="surpwd"/>
+          <input type="password"  placeholder="请输入确认新密码" v-model="surpwd"/>
         </li>
-         <li>
-        <span class="redstars">*</span>
-          <span>确认密码 :</span>
-          <input type="text"  placeholder="请输入确认新密码" v-model="uid"/>
-        </li>
+         
       </ul>
-      <div class="btns" @click="submit">
+      <div class="btns" @click="savepw">
         保存
       </div>
     </div>
@@ -179,6 +175,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
   name: "changemsg",
   data() {
@@ -203,16 +200,28 @@ export default {
            this.basedata=false
       }
     },
-    submit (){
-       var that=this
-       this.$axios.post('http://jixujiaoyu_api.songlongfei.club/user/reset_password',{
-          old_password:this.oldpwd,
-          new_password:this.newpwd,
-          token:this.surpwd,
-          uid:this.uid
-       }).then(res=>{
-         console.log(res)
-       })
+    savepw:function(){
+      let that = this;
+      if(this.oldpwd==''){
+          alert("请输入旧密码")
+      }else if(this.newpwd==''){
+          alert("请输入新密码")
+      }else if(this.surpwd!=this.newpwd){
+          alert("密码不一致")
+      }else{
+          let userinfo={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"), old_password:this.oldpwd,new_password:this.newpwd,}
+          this.$axios({
+          method: 'post',
+          url: 'http://jixujiaoyu_api.songlongfei.club/user/update_password',
+          data: qs.stringify(userinfo) 
+          }).then(function (response) {
+              if(response.data.status=="ok"){
+                  alert("密码修改成功")
+              }else{
+              
+              }
+          });
+      }
     }
   }
 };

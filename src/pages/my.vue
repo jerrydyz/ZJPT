@@ -87,7 +87,11 @@ export default {
       }
     },
     created(){
-      this.more( sessionStorage.getItem('type'))
+      console.log(sessionStorage.getItem('type'))
+      if(sessionStorage.getItem('type')){
+         this.more( sessionStorage.getItem('type'))
+      }
+      
     },
     methods:{
       more(val){
