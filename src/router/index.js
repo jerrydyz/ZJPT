@@ -14,7 +14,6 @@ import register from '@/pages/register'
 import courseBuyDetails from '@/pages/courseBuyDetails'
 
 
-import HelloWorld from '@/components/HelloWorld'
 import newsDetails from '@/commons/newsDetails'
 import courseDetails from '@/commons/courseDetails'
 
@@ -28,150 +27,158 @@ import allorders from '@/components/allorders'
 
 import commonHeader from '@/commons/header'
 import commonFooter from '@/commons/footer'
-
+import couse from '../pages/couse'
+import my from '../pages/my'
 
 Vue.use(Router)
 
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
-    },
-    {
-      path: '/index',
-      name: 'index',
-      components: {
-        comheader:commonHeader,
-        default:index,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/login',
-      name: 'login',
-      components: {
-        default:login,
-      }
-    },
-    {
-      path: '/findpw',
-      name: 'findpw',
-      components: {
-        comheader:commonHeader,
-        default:findpw,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/register',
-      name: 'register',
-      components: {
-        comheader:commonHeader,
-        default:register,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/works',
-      name: 'works',
-      components: {
-        comheader:commonHeader,
-        default:works,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/news',
-      name: 'news',
-      components: {
-        comheader:commonHeader,
-        default:news,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/laws',
-      name: 'laws',
-      components: {
-        comheader:commonHeader,
-        default:laws,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/courses',
-      name: 'courses',
-      components: {
-        comheader:commonHeader,
-        default:courses,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/helps',
-      name: 'helps',
-      components: {
-        comheader:commonHeader,
-        default:helps,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/aboutus',
-      name: 'aboutus',
-      components: {
-        comheader:commonHeader,
-        default:aboutus,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/courseBuyDetails',
-      name: 'courseBuyDetails',
-      components: {
-        comheader:commonHeader,
-        default:courseBuyDetails,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/newsDetails/:newsId',
-      name: 'newsDetails',
-      components: {
-        comheader:commonHeader,
-        default:newsDetails,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/courseDetails/:courseId',
-      name: 'courseDetails',
-      components: {
-        comheader:commonHeader,
-        default:courseDetails,
-        comfooter:commonFooter,
-      }
-    },
-    {
-      path: '/personal',
-      components: {
-        comheader:commonHeader,
-        default:personal,
-        comfooter:commonFooter,
-      },
-      redirect:'/personal/basicinfo',
-      children:[
-        {path:'pxcourses',name:'pxcourses',component:pxcourses},
-        {path:'basicinfo',name:'basicinfo',component:basicinfo},
-        {path:'courselist',name:'courselist',component:courselist},
-        {path:'jointest',name:'jointest',component:jointest},
-        {path:'testrecord',name:'testrecord',component:testrecord},
-        {path:'filerecord',name:'filerecord',component:filerecord},
-        {path:'allorders',name:'allorders',component:allorders},
-      ]
-    },
-    
-  ]
+    routes: [{
+            path: '/',
+            redirect: '/index'
+        },
+
+        {
+            path: '/index',
+            name: 'index',
+            components: {
+                comheader: commonHeader,
+                default: index,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/login',
+            name: 'login',
+            components: {
+                default: login,
+            }
+        },
+        {
+            path: '/findpw',
+            name: 'findpw',
+            components: {
+                comheader: commonHeader,
+                default: findpw,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/register',
+            name: 'register',
+            components: {
+                comheader: commonHeader,
+                default: register,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/works',
+            name: 'works',
+            components: {
+                comheader: commonHeader,
+                default: works,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/news',
+            name: 'news',
+            components: {
+                comheader: commonHeader,
+                default: news,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/laws',
+            name: 'laws',
+            components: {
+                comheader: commonHeader,
+                default: laws,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/courses',
+            name: 'courses',
+            components: {
+                comheader: commonHeader,
+                default: courses,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/helps',
+            name: 'helps',
+            components: {
+                comheader: commonHeader,
+                default: helps,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/aboutus',
+            name: 'aboutus',
+            components: {
+                comheader: commonHeader,
+                default: aboutus,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/courseBuyDetails',
+            name: 'courseBuyDetails',
+            components: {
+                comheader: commonHeader,
+                default: courseBuyDetails,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/newsDetails/:newsId',
+            name: 'newsDetails',
+            components: {
+                comheader: commonHeader,
+                default: newsDetails,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/courseDetails/:courseId',
+            name: 'courseDetails',
+            components: {
+                comheader: commonHeader,
+                default: courseDetails,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/personal',
+            components: {
+                comheader: commonHeader,
+                default: personal,
+                comfooter: commonFooter,
+            },
+            redirect: '/personal/basicinfo',
+            children: [
+                { path: 'pxcourses', name: 'pxcourses', component: pxcourses },
+                { path: 'basicinfo', name: 'basicinfo', component: basicinfo },
+                { path: 'courselist', name: 'courselist', component: courselist },
+                { path: 'jointest', name: 'jointest', component: jointest },
+                { path: 'testrecord', name: 'testrecord', component: testrecord },
+                { path: 'filerecord', name: 'filerecord', component: filerecord },
+                { path: 'allorders', name: 'allorders', component: allorders },
+            ]
+        }, {
+            path: '/my',
+            name: 'my',
+            component: my
+        }, {
+            path: '/couse',
+            name: 'couse',
+            component: couse
+        }
+
+    ]
 })

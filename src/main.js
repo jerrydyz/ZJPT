@@ -7,25 +7,29 @@ import router from './router'
 //全局引入axios
 import axios from 'axios'
 //axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
-Vue.prototype.$axios= axios
-//全局引入公共header和footer
-// import commonHeader from '@/commons/header'
-// Vue.component("commonHeader", commonHeader)
-// import commonFooter from '@/commons/footer'
-// Vue.component("commonFooter", commonFooter)
+Vue.prototype.$axios = axios
+    //全局引入公共header和footer
+    // import commonHeader from '@/commons/header'
+    // Vue.component("commonHeader", commonHeader)
+    // import commonFooter from '@/commons/footer'
+    // Vue.component("commonFooter", commonFooter)
 
 //全局引入loading
 import loading from '@/commons/loading'
 Vue.component("loading", loading)
-//全局引入iconfont
+    //全局引入iconfont
 import './assets/iconfont/iconfont.css'
-
+import './style/reset.css'
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.prototype.$axios = axios
+Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  components: { App },
-  template: '<App/>'
+    el: '#app',
+    router,
+    components: { App },
+    template: '<App/>'
 })
