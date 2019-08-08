@@ -7,23 +7,22 @@
               <div class="info" style="width:50%;">
                 <div class="tit">课程详情</div>
                 <a class="kechenglink">
-                  <img :src="courseImg"  alt="国际商务与国际营销(43课时)"/>
-                  <h3>国际商务与国际营销(43课时)</h3>
+                  <img :src="courseInfo.img_url"/>
+                  <h3>{{courseInfo.title}}</h3>
                 </a>
                 <div class="item">
-                  <span>课时：43 课时</span>
+                  <span>课时：{{parseInt(courseInfo.xueshi_num)}} 课时</span>
                 </div>
               </div>
               <div class="info" style="width:25%;">
                 <div class="tit">讲师</div>
                 <div class="item">
-                  <span>马陆亭</span>
-                  <span>符太浩</span>
+                  <span>{{teacher.name}}</span>
                 </div>
               </div>
               <div class="info ddiel-us" style="width:25%;">
                 <div class="tit">价格</div>
-                <h3 style="color:#fc6238">¥180.00</h3>
+                <h3 style="color:#fc6238">{{courseInfo.price}}</h3>
               </div>
             </div>
             <dl class="class_order_card" style="display:none;">
@@ -93,7 +92,7 @@
                   </div>
                 <div class="price">
                   <div class="item">
-                    实付金额：<div class="dne-omns-elis" id="pay_money" style="display: inline">￥180.00</div>
+                    实付金额：<div class="dne-omns-elis" id="pay_money" style="display: inline">￥{{courseInfo.price}}</div>
                   </div>
                 </div>
               </div>
@@ -114,6 +113,7 @@
 
 <script>
 import qs from 'qs'
+import { Message } from 'element-ui';
 export default {
   name: "courseBuyDetails",
   data() {
@@ -123,8 +123,15 @@ export default {
       xueshika:'',
       wxpaybox:0,
       wxPayQRcode:'',
-      courseImg:'',
+      courseInfo:'',
+      teacher:'',
+
     };
+  },
+  created () {
+    var areaString = '{"id":"310101","cityId":"3101","cityName":"","areaName":"黄浦区","updateTime":"1000","provinceId":"31","pinYin":"huangpuqu","pinYinChar":"HPQ","isShowWithCity":0},{"id":"310104","cityId":"3101","cityName":"","areaName":"徐汇区","updateTime":"1000","provinceId":"31","pinYin":"xuhuiqu","pinYinChar":"XHQ","isShowWithCity":0},{"id":"310105","cityId":"3101","cityName":"","areaName":"长宁区","updateTime":"1000","provinceId":"31","pinYin":"changningqu","pinYinChar":"CNQ","isShowWithCity":0},{"id":"310106","cityId":"3101","cityName":"","areaName":"静安区","updateTime":"1000","provinceId":"31","pinYin":"jinganqu","pinYinChar":"JAQ","isShowWithCity":0},{"id":"310107","cityId":"3101","cityName":"","areaName":"普陀区","updateTime":"1000","provinceId":"31","pinYin":"","pinYinChar":"","isShowWithCity":0},{"id":"310109","cityId":"3101","cityName":"","areaName":"虹口区","updateTime":"1000","provinceId":"31","pinYin":"hongkouqu","pinYinChar":"HKQ","isShowWithCity":0},{"id":"310110","cityId":"3101","cityName":"","areaName":"杨浦区","updateTime":"1000","provinceId":"31","pinYin":"yangpuqu","pinYinChar":"YPQ","isShowWithCity":0},{"id":"310112","cityId":"3101","cityName":"","areaName":"闵行区","updateTime":"1000","provinceId":"31","pinYin":"yueyang","pinYinChar":"YY","isShowWithCity":0},{"id":"310113","cityId":"3101","cityName":"","areaName":"宝山区","updateTime":"1000","provinceId":"31","pinYin":"","pinYinChar":"","isShowWithCity":0},{"id":"310114","cityId":"3101","cityName":"","areaName":"嘉定区","updateTime":"1000","provinceId":"31","pinYin":"jiadingqu","pinYinChar":"JDQ","isShowWithCity":0},{"id":"310115","cityId":"3101","cityName":"","areaName":"浦东新区","updateTime":"1000","provinceId":"31","pinYin":"pudongxinqu","pinYinChar":"PDXQ","isShowWithCity":0},{"id":"310116","cityId":"3101","cityName":"","areaName":"金山区","updateTime":"1000","provinceId":"31","pinYin":"jinshanqu","pinYinChar":"JSQ","isShowWithCity":0},{"id":"310117","cityId":"3101","cityName":"","areaName":"松江区","updateTime":"1000","provinceId":"31","pinYin":"songjiangqu","pinYinChar":"SJQ","isShowWithCity":0},{"id":"310118","cityId":"3101","cityName":"","areaName":"青浦区","updateTime":"1000","provinceId":"31","pinYin":"qingpuqu","pinYinChar":"QPQ","isShowWithCity":0},{"id":"310120","cityId":"3101","cityName":"","areaName":"奉贤区","updateTime":"1000","provinceId":"31","pinYin":"fengxianqu","pinYinChar":"FXQ","isShowWithCity":0},{"id":"310230","cityId":"3101","cityName":"","areaName":"崇明区","updateTime":"1000","provinceId":"31","pinYin":"","pinYinChar":"","isShowWithCity":0},{"id":"310108","cityId":"3101","cityName":"","areaName":"闸北区","updateTime":"1000","provinceId":"31","pinYin":"zhabeiqu","pinYinChar":"ZBQ","isShowWithCity":0},{"id":"320101","cityId":"3201","cityName":"","areaName":"市辖区","updateTime":"1000","provinceId":"32","pinYin":"","pinYinChar":"","isShowWithCity":0}';
+    
+
   },
   mounted () {
     let that =this;
@@ -133,12 +140,13 @@ export default {
     this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_info",qs.stringify(courseId))
       .then(response => {
         if(response.data.status=="ok"){
-          console.log(response.data.data.img_url);
-          that.courseImg=response.data.data.img_url;
+          console.log(response.data.data);
+          that.courseInfo=response.data.data;
+          that.teacher=response.data.data.jiangshi
         }else if(response.data.status=="error"){
-
+          this.$message.error({message: response.data.msg,duration:1600});
         }else if(response.data.status=="relogin"){
-
+          this.$message.error({message: response.data.msg,duration:1600});
         }
         
       })
@@ -160,7 +168,7 @@ export default {
                 if(response.data.status=="ok"){
                     console.log(response.data.data);
                 }else if(response.data.status=="error"){
-
+                  this.$message.error({message: response.data.msg,duration:1600});
                 }else if(response.data.status=="relogin"){
 
                 }
@@ -174,22 +182,8 @@ export default {
           let that = this;
           if(this.selectstate==1){
               //alipay
-              let buycourse={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"),type:'2',type_id:this.buycourseId}
-                this.$axios.get("http://jixujiaoyu_api.songlongfei.club/pay/alipay",qs.stringify(buycourse))
-                .then(response => {
-                    if(response.data.status=="ok"){
-                        console.log(response.data.data);
-                    }else if(response.data.status=="error"){
-
-                    }else if(response.data.status=="relogin"){
-
-                    }
-                    
-                })
-                .catch(response => {
-                    console.log(response);
-                });
-
+            var urllink='http://jixujiaoyu_api.songlongfei.club/pay/alipay?uid='+sessionStorage.getItem("uid")+'&token='+sessionStorage.getItem("token")+'&type='+2+'&type_id='+this.buycourseId+''
+            window.open(urllink);
           }else if(this.selectstate==2){
               //wxpay
                 let buycourse={uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token"),type:'2',type_id:this.buycourseId}

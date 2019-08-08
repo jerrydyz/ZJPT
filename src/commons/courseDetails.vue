@@ -21,7 +21,7 @@
             <i class="icon-inils02"></i>学时
           </div>
           <div class="l2">
-            <span>{{courseData.kecheng_jie_num}}学时</span>
+            <span>{{parseInt(courseData.xueshi_num)}}学时</span>
           </div>
           <div class="l1">
             <i class="icon-inils03"></i>浏览量
@@ -424,7 +424,7 @@ export default {
   float: left;
   width: 60px;
   color: #999;
-  line-height: 14px;
+  line-height: 20px;
 }
 .classtopbox .l2 span {
   margin-right: 5px;
