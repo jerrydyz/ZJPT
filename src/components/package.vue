@@ -67,7 +67,7 @@ export default {
           }).then(res => {
             console.log(res)
             if(res.data.status=="ok"){
-               that.list=res.data.data
+               that.list=that.list.concat(res.data.data)
             }else{
               
             }

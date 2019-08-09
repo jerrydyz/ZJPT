@@ -13,8 +13,8 @@
                     <li class="l6">操作</li>
                 </ul>
             </div>
-             <div class="topcon">
-               <ul v-show="!nodata" v-for="(item,index) in list" :key="index">
+             <div class="topcon"  v-show="!nodata">
+               <ul v-for="(item,index) in list" :key="index">
                     <li class="l1">{{item.year}}</li>
                     <li>{{name}}</li>
                     <li>{{id_card}}</li>
@@ -34,22 +34,23 @@ import qs from 'qs'
 export default {
     data(){
         return{
-            nodata:true,
+            nodata:false,
             msgtip:false,
             uid:'',
             token:'',
-            year:2019,
+            year:'',
             list:[],//返回来的数据
             name:'',
             id_card:''
         }
     },
     created (){
+        var date=new Date;
+       this.year=date.getFullYear()
         this.uid=sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
          this.name= sessionStorage.getItem('name')
          this.id_card=sessionStorage.getItem('id_card')
-           console.log(this.name,this.id_card)
         this.dangan()
     },
     methods:{

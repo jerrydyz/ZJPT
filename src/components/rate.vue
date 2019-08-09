@@ -6,24 +6,25 @@
            <div class="clearfix">
                 <div class="one fl">
                 <p class="p1">本年度已获学时</p>
-                <p class="p2">60</p>    
+                <p class="p2">{{xueshi}}</p>    
             </div>
-            <div class="two fl">
+            <div class="two fl" style="background-color:#e1f1ff">
                <div class="clearfix">
                     <div class="zuo fl">
                     <p>
-                        <i></i>
+                        <img src="../assets/task_fill.png" alt="">
                     </p>
-                    <p>
+                    <p class="download">
                         <span>待考试</span>
                         <span>(0)</span>
                     </p>
                 </div>
-                 <div class="you fl">
+                <div class="line fl"></div>
+                 <div class="you fl" @click="download" >
                     <p>
-                        <i></i>
+                       <img src="../assets/select_fill.png" alt="">
                     </p>
-                    <p>
+                    <p class="download" >
                        证书下载
                     </p>
                 </div>
@@ -33,31 +34,17 @@
          </div>
          <div class="bottom">
              <h3 class="tit">全部课程</h3>
-             <div class="shang clearfix">
+            <div class="shang clearfix" v-for="item in allcourse" :key="item.id">
                  <div class="imgleft fl">
-                     <img src="../assets/my02.png" alt="">
+                     <img :src="item.img_url" alt="">
                  </div>
                  <div class="imgmodel fl">
-                     <h3 class="lgtit">2019年度中小学教师思想素质提升课程</h3>
-                     <p>报名时间:2019-5-1 至 2019-6-30</p>
-                     <p>目标学时:必修60&nbsp;&nbsp; 选修0  &nbsp;&nbsp;;&nbsp;&nbsp;已获学时 : 必修0  &nbsp;&nbsp;选修0</p>
-                 </div>
-                 <div class="imgright fr">
-                      <p><span>￥</span><span>45.00元</span></p>
-                      <p>立即报名</p>
-                 </div>
-             </div>
-              <div class="shang clearfix">
-                 <div class="imgleft fl">
-                     <img src="../assets/my02.png" alt="">
-                 </div>
-                 <div class="imgmodel fl">
-                     <h3 class="lgtit">2019年度中小学教师思想素质提升课程</h3>
+                     <h3 class="lgtit">{{item.title}}</h3>
                      <p>完成进度：<span></span>%</p>
-                     <p>目标学时:必修60&nbsp;&nbsp; 选修0  &nbsp;&nbsp;;&nbsp;&nbsp;已获学时 : 必修0  &nbsp;&nbsp;选修0</p>
+                     <!-- <p>目标学时: <span>{{allxueshi}}</span> ; &nbsp; &nbsp;已获学时 : <span>{{kechengxueshi}}</span></p> -->
                  </div>
                  <div class="imgright fr">
-                      <p><span>￥</span><span>180.00元</span></p>
+                      <p><span>￥</span><span>{{item.price}}元</span></p>
                       <p>参加学习</p>
                  </div>
              </div>
@@ -68,7 +55,77 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
+    name:'rate',
+    data (){
+        return {
+            year:'',
+            uid:'',
+            token:'',
+            xueshi:'',
+            num:'2',
+            allcourse:[],
+             list:[],
+            count:'',
+            pagesize:'',
+            yenum:'',
+            allxueshi:'',
+            kechengxueshi:''
+        }
+    },
+    created (){
+         this.uid= sessionStorage.getItem('uid')
+        this.token=sessionStorage.getItem('token')
+        var date=new Date;
+        this.year=date.getFullYear()
+        this.getyeartime ()
+        this.getallcourse()
+    },
+    methods:{
+         //获取年度学时
+      getyeartime (){
+         var that=this
+         var data={
+            year:this.year,
+            uid:this.uid,
+            token:this.token
+         }
+          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi",
+         qs.stringify(data)
+          ).then(res =>{
+            console.log("获取学时")
+             console.log(res)
+             if(res.data.status=='ok'){
+                that.xueshi=res.data.data.xueshi_num
+             }
+          })
+      },
+      //下载证书
+      download (){
+          this.$emit('more','archives')
+      },
+      //获取全部课程
+      getallcourse (){
+          var that=this
+          var datalist={
+              num:this.num,
+              year:this.year,
+              page:'1'
+          }
+          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+            qs.stringify(datalist)
+          ).then(res =>{
+              console.log('获取全部课程')
+              console.log(res)
+              that.allcourse=that.allcourse.concat(res.data.data.data)
+              that.count=res.data.data.count
+              that.pagesize=res.data.data.pagesize
+          })
+          
+      },
+    }
+
 
 }
 </script>
@@ -79,7 +136,7 @@ export default {
     .rate{
          .rightcon{
         width: 948px;
-        padding: 30px 40px 79px 40px;
+        padding: 20px 40px 67px 40px;
         box-sizing: border-box;
         background-color: #fff;
         .top{
@@ -117,10 +174,37 @@ export default {
             text-align: center;
             line-height: 90px;
             .zuo{
-                width: 50%;
+                width: 49.5%;
+                p{
+                     height: 30px;
+                     line-height: 30px;
+                     img{
+                         margin-top:15px;
+                     }
+                     &.download{
+                          margin-top:19px;
+                     }
+                }
             }
             .you{
                 width: 50%;
+                cursor: auto;
+                 p{
+                     height: 30px;
+                      line-height: 30px;
+                       img{
+                         margin-top:15px;
+                     }
+                     &.download{
+                          margin-top:19px;
+                     }
+                }
+            }
+            .line{
+                width: 1px;
+                height: 40px;
+                background-color: #cadae9;
+                margin-top:20px;
             }
 
           }
@@ -162,7 +246,7 @@ export default {
                font-size:20px;
               font-family:@family;
               color:#333333; 
-              margin-bottom: 25px;
+              margin-bottom: 40px;
                
             }
              p:nth-child(2){

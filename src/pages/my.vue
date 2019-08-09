@@ -5,7 +5,7 @@
         <p class="fl">河南省继续教育学会在线学习平台</p>
         <p class="fr">
           <span class="spn1" @click="more('rate')" >首页</span>
-          <span>退出</span>
+          <span @click="goback">退出</span>
         </p>
       </div>
     </div>
@@ -78,6 +78,7 @@ import mykecheng from '../components/mykecheng';
 import foot from '../components/footer';
 import packages from '../components/package';
 import allCourses from '../components/allCourses';
+import qs from 'qs'
 export default {
     name:'my',
     data (){
@@ -85,7 +86,9 @@ export default {
          con:'rate',//组件名
          bgcolor:'',
          name:'',
-         id_card:''
+         id_card:'',
+         uid:'',
+         token:''
       }
     },
     created(){
@@ -94,7 +97,8 @@ export default {
       }
      this.name= sessionStorage.getItem('name')
       this.id_card=sessionStorage.getItem('id_card')
-      
+       this.uid= sessionStorage.getItem('uid')
+        this.token=sessionStorage.getItem('token')
     },
     methods:{
       more(val){
@@ -102,7 +106,21 @@ export default {
         this.bgcolor=val
         sessionStorage.setItem('type',this.con)
       },
-      
+      //返回按钮
+      goback (){
+          var that =this
+          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/user/logout',
+           qs.stringify({
+             uid:this.uid,
+             token:this.token
+           })
+          ).then(res =>{
+            sessionStorage.removeItem('token')
+            that.$router.push('/index')
+          })
+      },
+     
+
     },
     components:{
        rate,
@@ -115,6 +133,13 @@ export default {
        foot,
        packages,
        allCourses
+    },
+    destroyed (){
+       sessionStorage.removeItem('token')
+       sessionStorage.removeItem('type')
+       sessionStorage.removeItem('name')
+       sessionStorage.removeItem('id_card')
+       sessionStorage.removeItem('uid')
     }
 };
 </script>
