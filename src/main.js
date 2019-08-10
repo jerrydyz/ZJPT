@@ -17,13 +17,17 @@ Vue.prototype.$axios = axios
 //全局引入loading
 import loading from '@/commons/loading'
 Vue.component("loading", loading)
+
     //全局引入iconfont
 import './assets/iconfont/iconfont.css'
 import './style/reset.css'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-Vue.prototype.$axios = axios
 Vue.use(ElementUI);
+
+import VueVideoPlayer from 'vue-video-player'
+Vue.use(VueVideoPlayer)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

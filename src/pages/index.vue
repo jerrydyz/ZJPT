@@ -113,6 +113,7 @@
 <script>
 import $jquery from 'jquery'
 import qs from 'qs'
+import { Message } from 'element-ui';
 import 'swiper/dist/css/swiper.css'
 import { swiper, swiperSlide } from 'vue-awesome-swiper'
 import indexnews from "@/components/indexnews.vue";
@@ -202,15 +203,16 @@ export default {
       loadingState:'',
     }
   },
+  
   created(){
     this.createCode();
-    sessionStorage.setItem("login1","0");
     sessionStorage.setItem("sex","1");
+    sessionStorage.setItem("login1","0");
     sessionStorage.setItem("name","XXX");
   },
 
   mounted() {
-    
+    sessionStorage.setItem("login1","0");
     let that = this
     //轮播图
     this.$axios({
@@ -372,9 +374,9 @@ export default {
       checkLpicma(){
           this.picLyanzhengma.toUpperCase();//取得输入的验证码并转化为大写         
           if(this.picLyanzhengma == '') {
-            alert("请输入验证码")
+            this.$message.error({message:"请输入验证码",duration:1600});
           }else if(this.picLyanzhengma.toUpperCase() != this.checkCode ) { //若输入的验证码与产生的验证码不一致时  
-            alert("验证码不正确")  
+            this.$message.error({message:"验证码不正确",duration:1600});
             this.createCode();//刷新验证码   
             this.picLyanzhengma = '';
           }else { //输入正确时  
@@ -385,11 +387,11 @@ export default {
       Login(){
         let that=this;
         if(this.idcard==''){
-          alert("身份证号不能为空")
+          this.$message.error({message:"身份证号不能为空",duration:1600});
         }else if(!this.idcard.match(/(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/)){
-          alert("请输入正确的身份证号")
+          this.$message.error({message:"请输入正确的身份证号",duration:1600});
         }else if(this.UserPsd==''){
-            alert("密码不能为空") 
+          this.$message.error({message:"密码不能为空",duration:1600});
         }else if(this.checkLpicma() == true){
           let userinfo={id_card:this.idcard, password:this.UserPsd}
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
@@ -407,6 +409,11 @@ export default {
               sessionStorage.setItem("mobile", response.data.data.mobile);
               sessionStorage.setItem("id_card", response.data.data.id_card);
               
+            }else if(response.data.status=='error'){
+              this.$message.error({message:response.data.errormsg,duration:1600});
+
+            }else if(response.data.status=='relogin'){
+
             }
             
           })

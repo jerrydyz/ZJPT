@@ -12,7 +12,7 @@ import login from '@/pages/login'
 import findpw from '@/pages/findpw'
 import register from '@/pages/register'
 import courseBuyDetails from '@/pages/courseBuyDetails'
-
+import video from '@/pages/video'
 
 import newsDetails from '@/commons/newsDetails'
 import courseDetails from '@/commons/courseDetails'
@@ -45,6 +45,13 @@ export default new Router({
                 comheader: commonHeader,
                 default: index,
                 comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/video',
+            name: 'video',
+            components: {
+                default: video,
             }
         },
         {
