@@ -298,6 +298,15 @@ export default {
             qs.stringify(datamsg)).then(res =>{
                if(res.data.status=='ok'){
                   this.$message.success({message: '修改成功',duration:1600});
+                  that.email=""
+                  that.zhicheng="";
+                  that.xingzheng="";
+                  that.worktime=='';
+                  that.zhuanye=='';
+                  that.address=='';
+                  that.mobil=='';
+                  that.zhengshuhao=='';
+                  
                }
             })
         }

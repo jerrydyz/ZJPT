@@ -40,7 +40,7 @@
                  </div>
                  <div class="imgmodel fl">
                      <h3 class="lgtit">{{item.title}}</h3>
-                     <p>完成进度：<span></span>%</p>
+                     <p>完成进度：<el-progress :percentage="used"></el-progress></p>
                      <!-- <p>目标学时: <span>{{allxueshi}}</span> ; &nbsp; &nbsp;已获学时 : <span>{{kechengxueshi}}</span></p> -->
                  </div>
                  <div class="imgright fr">
@@ -71,10 +71,13 @@ export default {
             pagesize:'',
             yenum:'',
             allxueshi:'',
-            kechengxueshi:''
+            kechengxueshi:'',
+            used:0,
+            id:[]
         }
     },
     created (){
+        var that=this
          this.uid= sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
         var date=new Date;
@@ -82,6 +85,12 @@ export default {
         this.getyeartime ()
         this.getallcourse()
     },
+    watch:{
+        'used':function (v,v2){
+           
+        }
+    },
+    
     methods:{
          //获取年度学时
       getyeartime (){
@@ -121,9 +130,38 @@ export default {
               that.allcourse=that.allcourse.concat(res.data.data.data)
               that.count=res.data.data.count
               that.pagesize=res.data.data.pagesize
-          })
-          
+              sessionStorage.setItem("id", res.data.data.data.id);
+                for(var i=0 ;i<res.data.data.data.length;i++){
+                    console.log(i)
+                    that.id.push(res.data.data.data[i].id)
+                    console.log(that.id)
+                    that.getprogress ()
+                }
+                })
+                
       },
+       //获取课程进度
+    getprogress (){
+        var that=this
+        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+            qs.stringify({
+              kecheng_id:that.id,
+              uid:that.uid,
+              token:that.token
+            })
+        ).then(res =>{
+            console.log("获取进度")
+            console.log(res)
+            console.log(res.data.status)
+            if(res.data.status=='error'){
+              that.used=0
+            }else{
+               if(res.data.status=="ok"){
+                  that.used=res.data.progress
+               }
+            }
+        })
+    }
     }
 
 
@@ -136,7 +174,7 @@ export default {
     .rate{
          .rightcon{
         width: 948px;
-        padding: 20px 40px 67px 40px;
+        padding: 20px 40px 47px 40px;
         box-sizing: border-box;
         background-color: #fff;
         .top{

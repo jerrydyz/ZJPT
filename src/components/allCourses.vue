@@ -15,13 +15,8 @@
           </p>
           <p class="tit">{{item.title}}</p>
           <p class="jindu clearfix">
-            <span class="fl">进度</span>
-            <!-- <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-            </div>-->
-            <el-progress :percentage="50" class="fl"></el-progress>
-
-            <!-- <span class="fr" style="margin-top:-12px;">0%</span> -->
+            <span style="display:block;margin:5px 0;">进度</span>
+            <el-progress :percentage="used"></el-progress>
           </p>
         </li>
       </ul>
@@ -48,21 +43,28 @@ export default {
       pagesize: "",
       yenum: "",
       allxueshi: "",
-      kechengxueshi: ""
+      kechengxueshi: "",
+      used:0,
+      id:''
     };
   },
   created() {
+    var that=this
     this.uid = sessionStorage.getItem("uid");
     this.token = sessionStorage.getItem("token");
     var date = new Date();
     this.year = date.getFullYear();
+    // this.id=sessionStorage.getItem('id')
+    console.log(this.allcourse)
     this.getallcourse();
+   setTimeout(function(){
+     console.log('====')
+     console.log(that.id)
+       that.getprogress()
+   },200)
+
   },
   methods: {
-    //进度条
-    formatTooltip(val) {
-      return val / 100;
-    },
     //获取全部课程
     getallcourse() {
       var that = this;
@@ -82,8 +84,37 @@ export default {
           that.allcourse = that.allcourse.concat(res.data.data.data);
           that.count = res.data.data.count;
           that.pagesize = res.data.data.pagesize;
-          sessionStorage.setItem("id", res.data.data.id);
+          sessionStorage.setItem("id", res.data.data.data.id);
+          for(var i=0 ;i<res.data.data.data.length;i++){
+              console.log(i)
+              that.id=res.data.data.data[i].id
+              console.log(that.id)
+          }
+
+
         });
+    },
+    //获取课程进度
+    getprogress (){
+        var that=this
+        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+            qs.stringify({
+              kecheng_id:that.id,
+              uid:that.uid,
+              token:that.token
+            })
+        ).then(res =>{
+            console.log("获取进度")
+            console.log(res)
+            console.log(res.data.status)
+            if(res.data.status=='error'){
+              that.used=0
+            }else{
+               if(res.data.status=="ok"){
+                  that.used=res.data.progress
+               }
+            }
+        })
     }
   }
 };
@@ -150,18 +181,18 @@ export default {
             white-space: nowrap;
             margin-top: 12px;
           }
-          &.jindu {
-            width: 100%;
-            height: 12px;
-            display: flex;
-            justify-content: space-between;
-            margin-top: 16px;
-            span {
-              &.fr {
-                margin-top: -12px;
-              }
-            }
-          }
+          // &.jindu {
+          //   width: 100%;
+          //   height: 12px;
+          //   display: flex;
+          //   justify-content: space-between;
+          //   margin-top: 16px;
+          //   span {
+          //     &.fr {
+          //       margin-top: -12px;
+          //     }
+          //   }
+          // }
         }
       }
       li:hover {
@@ -169,20 +200,6 @@ export default {
         border: 1px solid #c1c1c1;
       }
     }
-  }
-}
-</style>
-<style lang="less">
-.allCourses {
-  .block {
-    width: 70%;
-    height: 10px;
-  }
-  .el-slider {
-    height: 10px;
-  }
-  .el-slider__runway {
-    margin: -5px 0 0 40px;
   }
 }
 </style>

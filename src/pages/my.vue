@@ -96,9 +96,12 @@ export default {
          this.more( sessionStorage.getItem('type'))
       }
      this.name= sessionStorage.getItem('name')
-      this.id_card=sessionStorage.getItem('id_card')
        this.uid= sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
+       this.id_card=sessionStorage.getItem('id_card')
+        var leng=this.id_card.length
+       this.id_card = this.id_card.substr(0, 3) + '****' + this.id_card.substr(leng - 4);
+
     },
     methods:{
       more(val){
