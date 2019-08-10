@@ -9,32 +9,16 @@
                     <li class="fl l1">试卷名称</li>
                     <li class="fr l2">操作</li>
                     <li class="fr l3">分数</li>
+                    <li class="fr l5">总分数</li>
                      <li class="fr l4">考试时间</li>
                 </ul>
             </div>
-             <div class="topcon">
-                <ul class="clearfix" v-show="!nodata">
+             <div class="topcon" v-show="!nodata">
+                <ul class="clearfix" v-for="item in data" :key="item.id">
                     <li class="fl l1">国际商务与国际营销</li>
                     <li class="fr l2">学习未完成</li>
                     <li class="fr l3">-</li>
-                     <li class="fr l4"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">-</li>
-                     <li class="fr l4"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">-</li>
-                     <li class="fr l4"> 2019-7-17-2019-12-18</li>
-                </ul>
-                <ul class="clearfix">
-                    <li class="fl l1">国际商务与国际营销</li>
-                    <li class="fr l2">学习未完成</li>
-                    <li class="fr l3">-</li>
+                     <li class="fr l5">总分数</li>
                      <li class="fr l4"> 2019-7-17-2019-12-18</li>
                 </ul>
             </div>
@@ -47,11 +31,17 @@
 </template>
 
 <script>
+import qs from 'qs'
 export default {
     data(){
         return{
-            nodata:false
+            nodata:true,
+            data:[]
         }
+    },
+    created (){
+        var that=this
+
     }
 
 }
@@ -103,6 +93,11 @@ export default {
                         text-align: center;
 
                     }
+                     &.l5{
+                        width: 150px;
+                        text-align: center;
+
+                    }
                 }
             }
             }
@@ -118,16 +113,9 @@ export default {
                     line-height: 35px;
                     font-size:14px;
                      color: #868686;
-                    &.l1{
-                        width: 300px;
-                        overflow: hidden;
+                     overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
-                        padding-left:10px;
-                        box-sizing: border-box;
-                        
-                           
-                    }
                      &.l2{
                         width: 150px;
                         text-align: right;
@@ -139,6 +127,11 @@ export default {
                          }
                      &.l4{
                         width: 280px;
+                        text-align: center;
+
+                    }
+                    &.l5{
+                        width: 150px;
                         text-align: center;
 
                     }

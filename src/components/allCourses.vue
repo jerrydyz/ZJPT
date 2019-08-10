@@ -4,108 +4,125 @@
       <span>全部课程</span>
     </div>
     <div class="content">
-        <ul class="clearfix">
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-        </ul>
-    
+      <ul class="clearfix">
+        <li class="fl" v-for="item in allcourse" :key="item.id">
+          <p class="imm">
+            <img :src="item.img_url" alt />
+          </p>
+          <p class="txt">
+            {{item.title}}(
+            <span>{{item.xueshi_num}}</span>学时)
+          </p>
+          <p class="tit">{{item.title}}</p>
+          <p class="jindu clearfix">
+            <span style="display:block;margin:5px 0;">进度</span>
+            <el-progress :percentage="used"></el-progress>
+          </p>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import qs from "qs";
 export default {
-   data() {
-      return {
-        value1: 0,
-        value2: 50,
-        value3: 36,
-        value4: 48,
-        value5: 42
-      }
-    },
-    methods: {
-      formatTooltip(val) {
-        return val / 100;
-      }
-    }
+  data() {
+    return {
+      value1: 0,
+      value2: 50,
+      value3: 36,
+      value4: 48,
+      value5: 42,
+      year: "",
+      uid: "",
+      token: "",
+      num: "2",
+      allcourse: [],
+      count: "",
+      pagesize: "",
+      yenum: "",
+      allxueshi: "",
+      kechengxueshi: "",
+      used:0,
+      id:''
+    };
+  },
+  created() {
+    var that=this
+    this.uid = sessionStorage.getItem("uid");
+    this.token = sessionStorage.getItem("token");
+    var date = new Date();
+    this.year = date.getFullYear();
+    // this.id=sessionStorage.getItem('id')
+    console.log(this.allcourse)
+    this.getallcourse();
+   setTimeout(function(){
+     console.log('====')
+     console.log(that.id)
+       that.getprogress()
+   },200)
 
+  },
+  methods: {
+    //获取全部课程
+    getallcourse() {
+      var that = this;
+      var datalist = {
+        num: this.num,
+        year: this.year,
+        page: "1"
+      };
+      this.$axios
+        .post(
+          "http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list",
+          qs.stringify(datalist)
+        )
+        .then(res => {
+          console.log("获取全部课程");
+          console.log(res);
+          that.allcourse = that.allcourse.concat(res.data.data.data);
+          that.count = res.data.data.count;
+          that.pagesize = res.data.data.pagesize;
+          sessionStorage.setItem("id", res.data.data.data.id);
+          for(var i=0 ;i<res.data.data.data.length;i++){
+              console.log(i)
+              that.id=res.data.data.data[i].id
+              console.log(that.id)
+          }
+
+
+        });
+    },
+    //获取课程进度
+    getprogress (){
+        var that=this
+        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+            qs.stringify({
+              kecheng_id:that.id,
+              uid:that.uid,
+              token:that.token
+            })
+        ).then(res =>{
+            console.log("获取进度")
+            console.log(res)
+            console.log(res.data.status)
+            if(res.data.status=='error'){
+              that.used=0
+            }else{
+               if(res.data.status=="ok"){
+                  that.used=res.data.progress
+               }
+            }
+        })
+    }
+  }
 };
 </script>
 
 <style scoped lang="less">
-.allCourses{
-   width: 948px;
+.allCourses {
+  width: 948px;
   .title {
     width: 100%;
     height: 55px;
@@ -120,80 +137,69 @@ export default {
       border-bottom: 2px solid #0c69f5;
     }
   }
-  .content{
-      width: 100%;
-      ul{
-          li{
-              // border:1px solid red;
-               width: 260px;
-                height: 285px;
-                margin-left: 32px;
-                margin-top: 15px;
-                border: 1px solid #dfe4ed;
-                border-radius: 5px;
-                padding: 10px;
-                background-color: #fff;
-                P{
-                  img{
-                    width: 100%;
-                    // height: 189px;
-                    border-radius: 5px;
-                    overflow: hidden;
-                  }
-                  &.txt{
-                    width: 100%;
-                    height: 34px;
-                    padding-left: 8px;
-                    background-color: rgba(0,0,0,.4);
-                    font-size: 14px;
-                    color: #fff;
-                    line-height: 34px;
-                    margin-top:15px;
-                    border-radius: 0 0 5px 5px;
-                  }
-                  &.tit{
-                    height: 22px;
-                    font-size: 16px;
-                    color: #717171;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    margin-top: 12px;
-                  }
-                  &.jindu{
-                    width: 100%;
-                    height: 12px;
-                    display: flex;
-                    justify-content: space-between;
-                    margin-top: 16px;
-                    span{
-                      &.fr{
-                        margin-top:-12px;
-                      }
-                    }
-                  }
-                }
+  .content {
+    width: 100%;
+    ul {
+      li {
+        // border:1px solid red;
+        width: 260px;
+        height: 285px;
+        margin-left: 32px;
+        margin-top: 15px;
+        border: 1px solid #dfe4ed;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #fff;
+        p {
+          &.imm {
+            height: 130px;
           }
-          li:hover{
-           box-shadow: 0 0 10px #c1c1c1; 
-           border:1px solid #c1c1c1; 
+          img {
+            width: 100%;
+            height: 100%;
+            border-radius: 5px;
+            overflow: hidden;
           }
-      }
-  }
 
-}
-</style>
-<style lang="less">
-    .allCourses{
-        .block{
-          width: 70%;
-          height: 10px;
+          &.txt {
+            width: 100%;
+            height: 34px;
+            padding-left: 8px;
+            background-color: rgba(0, 0, 0, 0.4);
+            font-size: 14px;
+            color: #fff;
+            line-height: 34px;
+            margin-top: 15px;
+            border-radius: 0 0 5px 5px;
+          }
+          &.tit {
+            height: 22px;
+            font-size: 16px;
+            color: #717171;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-top: 12px;
+          }
+          // &.jindu {
+          //   width: 100%;
+          //   height: 12px;
+          //   display: flex;
+          //   justify-content: space-between;
+          //   margin-top: 16px;
+          //   span {
+          //     &.fr {
+          //       margin-top: -12px;
+          //     }
+          //   }
+          // }
         }
-        .el-slider{
-            height: 10px;
-        }
-        .el-slider__runway{
-          margin:-5px 0 0 40px;
-        }
+      }
+      li:hover {
+        box-shadow: 0 0 10px #c1c1c1;
+        border: 1px solid #c1c1c1;
+      }
     }
+  }
+}
 </style>

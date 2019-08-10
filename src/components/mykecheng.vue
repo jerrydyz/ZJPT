@@ -4,50 +4,29 @@
       <span>我的课程</span>
     </div>
     <div class="content">
-        <ul class="clearfix">
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
+        <ul class="clearfix" v-if="datalist!=0">
+            <li class="fl" v-for="item in datalist" :key="item.id">
+                <p><img :src="item.img_url" alt=""></p>
+                <p class="txt">{{item.title}}(<span>{{item.xueshi_num}}</span>课时)</p>
+                <p class="tit">{{item.title}}</p>           
                 <p class="jindu clearfix">
                   <span class="fl">进度</span>
                  <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
-                </p>
-            </li>
-            <li class="fl">
-                <p><img src="../assets/kecheng.jpg" alt=""></p>
-                <p class="txt">国际商务与国际营销(43课时)</p>
-                <p class="tit">国际商务与国际营销</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value1"></el-slider>
+                   <el-slider v-model="value2"></el-slider>
                 </div>
                 <span class="fr" style="margin-top:-12px;">0%</span>
                 </p>
             </li>
         </ul>
+        <div class="nodata" v-else >
+        </div>
     
     </div>
   </div>
 </template>
 
 <script>
+import qs from 'qs'
 export default {
    data() {
       return {
@@ -55,12 +34,40 @@ export default {
         value2: 50,
         value3: 36,
         value4: 48,
-        value5: 42
+        value5: 42,
+        uid:'',
+        token:'',
+        year:'',
+        datalist:[]
       }
+    },
+    created (){
+        this.uid=sessionStorage.getItem('uid')
+        this.token=sessionStorage.getItem('token')
+         var date=new Date;
+        this.year=date.getFullYear()
+        this.checkkecheng()
+
     },
     methods: {
       formatTooltip(val) {
         return val / 100;
+      },
+      checkkecheng(){
+         var that=this
+         this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_list_for_buy',
+          qs.stringify({
+             uid:this.uid,
+             token:this.token,
+             year:this.year
+          })
+         ).then(res =>{
+           console.log("检查是否购买")
+           console.log(res)
+           if(res.data.status=="ok"){
+                that.datalist=that.datalist.concat(res.data.data)
+           }
+         }) 
       }
     }
 
@@ -143,6 +150,12 @@ export default {
            border:1px solid #c1c1c1; 
           }
       }
+      .nodata{
+                width: 212px;
+                height: 240px;
+                margin: 80px auto;
+                background-image: url('../assets/nodata.png');
+            }
   }
 
 }

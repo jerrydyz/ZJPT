@@ -9,7 +9,7 @@
                     <li class="fl l1">试卷名称</li>
                     <li class="fr l2">状态</li>
                     <li class="fr l3">总分数</li>
-                    <li class="fr l4" >进度</li>
+                    <li class="fr l4" >分数</li>
                     <li class="fr l5">考试时间</li>
                 </ul>
             </div>
@@ -50,10 +50,10 @@ export default {
     },
     methods:{
           kaoshi (){
-           //获取课程包信息
+           //获取考试记录
             var that=this 
             var data={
-                year:this.page,
+                page:this.page,
                 uid:this.uid,
                 token:this.token,
                 num:this.num
@@ -65,7 +65,7 @@ export default {
                 }).then(res => {
                     console.log(res)
                     if(res.data.status){
-                        that.data =res.data.data.data
+                        that.data =that.data.concat(res.data.data.data)
                         if(res.data.data.data){
                             that.nodata=true
                         }else{

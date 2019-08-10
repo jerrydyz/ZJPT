@@ -10,13 +10,13 @@
            <span class="fr">订单状态</span>
         </div>
         <div class="total">
-            <ul>
+            <ul v-for="(item,index) in data" :key="index">
                 <li class="clearfix dingdan">
                     <p class="fl">
-                       <span>订单编号 ：</span><span>384</span> 
+                       <span>订单编号 ：</span><span>{{item.order_id}}</span> 
                     </p>
                     <p class="fr">
-                    <span>下单时间 :</span><span>2018-08-07 14:00:55</span>
+                    <span>下单时间 :</span><span>{{item.time}}</span>
                     </p>
                 </li>
                 <li class="clearfix neirong">
@@ -24,58 +24,17 @@
                         <img src="../assets/guanli.jpg" alt="">
                     </p>
                     <p class="fl guanword">
-                       <span>管理学原理</span><span>目标学时：<b>16</b>学时</span> 
+                       <span>{{item.buy_obj}}</span>
+                       <!-- <span>目标学时：<b>16</b>学时</span>  -->
                     </p>
-                    <p class="fl monery">￥100.00元
-                    </p>
-                    <p class="fr zhifu">已支付
-                    </p>
-                </li>
-            </ul>
-            <ul>
-                <li class="clearfix dingdan">
-                    <p class="fl">
-                       <span>订单编号 ：</span><span>384</span> 
-                    </p>
-                    <p class="fr">
-                    <span>下单时间 :</span><span>2018-08-07 14:00:55</span>
-                    </p>
-                </li>
-                <li class="clearfix neirong">
-                    <p class="fl">
-                        <img src="../assets/guanli.jpg" alt="">
-                    </p>
-                    <p class="fl guanword">
-                       <span>管理学原理</span><span>目标学时：<b>16</b>学时</span> 
-                    </p>
-                    <p class="fl monery">￥100.00元
+                    <p class="fl monery">￥{{item.monery}}元
                     </p>
                     <p class="fr zhifu">已支付
                     </p>
                 </li>
             </ul>
-            <ul>
-                <li class="clearfix dingdan">
-                    <p class="fl">
-                       <span>订单编号 ：</span><span>384</span> 
-                    </p>
-                    <p class="fr">
-                    <span>下单时间 :</span><span>2018-08-07 14:00:55</span>
-                    </p>
-                </li>
-                <li class="clearfix neirong">
-                    <p class="fl">
-                        <img src="../assets/guanli.jpg" alt="">
-                    </p>
-                    <p class="fl guanword">
-                       <span>管理学原理</span><span>目标学时：<b>16</b>学时</span> 
-                    </p>
-                    <p class="fl monery">￥100.00元
-                    </p>
-                    <p class="fr zhifu">已支付
-                    </p>
-                </li>
-            </ul>
+           
+           
            
         </div>
     </div>
@@ -83,7 +42,46 @@
 </template>
 
 <script>
-export default {};
+import qs from 'qs'
+export default {
+    data (){
+        return {
+            uid:'',
+            token:'',
+            page:'1',
+            num:'3',
+            data:[]
+
+        }
+    },
+    created (){
+          this.uid= sessionStorage.getItem('uid')
+        this.token=sessionStorage.getItem('token')
+        console.log(this.uid,this.token)
+        this.getOrder()
+    },
+    methods:{
+        getOrder (){
+            var that=this
+            var data={
+                uid:this.uid,
+                token:this.token,
+                page:this.page,
+                num:this.num
+            }
+            this.$axios.post('http://jixujiaoyu_api.songlongfei.club/pay/get_pay_order',
+            qs.stringify(data)
+            ).then(res =>{
+                console.log("订单列表")
+                console.log(res)
+                if(res.data.status=="ok"){
+                     that.data=that.data.concat(res.data.data)
+                }
+
+            })
+        }
+    }
+};
 </script>
 
 <style scoped lang="less">
@@ -156,6 +154,7 @@ export default {};
                             // line-height: 90px;
                             &.guanword{
                                 width: 350px;
+                                margin-top: 35px;
                                 span{
                                     display: block;
                                     &:nth-child(1){

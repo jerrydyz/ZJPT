@@ -27,7 +27,7 @@
               <span>
                 {{item.kecheng_num}}
               </span>
-                
+                <p style="margin-top:5px">进度 <el-progress :percentage="used"></el-progress></p>
             </div>
           </div>
           <div class="price-box fr">
@@ -50,12 +50,19 @@ export default {
   name: "package",
   data (){
     return {
-      list:[]
+      list:[],
+      used:10,
+      id:[],
+      year:''
         
     }
   },
   created (){
     this.kechengbao()
+    this.uid = sessionStorage.getItem("uid");
+    this.token = sessionStorage.getItem("token");
+    var date = new Date();
+    this.year = date.getFullYear();
   },
   methods:{
       kechengbao (){
@@ -64,10 +71,18 @@ export default {
         this.$axios({
           method: 'post',
           url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list',
+          data:qs.stringify({
+            year:this.year
+          })
           }).then(res => {
             console.log(res)
             if(res.data.status=="ok"){
-               that.list=res.data.data
+               that.list=that.list.concat(res.data.data)
+               for(var i=0;i<res.data.data.length;i++){
+                 that.id.push(res.data.data[i].id)
+                 console.log(that.id)
+                 that.getbaoprogress()
+               }
             }else{
               
             }
@@ -75,6 +90,19 @@ export default {
       },
       xuexi (){
          this.$emit('more','mykecheng')
+      },
+      getbaoprogress (){
+         var that=this
+         this.$axios.post('http://jixujiaoyu_api.songlongfei.club//kecheng/get_kecheng_keshi_jindu',
+          qs.stringify({
+             kecheng_id:this.id,
+             uid:this.uid,
+             token:this.token
+          })
+         ).then(res =>{
+            console.log("获取课程包进度")
+            console.log(res)
+         })
       }
   }
 };
