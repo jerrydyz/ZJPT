@@ -92,9 +92,9 @@ export default {
               // sessionStorage.setItem("id_card", response.data.data.id_card);
               that.$router.push({ path: 'personal' });
             }else if(response.data.status=='error'){
-              alert(response.data.msg)
-            }else{
-
+              this.$message.error({message:response.data.errormsg,duration:1600});
+            }else if(response.data.status=='relogin'){
+              
             }
             
           })
