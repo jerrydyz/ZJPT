@@ -13,7 +13,7 @@
                     <li class="l6">操作</li>
                 </ul>
             </div>
-             <div class="topcon"  v-show="!nodata">
+             <div class="topcon" v-show="!nodata">
                <ul v-for="(item,index) in list" :key="index">
                     <li class="l1">{{item.year}}</li>
                     <li>{{name}}</li>
@@ -23,9 +23,9 @@
                 </ul>
             </div>
             <div class="nodata" v-show="nodata">
-
             </div>
         </div>
+ 
     </div>
 </template>
 
@@ -35,7 +35,6 @@ export default {
     data(){
         return{
             nodata:false,
-            msgtip:false,
             uid:'',
             token:'',
             year:'',
@@ -54,12 +53,6 @@ export default {
         this.dangan()
     },
     methods:{
-        look (){
-            this.msgtip=true
-        },
-        closetip (){
-             this.msgtip=false
-        },
         dangan (){
            //获取课程包信息
             var that=this 
@@ -76,11 +69,12 @@ export default {
                     console.log(res)
                     console.log('档案记录')
                     that.list=res.data.data
-                    if(res.data.data){
+                    if(res.data.data.length){
                         that.nodata=false
                     }else{
                         that.nodata=true
                     }
+                   
       });
       },
     }

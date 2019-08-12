@@ -9,12 +9,8 @@
                 <p><img :src="item.img_url" alt=""></p>
                 <p class="txt">{{item.title}}(<span>{{item.xueshi_num}}</span>课时)</p>
                 <p class="tit">{{item.title}}</p>           
-                <p class="jindu clearfix">
-                  <span class="fl">进度</span>
-                 <div class="block fl">
-                   <el-slider v-model="value2"></el-slider>
-                </div>
-                <span class="fr" style="margin-top:-12px;">0%</span>
+                <p class="">
+                进度：<el-progress :percentage="used"></el-progress>
                 </p>
             </li>
         </ul>
@@ -30,15 +26,12 @@ import qs from 'qs'
 export default {
    data() {
       return {
-        value1: 0,
-        value2: 50,
-        value3: 36,
-        value4: 48,
-        value5: 42,
+        used: 0,
         uid:'',
         token:'',
         year:'',
-        datalist:[]
+        datalist:[],
+        idd:''
       }
     },
     created (){
@@ -47,12 +40,9 @@ export default {
          var date=new Date;
         this.year=date.getFullYear()
         this.checkkecheng()
-
     },
     methods: {
-      formatTooltip(val) {
-        return val / 100;
-      },
+      //我的课程
       checkkecheng(){
          var that=this
          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_list_for_buy',
@@ -66,9 +56,38 @@ export default {
            console.log(res)
            if(res.data.status=="ok"){
                 that.datalist=that.datalist.concat(res.data.data)
+                console.log( that.datalist)
+                for(var i=0;i<that.datalist.length;i++){
+                   console.log(i)
+                  //  获取课程id
+                   that.idd =that.datalist[i].id
+                  that.getprogress ()
+                }
            }
          }) 
-      }
+      },
+          //获取课程进度
+    getprogress (){
+        var that=this
+        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+            qs.stringify({
+              kecheng_id:that.idd,
+              uid:that.uid,
+              token:that.token
+            })
+        ).then(res =>{
+            console.log("获取进度")
+            console.log(res)
+            console.log(res.data.status)
+            if(res.data.status=='error'){
+              that.used=0
+            }else{
+               if(res.data.status=="ok"){
+                  that.used=res.data.progress
+               }
+            }
+        })
+    }
     }
 
 };

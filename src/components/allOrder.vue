@@ -7,6 +7,7 @@
         <div class="info clearfix">
            <span class="fl">课程信息</span>
            <span class="fl">价格</span>
+           <span class="fl">支付方式</span>
            <span class="fr">订单状态</span>
         </div>
         <div class="total">
@@ -20,21 +21,27 @@
                     </p>
                 </li>
                 <li class="clearfix neirong">
-                    <p class="fl">
-                        <img src="../assets/guanli.jpg" alt="">
-                    </p>
                     <p class="fl guanword">
                        <span>{{item.buy_obj}}</span>
-                       <!-- <span>目标学时：<b>16</b>学时</span>  -->
                     </p>
-                    <p class="fl monery">￥{{item.monery}}元
+                    <p class="fl monery">￥{{item.money}}元
                     </p>
-                    <p class="fr zhifu">已支付
+                    <p class="fl type">{{item.pay_type=='1'?"支付宝":item.pay_type=="2"?"微信":item.pay_type=="3"?"学时卡":"赠送"}}</p>
+                    <p class="fr zhifu">{{item.status=='0'?"未支付":item.status=="1"?"已支付":"支付失败"}}
                     </p>
                 </li>
             </ul>
            
-           
+          <div class="block" style="text-align:right;margin-top:20px;">
+            <el-pagination
+                layout="prev, pager, next"
+                :total="data.length"
+                :page-size="5"    
+                @current-change="current_change" 
+                :current-page.sync="page" 
+                >
+            </el-pagination>
+            </div>
            
         </div>
     </div>
@@ -48,10 +55,9 @@ export default {
         return {
             uid:'',
             token:'',
-            page:'1',
-            num:'3',
-            data:[]
-
+            page:1,
+            data:[],
+            // currentPage:1
         }
     },
     created (){
@@ -76,9 +82,16 @@ export default {
                 console.log(res)
                 if(res.data.status=="ok"){
                      that.data=that.data.concat(res.data.data)
+                     console.log(that.data)
                 }
 
             })
+        },
+        current_change(page){
+            // console.log(currentPage)
+            this.page=page
+            this.data=[]
+            this.getOrder()
         }
     }
 };
@@ -117,15 +130,21 @@ export default {
             span{
                 display:inline-block;
                 overflow: hidden;
+                text-align: center;
                 &:nth-child(1){
-                    width: 60%;
+                    width: 45%;
+                    text-align: left;
                 }
                  &:nth-child(2){
-                    width: 20%;
+                    width: 18%;
                 }
                  &:nth-child(3){
-                    width: 20%;
-                    text-align: right;
+                    width: 18%;
+                   
+                }
+                 &:nth-child(4){
+                    width: 18%;
+                   text-align: right;
                 }
 
             }
@@ -151,10 +170,11 @@ export default {
                             margin-right:10px;
                         }
                         p{
-                            // line-height: 90px;
+                             width: 18%;
+                             text-align: center;
                             &.guanword{
-                                width: 350px;
-                                margin-top: 35px;
+                                width: 45%;
+                                text-align: left;
                                 span{
                                     display: block;
                                     &:nth-child(1){
@@ -175,12 +195,16 @@ export default {
                             &.monery{
                                 font-size: 22px;
                                 color: #fe0000;
-                                 margin-top:35px; 
+                                 
                             }
                             &.zhifu{
                                font-size: 14px;
                                 color: #fe0000; 
-                                margin-top:35px; 
+                                text-align: right;
+                            }
+                             &.type{
+                               font-size: 14px;
+                                color: #333; 
                             }
                         }
 

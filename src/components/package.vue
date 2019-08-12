@@ -34,7 +34,7 @@
             <div class="price">
               <span class="rmb">￥{{item.price}} 元</span>
             </div>
-            <div type="button" class="btn-now" @click="xuexi">继续学习</div>
+            <div type="button" class="btn-now" @click="xuexi" v-html="msg"></div>
           </div>
         </li>
         
@@ -53,7 +53,8 @@ export default {
       list:[],
       used:10,
       id:[],
-      year:''
+      year:'',
+      msg:'继续学习'
         
     }
   },
@@ -81,7 +82,13 @@ export default {
                for(var i=0;i<res.data.data.length;i++){
                  that.id.push(res.data.data[i].id)
                  console.log(that.id)
-                 that.getbaoprogress()
+                //  that.getbaoprogress()
+               }
+               for(var i=0;i<that.id.length;i++){
+                   that.idd=that.id[i]
+                   console.log("单个id")
+                   console.log(that.idd)
+                  that.getbaoprogress()
                }
             }else{
               
@@ -93,16 +100,25 @@ export default {
       },
       getbaoprogress (){
          var that=this
-         this.$axios.post('http://jixujiaoyu_api.songlongfei.club//kecheng/get_kecheng_keshi_jindu',
-          qs.stringify({
-             kecheng_id:this.id,
-             uid:this.uid,
-             token:this.token
-          })
-         ).then(res =>{
-            console.log("获取课程包进度")
-            console.log(res)
-         })
+          that.$axios.post('http://jixujiaoyu_api.songlongfei.club//kecheng/get_kecheng_keshi_jindu',
+                    qs.stringify({
+                      kecheng_id:that.idd,
+                      uid:that.uid,
+                      token:that.token
+                    })
+                  ).then(res =>{
+                      console.log("获取课程包进度")
+                      if(res.data.status=='error'){
+                          that.used=0
+                           that.msg="购买课程"                             
+                          
+                      }else{
+                          that.used=res.data.progress
+                          console.log("=======================")
+                          
+                      }
+                  })
+         
       }
   }
 };

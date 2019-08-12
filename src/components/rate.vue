@@ -40,7 +40,7 @@
                  </div>
                  <div class="imgmodel fl">
                      <h3 class="lgtit">{{item.title}}</h3>
-                     <p>完成进度：<el-progress :percentage="used"></el-progress></p>
+                     <!-- <el-progress>完成进度：<el-progress :percentage="used"></el-progress></p> -->
                      <!-- <p>目标学时: <span>{{allxueshi}}</span> ; &nbsp; &nbsp;已获学时 : <span>{{kechengxueshi}}</span></p> -->
                  </div>
                  <div class="imgright fr">
@@ -73,7 +73,8 @@ export default {
             allxueshi:'',
             kechengxueshi:'',
             used:0,
-            id:[]
+            id:[],
+            idd:''
         }
     },
     created (){
@@ -135,17 +136,23 @@ export default {
                     console.log(i)
                     that.id.push(res.data.data.data[i].id)
                     console.log(that.id)
-                    that.getprogress ()
                 }
+                // for(var i=0;i<that.id.length;i++){
+                //     that.idd=that.id[i]
+                //     console.log("==================")
+                //     console.log(that.idd)
+                // }
+                // that. getprogress ()
                 })
                 
       },
+     
        //获取课程进度
     getprogress (){
         var that=this
         that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
             qs.stringify({
-              kecheng_id:that.id,
+              kecheng_id:that.idd,
               uid:that.uid,
               token:that.token
             })
@@ -280,6 +287,7 @@ export default {
           } 
           .imgmodel{
             width: 550px;
+            margin-top:35px;
             .lgtit{
                font-size:20px;
               font-family:@family;

@@ -29,6 +29,7 @@ import commonHeader from '@/commons/header'
 import commonFooter from '@/commons/footer'
 import couse from '../pages/couse'
 import my from '../pages/my'
+import textpaper from '../pages/textpaper'
 
 Vue.use(Router)
 
@@ -185,6 +186,10 @@ export default new Router({
             path: '/couse',
             name: 'couse',
             component: couse
+        }, {
+            path: '/textpaper',
+            name: 'textpaper',
+            component: textpaper
         }
 
     ]

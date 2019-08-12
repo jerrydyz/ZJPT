@@ -45,8 +45,8 @@ export default {
     },
     created (){
             this.uid=sessionStorage.getItem('uid')
-          this.token=sessionStorage.getItem('token')
-          this.kaoshi()
+            this.token=sessionStorage.getItem('token')
+            this.kaoshi()
     },
     methods:{
           kaoshi (){

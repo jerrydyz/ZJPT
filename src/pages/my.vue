@@ -78,6 +78,7 @@ import mykecheng from '../components/mykecheng';
 import foot from '../components/footer';
 import packages from '../components/package';
 import allCourses from '../components/allCourses';
+import detail from '../components/detail';
 import qs from 'qs'
 export default {
     name:'my',
@@ -135,7 +136,8 @@ export default {
        mykecheng,
        foot,
        packages,
-       allCourses
+       allCourses,
+       detail
     },
     destroyed (){
        sessionStorage.removeItem('token')

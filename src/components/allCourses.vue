@@ -57,12 +57,6 @@ export default {
     // this.id=sessionStorage.getItem('id')
     console.log(this.allcourse)
     this.getallcourse();
-   setTimeout(function(){
-     console.log('====')
-     console.log(that.id)
-       that.getprogress()
-   },200)
-
   },
   methods: {
     //获取全部课程
@@ -89,9 +83,8 @@ export default {
               console.log(i)
               that.id=res.data.data.data[i].id
               console.log(that.id)
+               that.getprogress()
           }
-
-
         });
     },
     //获取课程进度
