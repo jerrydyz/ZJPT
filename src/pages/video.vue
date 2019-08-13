@@ -3,11 +3,11 @@
 		<div class="videopage-left">
 			<div class="video-top">
 				<div class="video-top-l">
-					<a href="http://ceshi2.jxjyedu.club/my/course.html?id=tYs4Z"><i class="video-fh"></i><span>返回我的课程&nbsp;&nbsp;&nbsp;|</span></a>
+					<a href=""><i class="video-fh"></i><span @click="returnMyCourse">返回我的课程&nbsp;&nbsp;&nbsp;|</span></a>
 				</div>
 				<div class="video-top-con">
 					<a class="cl-prev"></a>
-					<h2>第一节 管理概述(1) - 管理学原理</h2>
+					<h2>{{courseInfo.title}}</h2>
 					<a class="cl-next"></a>
 				</div>
 			</div>
@@ -16,14 +16,14 @@
 					<video-player class="vjs-custom-skin" :options="playerOptions"></video-player>
 				</div>
 				<div class="cl-info f-cb">
-					<div style="" title="分享" class="cli-share j-sharebox auto-1390289261253-parent" id="auto-id-Wgv0KyQS2q5GtCJz">
+					<div style="" title="分享" class="cli-share j-sharebox">
 						<span class="fl">分享到：</span>
 						<div data-bd-bind="1565399572085" class="bdsharebuttonbox bdshare-button-style1-16">
 							<a data-cmd="more" class="bds_more " href="#"></a>
 							<a title="分享到微信" data-cmd="weixin" class="bds_weixin" href="#"></a>
-							<a title="分享到QQ好友" data-cmd="sqq" class="bds_sqq" href="#"></a>
+							<!-- <a title="分享到QQ好友" data-cmd="sqq" class="bds_sqq" href="#"></a>
 							<a title="分享到QQ空间" data-cmd="qzone" class="bds_qzone" href="#"></a>
-							<a title="分享到新浪微博" data-cmd="tsina" class="bds_tsina" href="#"></a>
+							<a title="分享到新浪微博" data-cmd="tsina" class="bds_tsina" href="#"></a> -->
 						</div>
 					</div>
 				</div>
@@ -34,21 +34,21 @@
 			<div class="m-ctb">
 				<!--右边上面第一部分-->
 				<div class="courseintro">
-					<h2>管理学原理</h2>
+					<h2>{{courseInfo.title}}</h2>
 					<div class="video_rinfo" style="position:relative;">
 						<img src="http://ceshi2.jxjyedu.club/data/upload/2019/0730/16/5d400136bc6a1_147_95_147_95.jpg">
 						<div class="video_rinfo-con">
-							<p>年度：2019</p>
-							<p>分类：高等教师</p>
-							<p>讲师：符太浩</p>
-							<p>学时：16学时</p>
+							<p>年度：{{courseInfo.year}}</p>
+							<p>分类：{{courseInfo.type_name}}</p>
+							<p>讲师：{{courseInfo.jiangshi.name}}</p>
+							<p>学时：{{courseInfo.xueshi_num}}</p>
 						</div>
 					</div>
 				</div>
 				<!--右边teb-->
 				<ul class="tabs" id="tags">
-					<li class="current"><a style="color:#FFF;" href="javascript:;" onclick="muluBang(this)" class=""><i class="tabs-ml"></i>目录</a></li>
-					<li><a href="javascript:;" id="note" onclick="noteBang(this,92,1)"><i class="tabs-bj"></i>笔记</a></li>
+					<li class="current" @click="tabstateshow"><a style="color:#FFF;" class=""><i class="tabs-ml"></i>目录</a></li>
+					<li @click="tabstateshow"><a id="note"><i class="tabs-bj"></i>笔记</a></li>
 					
 				</ul>
 			</div>
@@ -56,107 +56,20 @@
 			<!--teb内容切换盒子-->
 			<div id="tagcontent_box">
 				<!--课程-->
-				<div class="m-chapterList" id="tagcontent0" style="display: block;">
-					<div class="section bigsection">
+				<div class="m-chapterList" id="tagcontent0" v-show="tabstate">
+					<div class="section bigsection" v-for="(itemlist,index) in courseInfo.zhang" :key="index">
 						<div class="section_bj"> </div>
-						<a class="fl ksname" href="javascript:;">第一章管理与管理学</a>
-					</div>
-					<div class="section-cur section">
-						<div class="section_bj" style="background-color:green;width:7%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_181.html">第一节管理概述(1)</a>
-						<span class="per-progress" jindu="7">NaN%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_182.html">第二节管理概述(2)</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div> 
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_183.html">第三节管理者</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_184.html">第四节管理学</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                
-					<div class="section bigsection">
-						<div class="section_bj"> </div>
-						<a class="fl ksname" href="javascript:;">第二章管理理论的形成与发展</a>
-					</div>
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_186.html">第一节管理理论产生前的管理实践与管理思想</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_187.html">第二节古典管理理论的形成</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_188.html">第三节行为科学的兴起</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_189.html">第四节现代管理理论的丛林</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_190.html">第五节现代管理理论的丛林、当代管理理论的发展</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                    
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_191.html">第六节当代管理理论的发展</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                
-					<div class="section bigsection">
-						<div class="section_bj"> </div>
-						<a class="fl ksname" href="javascript:;">第三章组织环境与组织文化</a>
-					</div>
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_193.html">第一节组织环境概述</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_194.html">第二节组织环境分析</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div> 
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_195.html">第三节组织文化</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>
-					<div class="section bigsection">
-						<div class="section_bj"> </div>
-						<a class="fl ksname" href="javascript:;">第四章管理道德与社会责任</a>
-					</div>
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_197.html">第一节管理道德概述</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div> 
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_198.html">第二节管理道德概述、社会责任</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>
-					<div class="section">
-						<div class="section_bj" style="background-color:green;width:0%"> </div>
-						<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_199.html">第三节社会责任</a>
-						<span class="per-progress" jindu="0">0%</span>
-					</div>                
+						<a class="fl ksname" href="javascript:;">{{itemlist.title}}</a>
+						<div class="section-cur section" v-for="(item,index) in itemlist.jie" :key="index">
+							<div class="section_bj" style="background-color:green;width:7%"> </div>
+							<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_181.html">{{item.title}}</a>
+							<span class="per-progress" jindu="7">0%</span>
+						</div> 
+					</div>              
 				</div>
 
 				<!--笔记-->
-				<div class="p10 tagcontent txt_l" id="tagcontent1" style="display: none">
+				<div class="p10 tagcontent txt_l" id="tagcontent1" v-show="!tabstate">
 					<form>
 						<input type="hidden" value="1" name="kztype">
 						<input type="hidden" value="0" class="kzid" name="kzid">
@@ -183,25 +96,6 @@
 						<div style="text-align:center;height:auto;overflow:hidden; color:#999999; font-size:12px">暂无数据</div>
 					</div>
 				</div>
-				<div class="p10 tagcontent txt_r" id="tagcontent3" style="display: none;">
-					<form>
-						<input type="hidden" value="1" name="kztype">
-						<input type="hidden" value="0" class="kzid" name="kzid">
-						<div class="tips1 l5">我的提问</div>
-						<div class="editwrap mt22">
-							<div class="tips r5">内容限<span id="questioncont_length">450</span>字符内</div>
-							<textarea name="content" class="j-edittxt edittxt" maxlength="100" id="questioncont" placeholder="请添加问题描述... "></textarea>
-							<label for="edittxt" class="j-hint hint" id="auto-id-drt6TisVISpRhnQa"></label>
-						</div>
-						<div class="mt5 clearfix">
-							<input type="button" onclick="addquestionBang(this,92,1)" style="border:none;cursor:pointer;" class="bg_btn_gray Secrecy fr" value="保存">
-						</div>
-					</form>
-					<ul class="video-list"></ul>
-					<div style="margin-top:28px;" class="wie" id="txtmydianboqst">
-						<div style="text-align:center;height:auto;overflow:hidden; color:#999999; font-size:12px">暂无数据</div>
-					</div>
-				</div>
 			</div>
 
 		</div>
@@ -212,7 +106,7 @@
 //引入video样式
 import 'video.js/dist/video-js.css'
 import 'vue-video-player/src/custom-theme.css'
-
+import qs from 'qs'
 //引入hls.js
 import 'videojs-contrib-hls.js/src/videojs.hlsjs'
 
@@ -221,7 +115,7 @@ export default {
   data () {
     return {
 		playerOptions: {
-	        playbackRates: [0.7, 1.0, 1.5, 2.0], //播放速度
+	        playbackRates: [1.0], //播放速度
 	        autoplay: false, //如果true,浏览器准备好时开始回放。
 	        controls: true, //控制条
 	        preload: 'auto', //视频预加载
@@ -237,10 +131,43 @@ export default {
 	        poster: "/static/images/index/index-banner1.jpg", //你的封面地址
 	        //width: document.documentElement.clientWidth,
 	        notSupportedMessage: '此视频暂无法播放，请稍后再试' //允许覆盖Video.js无法播放媒体源时显示的默认信息。
-	      }
-	    }
+		  },
+		  courseInfo:'',
+		  tabstate:true,
+		}
+		
+  },
+  mounted () {
+	let that = this;
+	let datacourse={kecheng_id:this.$route.query.vid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+	this.$axios({
+		method: 'post',
+		url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
+		data: qs.stringify(datacourse) 
+		}).then(function (response) {
+		if(response.data.status=="ok"){
+			console.log("该播放课程信息")
+			console.log(response.data.data)
+			that.courseInfo=response.data.data;
+		}else if(response.data.status=="error"){
+			that.$message.error({message:response.data.errormsg,duration:1600});
+		}else if(response.data.status=="relogin"){
+			that.$message.error({message:"重新登录",duration:1600});
+		}
+	});
   },
   methods: {
+	  returnMyCourse:function(){
+		 
+	  },
+	  tabstateshow:function(){
+		 if(this.tabstate==true){
+			 this.tabstate==false;
+		 }else{
+			  this.tabstate==true;
+		 }
+	  },
+
     
   },
   computed: {
@@ -250,9 +177,9 @@ export default {
 </script>
 
 <style lang="less">
-  .videopage{width: 100%;height: 100%;background-color: #000;
+  .videopage{width: 100%;height: 100%;background-color: #000;display:flex;
 	.videopage-left{width: calc(100% - 370px);box-sizing: border-box;height: calc(100% - 60px);
-		.video-top{ height:60px; line-height:60px; background:#3C3C3C; width:100%;color:#CBCBCB;
+		.video-top{ height:60px; line-height:60px; background:#3C3C3C; width:calc(100% + 20px);color:#CBCBCB;
 			.video-top-l{ width:180px;position:absolute; left:20px; top:0;
 				a{color:#CBCBCB;
 					.video-fh{ width:20px; float:left; background:url(/static/images/coursedetails/ico.png) no-repeat -112px -64px;height:17px; margin:22px 10px 0 0;background-size:270px 356px;}
@@ -266,12 +193,12 @@ export default {
 
 			}
 		}
-		.player-container{width: 100%;height: 100%;
-			.videobox{}
+		.player-container{width: 100%;height: calc(100% - 60px);position: absolute;top:60px;bottom:0;background-color: #000;
+			.videobox{height: 100%;width: calc(100% - 370px);}
 			
 		}
 	}
-	.videopage-right{width: 370px;height: auto;
+	.videopage-right{width: 370px;
 	
 	}
   }
@@ -279,7 +206,7 @@ export default {
 .m-chapterList{border-top:0; text-align:left; position:relative;padding-bottom:1em; font-size:14px; color:#999999;background-color: #333;}
 .m-chapterList .chapter{height:40px; color:#666; font-size:14px; font-family:'微软雅黑'; font-weight:bolder; padding:10px 12px 0 12px; line-height:40px; cursor:default;}
 .m-chapterList .ch{width:41px; height:40px; text-align:left;}
-.m-chapterList .section{height:30px;width:345px;  float:left; line-height:30px; cursor:pointer; position:relative; -webkit-transition:0.5s all ease; -moz-transition:0.5s all ease; -ms-transition:0.5s all ease; -o-transition:0.5s all ease; transition:0.5s all ease;margin-bottom: 5px;margin-left: 20px;}
+.m-chapterList .section{width:345px;  float:left; line-height:30px; cursor:pointer; position:relative; -webkit-transition:0.5s all ease; -moz-transition:0.5s all ease; -ms-transition:0.5s all ease; -o-transition:0.5s all ease; transition:0.5s all ease;margin-bottom: 5px;margin-left: 20px;}
 .m-chapterList .bigsection{width:365px;margin-left: 0px;}
 .m-chapterList .section-cur{ color:#ffffff; display:block;width: 345px;}
 .m-chapterList .section-cur .ks{background:#E82F24;color:#ffffff}
@@ -330,17 +257,21 @@ export default {
 #tagcontent0,#tagcontent1{width:370px; position: absolute; overflow-x: hidden; overflow-y: auto; top:250px; bottom:0;right: 0; }
 .checklabel{color:#999999;}
 .m-videoReportDialog .checklabel:hover{color:#16914E;}
-.cl-info{background:#000000; height:42px; line-height:42px; color:#b7babe; font-size:12px;position: absolute;bottom: 0;}
+.cl-info{ height:42px; line-height:42px; color:#b7babe; font-size:12px;position: absolute;bottom: 0;width: calc(100% - 370px);}
 .cl-info .clis-im{margin-right:20px;}
 .cl-info .clis-im span{background-position:-114px -527px; padding-left:24px; color:#fff;}
 .cli-intro span{background-position:0 0px;}
 .cli-report span{background-position:0 -99px;}
-.cli-share{position:relative;}
+.cli-share{position:relative;padding: 0 22px;cursor: pointer;float: right;width: 160px;}
+.bdshare-button-style1-16 {margin-top: 8px;zoom: 1;}
 .share p{color:#333;}
 .cli-share span{background-position:0 -68px;}
 .editwrap{background:none repeat scroll 0px 0px rgb(250, 250, 250); border:1px solid #CECECE; padding:5px; height:65px; position:relative;}
 .editwrap_tittle{background:none repeat scroll 0px 0px rgb(250, 250, 250); border:1px solid #CECECE; padding:5px; height:30px; position:relative;}
 .cl-title .cl-lesson{width:37px;display:inline-block;}
-
-
+.bdshare-button-style1-16 a,.bdshare-button-style1-16 .bds_more {float: left;font-size: 12px;padding-left: 17px;line-height: 16px;height: 16px;background-image: url(/static/images/coursedetails/icons_1_16.png);background-size: 16px 3260px; background-repeat: no-repeat;cursor: pointer;margin: 6px 6px 6px 0;}
+.bdshare-button-style1-16 .bds_weixin {background-position: 0 -1612px;}
+.bdshare-button-style1-16 .bds_sqq {background-position: 0 -2652px;}
+.bdshare-button-style1-16 .bds_qzone {background-position: 0 -52px;}
+.bdshare-button-style1-16 .bds_tsina {background-position: 0 -104px;}
 </style>

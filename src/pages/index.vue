@@ -48,7 +48,7 @@
                 </div>
             </div>
       </div>
-      <div class="login-index-success" v-show="login1">
+      <div class="login-index-success" v-show="!type">
           <img class="user-image" src="/static/images/personal/man.png" v-show="sex==1" />
           <img class="user-image" src="/static/images/personal/women.png" v-show="sex==0"/>
           <div class="user-name">{{name}}</div>
@@ -127,7 +127,6 @@ export default {
   data () {
     return {
       apiurl:"",
-      type:true,
       newsjson:{
           title:'新闻咨询',
           englishTitle:'NEWS INFORMATION',
@@ -196,7 +195,7 @@ export default {
       //yeartabState
       categorytabState:'',
       //登陆状态
-      login1:sessionStorage.getItem("login1"),
+       type:true,
       //根据性别显示图片
       sex:sessionStorage.getItem("sex"),
       //name
@@ -208,15 +207,12 @@ export default {
   created(){
     this.createCode();
     sessionStorage.setItem("sex","1");
-    // sessionStorage.setItem("login1","0");
-    sessionStorage.setItem("name","XXX");
     if(sessionStorage.getItem("login1")){
       this.type=false
     }
   },
 
   mounted() {
-    sessionStorage.setItem("login1",true);
     let that = this
     //轮播图
     this.$axios({

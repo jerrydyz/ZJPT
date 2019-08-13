@@ -162,9 +162,9 @@ export default {
             this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/xueshika",qs.stringify(buycourse))
             .then(response => {
                 if(response.data.status=="ok"){
-                    console.log(response.data.data);
+                    this.$message.success({message: "您已购买成功",duration:1600});
                 }else if(response.data.status=="error"){
-                  this.$message.error({message: response.data.msg,duration:1600});
+                  this.$message.error({message: response.data.errormsg,duration:1600});
                 }else if(response.data.status=="relogin"){
 
                 }

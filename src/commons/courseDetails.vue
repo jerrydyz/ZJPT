@@ -258,12 +258,11 @@ export default {
         let courseId={kecheng_id:this.$route.params.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
         this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/check_kecheng_is_buy",qs.stringify(courseId))
         .then(response => {
-          console.log(response);
           if(response.data.status=="ok"){
             if(response.data.data.check_res=="0"){
               this.$message.success({message:"您还未购买该课程",duration:1600});
             }else if(response.data.data.check_res=="1"){
-              that.$router.push({ name:'videoPage',query:{id:that.buyCourseId} });
+              that.$router.push({ path:'/video',query:{vid:that.buyCourseId} });
             } 
           }else if((response.data.status=="error")){
             console.log(response);
