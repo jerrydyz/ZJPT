@@ -2,7 +2,7 @@
   <div class="courseDetails">
     <div class="classtopbox">
       <div class="left">
-        <a href="http://ceshi2.jxjyedu.club/course/watch/93_201.html">
+        <a>
           <img :src="courseData.img_url"/>
         </a>
       </div>
@@ -262,7 +262,7 @@ export default {
             if(response.data.data.check_res=="0"){
               this.$message.success({message:"您还未购买该课程",duration:1600});
             }else if(response.data.data.check_res=="1"){
-              that.$router.push({ path:'/video',query:{vid:that.buyCourseId} });
+              that.$router.push({ path:'/video',query:{courseId:that.buyCourseId,vid:Vid} });
             } 
           }else if((response.data.status=="error")){
             console.log(response);

@@ -10,39 +10,39 @@
                 <span class="redstar">*</span>
                 <input id="uname" name="uname" type="text" class="Name" placeholder="请输入姓名" v-model="username" @blur="identifyName">
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="nametips==1"></div>
-                    <div class="register-error hide" v-show="nametips==2"></div>
+                    <div class="register-sucess" v-show="nametips==1"></div>
+                    <div class="register-error" v-show="nametips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="nametips==2">请输入2-15个汉字</div>
+                <div class="register-tips" v-show="nametips==2">请输入2-15个汉字</div>
             </div>
             <div>
                 <span class="redstar">*</span>
                 <input name="uidcardno" id="pruidcardno" type="text" class="IDcard" maxlength="18" placeholder="请输入身份证号" v-model="IDcard" @blur="identifyIDcard">
                 <span class="tips">(作为账号登录)</span>
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="IDcardtips==1"></div>
-                    <div class="register-error hide" v-show="IDcardtips==2"></div>
+                    <div class="register-sucess" v-show="IDcardtips==1"></div>
+                    <div class="register-error" v-show="IDcardtips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="IDcardtips==2">请输入18位正确的身份证号</div>
+                <div class="register-tips" v-show="IDcardtips==2">请输入18位正确的身份证号</div>
             </div>
             <div> 
                 <span class="redstar">*</span>
                 <input name="phone" id="prphone" type="text" class="phone" maxlength="11" placeholder="请输入手机号" v-model="phone" @blur="identifyphone">
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="phonetips==1"></div>
-                    <div class="register-error hide" v-show="phonetips==2"></div>
+                    <div class="register-sucess" v-show="phonetips==1"></div>
+                    <div class="register-error" v-show="phonetips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="phonetips==2">请输入正确的手机号</div>
+                <div class="register-tips" v-show="phonetips==2">请输入正确的手机号</div>
             </div> 
             
             <div>
                 <span class="redstar">*</span>
                 <input name="udanwei" id="udanwei" type="text" class="unit" placeholder="请输入工作单位" v-model="company" @blur="identifycompany">
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="companytips==1"></div>
-                    <div class="register-error hide" v-show="companytips==2"></div>
+                    <div class="register-sucess" v-show="companytips==1"></div>
+                    <div class="register-error" v-show="companytips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="companytips==2">不能为空</div>
+                <div class="register-tips" v-show="companytips==2">不能为空</div>
             </div>
             <div>
                 <span class="redstar">*</span>
@@ -62,28 +62,28 @@
                     </select>
                 </div>
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="workaddrestips==1"></div>
-                    <div class="register-error hide"  v-show="workaddrestips==2"></div>
+                    <div class="register-sucess" v-show="workaddrestips==1"></div>
+                    <div class="register-error"  v-show="workaddrestips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="workaddrestips==2">不能为空</div>
+                <div class="register-tips" v-show="workaddrestips==2">不能为空</div>
             </div> 
             <div> 
                 <span class="redstar">*</span>
                 <input name="password" id="Pw" type="password" class="Pw" placeholder="建议输入6位以上包含字母和数字的密码" v-model="pw" @blur="identifypw">
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="pwtips==1"></div>
-                    <div class="register-error hide" v-show="pwtips==2"></div>
+                    <div class="register-sucess" v-show="pwtips==1"></div>
+                    <div class="register-error" v-show="pwtips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="pwtips==2">至少输入6位以上密码</div>
+                <div class="register-tips" v-show="pwtips==2">至少输入6位以上密码</div>
             </div> 
             <div> 
                 <span class="redstar">*</span>
                 <input name="repassword" id="identifyPw" type="password" class="identifyPw" placeholder="请确认密码" v-model="confirmpw" @blur="identifyconfirmpw">
                 <div class="register-state">
-                    <div class="register-sucess hide" v-show="confirmpwtips==1"></div>
-                    <div class="register-error hide" v-show="confirmpwtips==2"></div>
+                    <div class="register-sucess" v-show="confirmpwtips==1"></div>
+                    <div class="register-error" v-show="confirmpwtips==2"></div>
                 </div>
-                <div class="register-tips hide" v-show="confirmpwtips==2">密码不一致</div>
+                <div class="register-tips" v-show="confirmpwtips==2">密码不一致</div>
             </div> 
         </div>
         
@@ -748,7 +748,9 @@ export default {
       //验证名字
       identifyName:function(){
         var regu =/^[\u4e00-\u9fa5]+$/;
+        
         if(this.username==''){
+            console.log("1111")
             this.nametips=2;
         }else if(!regu.test(this.username) || this.username.length<2){
             this.nametips=2;
@@ -810,11 +812,16 @@ export default {
       },
       //用户注册 
       registerNow:function(){
+          let that= this;
           let userinfo={name:this.username,id_card:this.IDcard,mobile:this.phone,gongzuodanwei:this.company, password:this.pw}
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/reg",qs.stringify(userinfo)).then(response => {
               if(response.data.status=='ok'){
-                  console.log(response.data);
-                  that.$router.push({ path: 'index' });
+                console.log(response);
+                that.$router.push({ path: '/login' });
+              }else if(response.data.status=='error'){
+                  that.$message.error({message:response.data.errormsg,duration:1600});
+              }else if(response.data.status=='relogin'){
+                  that.$message.error({message:"请重新登录",duration:1600});
               }
           })
           .catch(response => {
@@ -840,7 +847,7 @@ export default {
 .register .register-box .write-infobox>div input:focus{ border: 1px solid #ce000f;}
 .register .register-box .write-infobox div .redstar{color: red;position: absolute;left: 10px;top: 17px;font-size: 16px;display: block;z-index: 1;}
 .register .register-box .write-infobox .chooseCity{width: 100%;height: 100%;color:#868686;font-size: 16px;box-sizing: border-box;background-color: transparent;}
-.register .register-box .write-infobox .chooseCity select{width: 133px;height: 100%;padding: 0 13px;}
+.register .register-box .write-infobox .chooseCity select{width: 133px;height: 100%;padding: 0 16px;}
 .register .register-box .write-infobox div .tips{color:#7ebdeb;font-size: 12px;position: absolute;right: 20px;top: 14px;}
 .register .register-box .write-infobox input,.register .register-box .write-infobox select{width: 100%;height: 100%;padding:0 20px;color:#868686;font-size: 16px;box-sizing: border-box;background-color: transparent;border: 1px solid #c1c1c1;border-radius: 5px;}
 .register .register-box .write-infobox input::-webkit-input-placeholder {color:#868686;font-size: 16px;}

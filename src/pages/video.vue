@@ -13,7 +13,7 @@
 			</div>
 			<div class="player-container">
 				<div class="videobox">
-					<video-player class="vjs-custom-skin" :options="playerOptions"></video-player>
+					<video-player class="vjs-custom-skin" :options="playerOptions" ref="videoPlayer"></video-player>
 				</div>
 				<div class="cl-info f-cb">
 					<div style="" title="分享" class="cli-share j-sharebox">
@@ -40,15 +40,15 @@
 						<div class="video_rinfo-con">
 							<p>年度：{{courseInfo.year}}</p>
 							<p>分类：{{courseInfo.type_name}}</p>
-							<p>讲师：{{courseInfo.jiangshi.name}}</p>
+							<p>讲师：{{jiangshi.name}}</p>
 							<p>学时：{{courseInfo.xueshi_num}}</p>
 						</div>
 					</div>
 				</div>
 				<!--右边teb-->
-				<ul class="tabs" id="tags">
-					<li class="current" @click="tabstateshow"><a style="color:#FFF;" class=""><i class="tabs-ml"></i>目录</a></li>
-					<li @click="tabstateshow"><a id="note"><i class="tabs-bj"></i>笔记</a></li>
+				<ul class="tabs">
+					<li class="current" @click="tabstate1"><i class="tabs-ml"></i>目录</li>
+					<li @click="tabstate2"><i class="tabs-bj" ></i>笔记</li>
 					
 				</ul>
 			</div>
@@ -56,37 +56,35 @@
 			<!--teb内容切换盒子-->
 			<div id="tagcontent_box">
 				<!--课程-->
-				<div class="m-chapterList" id="tagcontent0" v-show="tabstate">
+				<div class="m-chapterList" id="tagcontent0" v-show="tabstate==1">
 					<div class="section bigsection" v-for="(itemlist,index) in courseInfo.zhang" :key="index">
 						<div class="section_bj"> </div>
-						<a class="fl ksname" href="javascript:;">{{itemlist.title}}</a>
-						<div class="section-cur section" v-for="(item,index) in itemlist.jie" :key="index">
-							<div class="section_bj" style="background-color:green;width:7%"> </div>
-							<a class="fl ksname" href="http://ceshi2.jxjyedu.club/course/watch/92_181.html">{{item.title}}</a>
-							<span class="per-progress" jindu="7">0%</span>
+						<a class="fl ksname">{{itemlist.title}}</a>
+						<div class="section-cur section" v-for="item in itemlist.jie" :key="item.id" @click="palyvideo(item.id)">
+							<div class="section_bj"> </div>
+							<a class="fl ksname" >{{item.title}}</a>
+							<span class="per-progress">0%</span>
 						</div> 
 					</div>              
 				</div>
 
 				<!--笔记-->
-				<div class="p10 tagcontent txt_l" id="tagcontent1" v-show="!tabstate">
+				<div class="p10 tagcontent txt_l" id="tagcontent1" v-show="tabstate==2">
 					<form>
-						<input type="hidden" value="1" name="kztype">
-						<input type="hidden" value="0" class="kzid" name="kzid">
 						<div class="tips1 l5">我的笔记</div>
 						<div class="editwrap_tittle mt22">
 							<div class="tips r5">标题限<span id="notetittle_length">45</span>字符内</div>
-							<textarea name="tittle" class="j-edittxt edittxt" maxlength="45" id="notetittle" placeholder="在此输入笔记标题... " onblur=""></textarea>
+							<textarea  class="j-edittxt edittxt" maxlength="45" id="notetittle" placeholder="在此输入笔记标题... " onblur=""></textarea>
 							<label for="edittxt" class="j-hint hint" id="auto-id-drt6TisVISpRhnQa"></label>
 						</div>
 						<div class="editwrap mt22">
 							<div class="tips r5">内容限<span id="notecont_length">200</span>字符内</div>
-							<textarea name="content" class="j-edittxt edittxt" maxlength="200" id="notecont" placeholder="在此记录你的想法... "></textarea>
+							<textarea  class="j-edittxt edittxt" maxlength="200" id="notecont" placeholder="在此记录你的想法... "></textarea>
 							<label for="edittxt" class="j-hint hint" id="auto-id-drt6TisVISpRhnQa"></label>
 						</div>
 						<div class="mt5 clearfix">
 							<label class="checklabel fl" style="display: none;">
-								<input type="checkbox" class="j-privatecheck" hidefocus="true" id="note_isopen" checked="checked" value="1" name="is_open">
+								<input type="checkbox" class="j-privatecheck" hidefocus="true" id="note_isopen" checked="checked" value="1">
 								&nbsp;公开</label>
 							<input type="button" onclick="noteaddBang(this,92,1)" class="bg_btn_gray Secrecy fr" style="cursor:pointer" value="保存">
 						</div>
@@ -124,22 +122,26 @@ export default {
 	        language: 'zh-CN',
 	        aspectRatio: '16:9', // 将播放器置于流畅模式，并在计算播放器的动态大小时使用该值。值应该代表一个比例 - 用冒号分隔的两个数字（例如"16:9"或"4:3"）
 	        fluid: true, // 当true时，Video.js player将拥有流体大小。换句话说，它将按比例缩放以适应其容器。
-	        sources: [{
-	          	type: 'application/x-mpegURL',
-	          	src: 'http://jixujiaoyu_api.songlongfei.club/hls/576537c51c12c29adb33c072b48dda2f.m3u8'
-	        }],
+	        sources: [
+				{
+					type: 'application/x-mpegURL',
+					src: 'http://jixujiaoyu_api.songlongfei.club/hls/576537c51c12c29adb33c072b48dda2f.m3u8'
+				}
+			],
 	        poster: "/static/images/index/index-banner1.jpg", //你的封面地址
 	        //width: document.documentElement.clientWidth,
 	        notSupportedMessage: '此视频暂无法播放，请稍后再试' //允许覆盖Video.js无法播放媒体源时显示的默认信息。
 		  },
 		  courseInfo:'',
-		  tabstate:true,
+		  jiangshi:'',
+		  ZHang:'',
+		  tabstate:1,
 		}
 		
   },
   mounted () {
 	let that = this;
-	let datacourse={kecheng_id:this.$route.query.vid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+	let datacourse={kecheng_id:this.$route.query.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
 	this.$axios({
 		method: 'post',
 		url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
@@ -149,30 +151,68 @@ export default {
 			console.log("该播放课程信息")
 			console.log(response.data.data)
 			that.courseInfo=response.data.data;
+			that.ZHang=response.data.data.zhang;
+			console.log("该播放课程zhangjie")
+			console.log(that.ZHang)
+			that.jiangshi=response.data.data.jiangshi;
+			//刚进入页面播放哪个视频
+			that.chooseVideoSrc();
 		}else if(response.data.status=="error"){
 			that.$message.error({message:response.data.errormsg,duration:1600});
 		}else if(response.data.status=="relogin"){
 			that.$message.error({message:"重新登录",duration:1600});
 		}
 	});
+
+
   },
   methods: {
+	  tabstate1:function(){
+		 this.tabstate=1;
+	  },
+	  tabstate2:function(){
+		 this.tabstate=2;
+	  },
+
 	  returnMyCourse:function(){
 		 
 	  },
-	  tabstateshow:function(){
-		 if(this.tabstate==true){
-			 this.tabstate==false;
-		 }else{
-			  this.tabstate==true;
-		 }
+	  //播放哪个视频
+	  chooseVideoSrc:function(){
+		let that = this;
+		let myPlayer = this.$refs.videoPlayer.player;
+		let videoId=this.$route.query.vid;
+		for(let i=0;i<that.ZHang.length;i++){
+			for(let j=0;j<that.ZHang[i].jie.length;j++){
+				if(that.ZHang[i].jie[j].id==videoId){
+					console.log(videoId);
+					myPlayer.src(that.ZHang[i].jie[j].video_url);
+					console.log("播放视频url");
+					console.log(that.ZHang[i].jie[j].video_url);
+				}
+			};
+		};
 	  },
+	 
+	  //页面内点击播放视频
+	palyvideo:function(id){
+		let that = this;
+		let myPlayer = this.$refs.videoPlayer.player;
+		let videoId=id;
+		for(let i=0;i<that.ZHang.length;i++){
+			for(let j=0;j<that.ZHang[i].jie.length;j++){
+				if(that.ZHang[i].jie[j].id==videoId){
+					console.log(videoId);
+					myPlayer.src(that.ZHang[i].jie[j].video_url);
+					console.log("播放视频url");
+					console.log(that.ZHang[i].jie[j].video_url);
+				}
+			};
+		};
+	},
 
-    
-  },
-  computed: {
-    
-  }
+
+  } 
 }
 </script>
 
@@ -190,17 +230,13 @@ export default {
 				h2{ font-size:18px; font-weight:100;}
 				.cl-prev{background:url(/static/images/coursedetails/ico.png) -194px -1px no-repeat ;width:18px; height:34px; display:block; position:absolute;left:0; top:18px;background-size:270px 356px;}
 				.cl-next{background:url(/static/images/coursedetails/ico.png) -195px -50px no-repeat;width:18px; height:34px;display:block; position:absolute; right:0; top:18px;background-size:270px 356px;}
-
 			}
 		}
 		.player-container{width: 100%;height: calc(100% - 60px);position: absolute;top:60px;bottom:0;background-color: #000;
 			.videobox{height: 100%;width: calc(100% - 370px);}
-			
 		}
 	}
-	.videopage-right{width: 370px;
-	
-	}
+	.videopage-right{width: 370px;}
   }
   
 .m-chapterList{border-top:0; text-align:left; position:relative;padding-bottom:1em; font-size:14px; color:#999999;background-color: #333;}
@@ -213,8 +249,10 @@ export default {
 .m-chapterList .section-cur a{color:#ffffff; display:block;}
 .m-chapterList .section a:hover{color:#90ee99;}
 .m-chapterList .section .bgc-change{position: absolute;height: 100%;border-top-left-radius: 10px;border-bottom-left-radius: 10px;}
+
 .m-chapterList .section-cur .bgc-change{width: 10%;background-color: #90ee99;}
 .m-chapterList .section-success .bgc-change{width: 100%;background-color: #337ab7;}
+
 .m-chapterList .section .per-progress{position: absolute;right: 12px;top:2px; display: block;width:48px; height:20px;border-radius: 10px;background-color: #fff;float: right;color: #337ab7;text-align: center;line-height: 20px;font-size: 12px;}
 .ksicon-0-mark{width: 18px;background: url(/static/images/coursedetails/ico.png) no-repeat -115px -120px;height: 18px;}
 .ksicon-30-mark{ height: 18px;width: 18px;margin: 12px 10px 0 0;}
@@ -242,8 +280,8 @@ export default {
 .tabs li{float:left; width:180px;list-style: none}
 .m-ctb .tabicon{margin:15px 5px 0 0px;}
 .m-ctb .tabarea{ width:370px; overflow:hidden; background:#f5f7fa;}
-.m-ctb .tabs li a{height:45px; font-family:'微软雅黑'; width:100%; color:#ffffff; display:block; line-height:45px;}
-.m-ctb .tabs .current a{ background:#0ba0b1; position:relative;}
+.m-ctb .tabs li{height:45px; font-family:'微软雅黑'; width:50%; color:#ffffff; display:block; line-height:45px;cursor: pointer;}
+.m-ctb .tabs .current{ background:#0ba0b1; position:relative;}
 .m-ctb .tabs i{ width:16px; height:16px; line-height:16px; display: inline-block; margin:13px 10px 0 50px; background-image:url(/static/images/coursedetails/ico.png); background-repeat:no-repeat}
 .m-ctb .tabs-ml{ background-position:-141px -36px }
 .m-ctb .tabs-bj{ background-position:-141px -64px }
@@ -267,11 +305,24 @@ export default {
 .share p{color:#333;}
 .cli-share span{background-position:0 -68px;}
 .editwrap{background:none repeat scroll 0px 0px rgb(250, 250, 250); border:1px solid #CECECE; padding:5px; height:65px; position:relative;}
-.editwrap_tittle{background:none repeat scroll 0px 0px rgb(250, 250, 250); border:1px solid #CECECE; padding:5px; height:30px; position:relative;}
+.editwrap_tittle{background:none repeat scroll 0px 0px rgb(250, 250, 250); border:1px solid #CECECE; padding:5px; height:30px; position:relative;margin-top: 22px;}
 .cl-title .cl-lesson{width:37px;display:inline-block;}
 .bdshare-button-style1-16 a,.bdshare-button-style1-16 .bds_more {float: left;font-size: 12px;padding-left: 17px;line-height: 16px;height: 16px;background-image: url(/static/images/coursedetails/icons_1_16.png);background-size: 16px 3260px; background-repeat: no-repeat;cursor: pointer;margin: 6px 6px 6px 0;}
 .bdshare-button-style1-16 .bds_weixin {background-position: 0 -1612px;}
 .bdshare-button-style1-16 .bds_sqq {background-position: 0 -2652px;}
 .bdshare-button-style1-16 .bds_qzone {background-position: 0 -52px;}
 .bdshare-button-style1-16 .bds_tsina {background-position: 0 -104px;}
+.tips1 {color: #B2B2B2;height: 26px;line-height: 27px;font-weight: bold;font-size: 12px;}
+.editwrap, .editwrap1 { background: none repeat scroll 0 0 rgb(250, 250, 250); border: 1px solid #cecece;padding: 5px;position: relative;}
+.mt22 {margin-top: 22px;}
+.txt_l {text-align: left;}
+.p10 {padding: 20px;}
+.mt5 {margin-top: 10px;}
+.hint { color: #ccc;font-size: 12px;left: 5px; position: absolute; top: 5px;}
+.Secrecy{ background: none repeat scroll 0 0 #E82F24;border: medium none;color: #ffffff;font-size: 12px;height: 29px;line-height: 29px; padding: 0 15px;}
+#notetittle ,#questiontitle{height:26px;}
+#tagcontent1{background-color: #fff;}
+.tips {color: #B2B2B2;height: 26px;line-height: 27px;font-weight: bold;position: absolute;right: 0;top: -27px;font-size: 12px;}
+.tips span {color: #FF0000;font-size: 12px;}
+.edittxt{outline: none;resize: none; border: 0;background: none repeat scroll 0 0 transparent;border: medium none;font-size: 12px;height: 65px;line-height: 16px;overflow-x: hidden;overflow-y: auto; width: 100%;}
 </style>

@@ -53,7 +53,7 @@
           <img class="user-image" src="/static/images/personal/women.png" v-show="sex==0"/>
           <div class="user-name">{{name}}</div>
           <div class="title"> </div>
-          <div class="btn-personal"><router-link to="/personal">个人中心</router-link></div>
+          <div class="btn-personal"><router-link to="/my">个人中心</router-link></div>
           <div class="btn-login"><span @click="logout">退出登陆</span></div>
       </div>
     </div>
@@ -126,7 +126,6 @@ export default {
   },
   data () {
     return {
-      apiurl:"",
       newsjson:{
           title:'新闻咨询',
           englishTitle:'NEWS INFORMATION',
@@ -200,7 +199,7 @@ export default {
       sex:sessionStorage.getItem("sex"),
       //name
       name:sessionStorage.getItem("name"),
-      loadingState:'',
+      
     }
   },
   
@@ -410,7 +409,7 @@ export default {
               sessionStorage.setItem("id_card", response.data.data.id_card);
               
             }else if(response.data.status=='error'){
-              this.$message.error({message:response.data.errormsg,duration:1600});
+              that.$message.error({message:response.data.errormsg,duration:1600});
 
             }else if(response.data.status=='relogin'){
 
@@ -424,6 +423,30 @@ export default {
       },
       //用户退出 
       logout(){
+        let that =this;
+        let userinfo={uid:sessionStorage.getItem("uid"), token:sessionStorage.getItem("token")}
+        this.$axios({
+          method: 'post',
+          url: 'http://jixujiaoyu_api.songlongfei.club/user/logout',
+          data: qs.stringify(userinfo) 
+          }).then(function (response) {
+            
+            if(response.data.status=="ok"){
+              that.$message.success({message:"退出成功",duration:1600});
+              sessionStorage.removeItem("login1");
+              sessionStorage.removeItem("uid");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("sex");
+              sessionStorage.removeItem("name");
+              sessionStorage.removeItem("mobile");
+              sessionStorage.removeItem("id_card");
+              that.type=true;
+            }else if(response.data.status=="error"){
+              that.$message.error({message:response.data.errormsg,duration:1600});
+            }else if(response.data.status=="relogin"){
+              that.$message.error({message:"请重新登录",duration:1600});
+            }
+          });
         sessionStorage.setItem("login1", "0");
         this.login1=0;
       },

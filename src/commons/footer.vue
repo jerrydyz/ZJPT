@@ -25,7 +25,7 @@ export default {
   methods:{
     toPersonal:function(){
       if(localStorage.getItem("login1")==1){
-        this.$router.push({ path: '/personal' })
+        this.$router.push({ path: '/my' })
       }else{
         alert("您还未登陆");
       }
