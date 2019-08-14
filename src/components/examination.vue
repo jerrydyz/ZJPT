@@ -6,20 +6,20 @@
         <div class="content">
             <div class="top">
                 <ul class="clearfix">
-                    <li class="fl l1">试卷名称</li>
-                    <li class="fr l2">操作</li>
-                    <li class="fr l3">分数</li>
-                    <li class="fr l5">总分数</li>
-                     <li class="fr l4">考试时间</li>
+                    <li class="fl l1">年度</li>
+                    <li class="fl l2">试卷名称</li>
+                    <li class="fl l3">总分数</li>
+                    <li class="fl l4">学时</li>
+                     <li class="fl l5">操作</li>
                 </ul>
             </div>
              <div class="topcon">
                 <ul class="clearfix" v-for="item in data" :key="item.id">
-                    <li class="fl l1">{{item.shijuan_info.title}}</li>
-                    <li class="fr l2">{{item.is_pass=="0"?'未通过':"考试通过"}}</li>
-                    <li class="fr l3">-</li>
-                     <li class="fr l5">{{item.shijuan_info.score}}</li>
-                     <li class="fr l4"> 2019-7-17-2019-12-18</li>
+                    <li class="fl l1">{{item.year}}</li>
+                    <li class="fl l2">{{item.shijuan_info.title}}</li>
+                     <li class="fl l3">{{item.shijuan_info.score}}</li>
+                      <li class="fl l4">{{item.xueshi_num}}</li>
+                     <li class="fl l5" @click="gostady">{{item.is_pass=="0"?'未通过':"考试通过"}}</li>
                 </ul>
             </div>
              <div class="block" style="text-align:right;margin-top:20px;">
@@ -80,12 +80,21 @@ export default {
                 console.log(res)
                 that.data=that.data.concat(res.data.data.data)
                 console.log(that.data)
+                
                 if(res.data.data.data){
                     that.nodata=false
                 }else{
                     that.nodata=true
                 }
             })
+       },
+       gostady (){
+           for(var i=0;i<this.data.length;i++){
+                if(this.data[i].enable_kaoshi==1){
+                    this.$emit('more' ,'rate')
+                }
+                }
+          
        },
        current_change (currentPage){
            this.currentPage=currentPage
@@ -128,24 +137,21 @@ export default {
                     line-height: 35px;
                     font-size:14px;
                     color:#fff;
-                     &.l2{
-                        width: 150px;
-                        text-align: right;
+                    text-align: center;
+                    width: 20%;
+                     &.l1{
+                        text-align: left;
+                        width: 15%;
+                    }
+                    &.l2{   
+                        width: 25%;
                     }
                      &.l3{
-                        width: 150px;
-                        text-align: center;
-                        margin-right: 10px;
                          }
                      &.l4{
-                        width: 280px;
-                        text-align: center;
-
                     }
                      &.l5{
-                        width: 150px;
-                        text-align: center;
-
+                         text-align: right;
                     }
                 }
             }
@@ -158,31 +164,25 @@ export default {
                     box-sizing: border-box;
                 li{
                     // width: 910px;
-                    height: 35px;
+                   height: 35px;
                     line-height: 35px;
                     font-size:14px;
-                     color: #868686;
-                     overflow: hidden;
-                        text-overflow: ellipsis;
-                        white-space: nowrap;
-                     &.l2{
-                        width: 150px;
-                        text-align: right;
+                    color:#868686;
+                    text-align: center;
+                    width: 20%;
+                     &.l1{
+                        text-align: left;
+                        width: 15%;
+                    }
+                    &.l2{   
+                        width: 25%;
                     }
                      &.l3{
-                        width: 150px;
-                        text-align: center;
-                        margin-right: 10px;
                          }
                      &.l4{
-                        width: 280px;
-                        text-align: center;
-
                     }
-                    &.l5{
-                        width: 150px;
-                        text-align: center;
-
+                     &.l5{
+                         text-align: right;
                     }
                 }
             }

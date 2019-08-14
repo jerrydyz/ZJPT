@@ -5,29 +5,19 @@
     </div>
     <div class="content">
       <ul>
-        <li class="clearfix" v-for="(item,index) in list" :key="index">
+        <li class="clearfix" v-for="(item,index) in list" :key="index" @click="gopackdetail">
           <div class="left fl">
             <img :src="item.img_url" alt />
           </div>
           <div class="item-content fl">
             <div class="item-title">{{item.title}}</div>
             <div class="item-time clearfix">
-              <!-- <span class="fl">完成进度：</span>
-              <div class="progress-box fl">
-                <div class="progress" style="width: 0.00%;"></div>
-              </div>
-              <span class="fl">0.00%</span> -->
             </div>
             <div class="total-time">
-              目标学时：
+              学时：
               <span>
                  {{item.xueshi_num}}
               </span>
-              <span class="getcoursr-time">已获学时：</span>
-              <span>
-                {{item.kecheng_num}}
-              </span>
-                <p style="margin-top:5px">进度 <el-progress :percentage="used"></el-progress></p>
             </div>
           </div>
           <div class="price-box fr">
@@ -40,6 +30,16 @@
         
 
       </ul>
+       <div class="blocks" style="text-align:right;margin-right:20px;margin-top:20px;">
+              <el-pagination
+                layout="prev, pager, next"
+                :total="list.length"
+                :current-page.sync="pageNo"
+                :page-size="3"
+                @current-change="changePage()"
+                >
+              </el-pagination>
+            </div>
     </div>
   </div>
 </template>
@@ -54,7 +54,9 @@ export default {
       used:10,
       id:[],
       year:'',
-      msg:'继续学习'
+      msg:'购买',
+      pageNo:1,
+      idd:''
         
     }
   },
@@ -76,19 +78,23 @@ export default {
             year:this.year
           })
           }).then(res => {
+            console.log("课程包信息")
             console.log(res)
             if(res.data.status=="ok"){
+              that.list=[]
                that.list=that.list.concat(res.data.data)
                for(var i=0;i<res.data.data.length;i++){
                  that.id.push(res.data.data[i].id)
+                 console.log("========")
                  console.log(that.id)
+                
                 //  that.getbaoprogress()
                }
                for(var i=0;i<that.id.length;i++){
                    that.idd=that.id[i]
                    console.log("单个id")
                    console.log(that.idd)
-                  that.getbaoprogress()
+                  // that.getbaoprogress()
                }
             }else{
               
@@ -115,11 +121,24 @@ export default {
                       }else{
                           that.used=res.data.progress
                           console.log("=======================")
-                          
                       }
                   })
          
-      }
+      },
+      changePage (val){
+        this.pageNo=val
+          console.log(this.pageNo)
+      },
+       gopackdetail (){
+       this.$router.push({
+         path:'/packagedetail',
+         query:{
+              codeid:this.idd
+           }
+           
+         
+       })
+    }
   }
 };
 </script>

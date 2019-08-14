@@ -16,7 +16,7 @@
                     </p>
                     <p class="download">
                         <span>待考试</span>
-                        <span>(0)</span>
+                        <span>({{nums}})</span>
                     </p>
                 </div>
                 <div class="line fl"></div>
@@ -33,21 +33,29 @@
            </div>
          </div>
          <div class="bottom">
-             <h3 class="tit">全部课程</h3>
-            <div class="shang clearfix" v-for="item in allcourse" :key="item.id">
+             <h3 class="tit">课程包</h3>
+            <div class="shang clearfix" v-for="item in allcourse" :key="item.id" @click="gopackage">
                  <div class="imgleft fl">
                      <img :src="item.img_url" alt="">
                  </div>
                  <div class="imgmodel fl">
                      <h3 class="lgtit">{{item.title}}</h3>
-                     <!-- <el-progress>完成进度：<el-progress :percentage="used"></el-progress></p> -->
-                     <!-- <p>目标学时: <span>{{allxueshi}}</span> ; &nbsp; &nbsp;已获学时 : <span>{{kechengxueshi}}</span></p> -->
+                     <p>学时:&nbsp;{{item.xueshi_num}}</p>
                  </div>
                  <div class="imgright fr">
-                      <p><span>￥</span><span>{{item.price}}元</span></p>
-                      <p>参加学习</p>
+                      <p>价格：{{item.price}}</p>
                  </div>
              </div>
+              <div class="blocks" style="text-align:right;margin-right:20px;margin-top:20px;">
+              <el-pagination
+                layout="prev, pager, next"
+                :total="allcourse.length"
+                :current-page.sync="pageNo"
+                :page-size="2"
+                @current-change="changePage()"
+                >
+              </el-pagination>
+            </div>
          </div>
          
       </div>
@@ -64,7 +72,7 @@ export default {
             uid:'',
             token:'',
             xueshi:'',
-            num:'2',
+            num:2,
             allcourse:[],
              list:[],
             count:'',
@@ -74,7 +82,10 @@ export default {
             kechengxueshi:'',
             used:0,
             id:[],
-            idd:''
+            idd:'',
+            data:[],
+            nums:0,
+            pageNo:1
         }
     },
     created (){
@@ -84,7 +95,9 @@ export default {
         var date=new Date;
         this.year=date.getFullYear()
         this.getyeartime ()
-        this.getallcourse()
+        // this.getallcourse()
+        this.getdata()
+        this.kechengbao()
     },
     watch:{
         'used':function (v,v2){
@@ -93,35 +106,74 @@ export default {
     },
     
     methods:{
-         //获取年度学时
-      getyeartime (){
-         var that=this
-         var data={
-            year:this.year,
-            uid:this.uid,
-            token:this.token
-         }
-          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi",
-         qs.stringify(data)
-          ).then(res =>{
-            console.log("获取学时")
-             console.log(res)
-             if(res.data.status=='ok'){
-                that.xueshi=res.data.data.xueshi_num
-             }
+           //获取课程包信息
+       kechengbao (){
+       var that=this 
+        this.$axios({
+          method: 'post',
+          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list',
+          data:qs.stringify({
+            year:this.year
           })
+          }).then(res => {
+            console.log("课程包信息")
+            console.log(res)
+            if(res.data.status=="ok"){
+              that.allcourse=[]
+               that.allcourse=that.allcourse.concat(res.data.data)
+               for(var i=0;i<res.data.data.length;i++){
+                 that.id.push(res.data.data[i].id)
+                 console.log("========")
+                 console.log(that.id)
+               }
+               for(var i=0;i<that.id.length;i++){
+                   that.idd=that.id[i]
+                   console.log("单个id")
+                   console.log(that.idd)
+               }
+            }else{
+              
+            }
+      });
       },
+      //获取待考试个数
+       getdata (){
+            var that=this
+            this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kaoshi/get_shijuan_list',
+                qs.stringify({
+                    year:this.year,
+                    uid:this.uid,
+                    token:this.token,
+                    psge:this.page,
+                })
+            ).then(res =>{
+                console.log("获取考试信息")
+                console.log(res)
+                that.data=that.data.concat(res.data.data.data)
+                //  var nums=0;
+                 for(var i=0;i<that.data.length;i++){
+                      var obj=that.data[i].is_pass
+                   if(that.data[i].is_pass=="0"){
+                      that.nums++
+                   }
+                }
+                
+            })
+       },
       //下载证书
       download (){
           this.$emit('more','archives')
+      },
+      gopackage (){
+           this.$emit('more','packages') 
       },
       //获取全部课程
       getallcourse (){
           var that=this
           var datalist={
-              num:this.num,
               year:this.year,
-              page:'1'
+              page:1,
+              num:2
           }
           this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
             qs.stringify(datalist)
@@ -133,9 +185,9 @@ export default {
               that.pagesize=res.data.data.pagesize
               sessionStorage.setItem("id", res.data.data.data.id);
                 for(var i=0 ;i<res.data.data.data.length;i++){
-                    console.log(i)
+                    // console.log(i)
                     that.id.push(res.data.data.data[i].id)
-                    console.log(that.id)
+                    // console.log(that.id)
                 }
                 // for(var i=0;i<that.id.length;i++){
                 //     that.idd=that.id[i]
@@ -145,6 +197,25 @@ export default {
                 // that. getprogress ()
                 })
                 
+      },
+      //获取年度学时
+      getyeartime (){
+          var that=this
+          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi',
+                qs.stringify({
+                    year:that.year,
+                    uid:that.uid,
+                    token:that.token
+            })
+          ).then(res =>{
+              console.log("获取课成学时")
+              console.log(res)
+              if(res.data.data.length){
+                  that.xueshi=res.data.data.xueshi_num
+              }else{
+                  that.xueshi=0
+              }
+          })
       },
      
        //获取课程进度
@@ -157,9 +228,9 @@ export default {
               token:that.token
             })
         ).then(res =>{
-            console.log("获取进度")
-            console.log(res)
-            console.log(res.data.status)
+            // console.log("获取进度")
+            // console.log(res)
+            // console.log(res.data.status)
             if(res.data.status=='error'){
               that.used=0
             }else{
@@ -259,6 +330,7 @@ export default {
     .bottom{
         padding-bottom: 20px;
         box-sizing: border-box;
+        overflow: hidden;
         h3.tit{
             font-size:20px;
              font-family:@family;
@@ -292,7 +364,7 @@ export default {
                font-size:20px;
               font-family:@family;
               color:#333333; 
-              margin-bottom: 40px;
+              margin-bottom: 10px;
                
             }
              p:nth-child(2){
@@ -306,7 +378,7 @@ export default {
           .imgright{
             //  border: 1px solid red;
             //  display: none;
-            width: 120px;
+           margin-top:35px;
             height: 96px;
             text-align: right;
              p:nth-child(1){

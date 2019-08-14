@@ -30,7 +30,7 @@ import commonFooter from '@/commons/footer'
 import couse from '../pages/couse'
 import my from '../pages/my'
 import textpaper from '../pages/textpaper'
-
+import packagedetail from '../pages/packagedetail'
 Vue.use(Router)
 
 export default new Router({
@@ -190,7 +190,12 @@ export default new Router({
             path: '/textpaper',
             name: 'textpaper',
             component: textpaper
+        }, {
+            path: '/packagedetail',
+            name: 'packagedetail',
+            component: packagedetail
         }
+
 
     ]
 })

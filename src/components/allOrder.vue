@@ -81,6 +81,7 @@ export default {
                 console.log("订单列表")
                 console.log(res)
                 if(res.data.status=="ok"){
+                    // that.data=[]
                      that.data=that.data.concat(res.data.data)
                      console.log(that.data)
                 }
@@ -91,6 +92,7 @@ export default {
             // console.log(currentPage)
             this.page=page
             this.data=[]
+             console.log(page)
             this.getOrder()
         }
     }

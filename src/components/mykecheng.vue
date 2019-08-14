@@ -4,17 +4,22 @@
       <span>我的课程</span>
     </div>
     <div class="content">
-        <ul class="clearfix" v-if="datalist!=0">
+        <ul class="clearfix" v-show="datalist.length">
             <li class="fl" v-for="item in datalist" :key="item.id">
                 <p><img :src="item.img_url" alt=""></p>
                 <p class="txt">{{item.title}}(<span>{{item.xueshi_num}}</span>课时)</p>
-                <p class="tit">{{item.title}}</p>           
-                <p class="">
-                进度：<el-progress :percentage="used"></el-progress>
-                </p>
+                <p class="tit">{{item.title}}</p>  
+                <p style="color:red;"><span>主讲:&nbsp;</span>{{item.jiangshi.name}}</p>         
             </li>
+           
         </ul>
-        <div class="nodata" v-else >
+         <div class="blocks" style="text-align:right;margin-right:30px;margin-top:20px;">
+              <el-pagination
+                layout="prev, pager, next"
+                :total="datalist.length">
+              </el-pagination>
+            </div>
+        <div class="nodata" v-show="!datalist.length" >
         </div>
     
     </div>
@@ -61,7 +66,8 @@ export default {
                    console.log(i)
                   //  获取课程id
                    that.idd =that.datalist[i].id
-                  that.getprogress ()
+                  // that.getprogress ()
+                  
                 }
            }
          }) 
@@ -87,7 +93,8 @@ export default {
                }
             }
         })
-    }
+    },
+   
     }
 
 };

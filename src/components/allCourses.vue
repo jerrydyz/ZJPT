@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <ul class="clearfix">
-        <li class="fl" v-for="item in allcourse" :key="item.id">
+        <li class="fl" v-for="item in allcourse" :key="item.id" @click="todetail">
           <p class="imm">
             <img :src="item.img_url" alt />
           </p>
@@ -14,12 +14,18 @@
             <span>{{item.xueshi_num}}</span>学时)
           </p>
           <p class="tit">{{item.title}}</p>
-          <p class="jindu clearfix">
-            <span style="display:block;margin:5px 0;">进度</span>
-            <el-progress :percentage="used"></el-progress>
-          </p>
+          <p class="jindu"><span>讲师:&nbsp;</span>{{item.jiangshi.name}}</p>
         </li>
       </ul>
+      <div class="block" >
+       <el-pagination
+					layout="prev, pager, next"
+					:current-page.sync="pageNo"
+					:total="allcourse.length"
+					:page-size="6"
+					@current-change="changePage()"
+				></el-pagination>
+      </div>
     </div>
   </div>
 </template>
@@ -29,15 +35,11 @@ import qs from "qs";
 export default {
   data() {
     return {
-      value1: 0,
-      value2: 50,
-      value3: 36,
-      value4: 48,
-      value5: 42,
+      pageNo:1,
       year: "",
       uid: "",
       token: "",
-      num: "2",
+      // num: 2,
       allcourse: [],
       count: "",
       pagesize: "",
@@ -45,7 +47,8 @@ export default {
       allxueshi: "",
       kechengxueshi: "",
       used:0,
-      id:''
+      id:[],
+      idd:''
     };
   },
   created() {
@@ -63,9 +66,9 @@ export default {
     getallcourse() {
       var that = this;
       var datalist = {
-        num: this.num,
+        // num: this.num,
         year: this.year,
-        page: "1"
+        page: 1
       };
       this.$axios
         .post(
@@ -75,16 +78,18 @@ export default {
         .then(res => {
           console.log("获取全部课程");
           console.log(res);
+          that.allcourse=[];
           that.allcourse = that.allcourse.concat(res.data.data.data);
           that.count = res.data.data.count;
           that.pagesize = res.data.data.pagesize;
           sessionStorage.setItem("id", res.data.data.data.id);
           for(var i=0 ;i<res.data.data.data.length;i++){
-              console.log(i)
-              that.id=res.data.data.data[i].id
-              console.log(that.id)
-               that.getprogress()
+              that.id=that.id.concat(res.data.data.data[i].id)
           }
+           for(var i=0;i<that.id.length;i++){
+                  that.idd=that.id[i]
+                  console.log(this.idd)
+                }
         });
     },
     //获取课程进度
@@ -108,6 +113,21 @@ export default {
                }
             }
         })
+    },
+    //到课程详情页
+    todetail (){
+        this.$router.push({
+           name:'courseDetails',
+          params:{
+            courseId:this.idd
+          }
+        })
+      
+    },
+    changePage (page){
+      this.pageNo=page
+      console.log(page)
+       this.getallcourse()
     }
   }
 };
@@ -136,7 +156,7 @@ export default {
       li {
         // border:1px solid red;
         width: 260px;
-        height: 285px;
+        // height: 285px;
         margin-left: 32px;
         margin-top: 15px;
         border: 1px solid #dfe4ed;
@@ -174,24 +194,20 @@ export default {
             white-space: nowrap;
             margin-top: 12px;
           }
-          // &.jindu {
-          //   width: 100%;
-          //   height: 12px;
-          //   display: flex;
-          //   justify-content: space-between;
-          //   margin-top: 16px;
-          //   span {
-          //     &.fr {
-          //       margin-top: -12px;
-          //     }
-          //   }
-          // }
+          &.jindu {
+            color:red;
+           
+          }
         }
       }
       li:hover {
         box-shadow: 0 0 10px #c1c1c1;
         border: 1px solid #c1c1c1;
       }
+    }
+    .block{
+      text-align:right;
+      margin-right: 20px;
     }
   }
 }

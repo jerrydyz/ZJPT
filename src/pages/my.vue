@@ -1,5 +1,6 @@
 <template>
-  <div class="my">
+  <keep-alive>
+    <div class="my">
     <div class="title">
       <div class="top w clearfix">
         <p class="fl">河南省继续教育学会在线学习平台</p>
@@ -65,6 +66,7 @@
     </div>
     <foot></foot>
   </div>
+  </keep-alive>
 </template>
  
 <script>
@@ -93,13 +95,13 @@ export default {
       }
     },
     created(){
-      if(sessionStorage.getItem('type')){
-         this.more( sessionStorage.getItem('type'))
+      if(sessionStorage.getItem('types')){
+         this.more( sessionStorage.getItem('types'))
       }
      this.name= sessionStorage.getItem('name')
        this.uid= sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
-       this.id_card=sessionStorage.getItem('id_card')
+       this.id_card=localStorage.getItem('id_card')
         var leng=this.id_card.length
        this.id_card = this.id_card.substr(0, 3) + '****' + this.id_card.substr(leng - 4);
 
@@ -108,7 +110,7 @@ export default {
       more(val){
         this.con=val
         this.bgcolor=val
-        sessionStorage.setItem('type',this.con)
+        sessionStorage.setItem('types',this.con)
       },
       //返回按钮
       goback (){

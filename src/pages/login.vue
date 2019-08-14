@@ -78,6 +78,7 @@ export default {
         }else if(this.checkLpicma() == true){
           let userinfo={id_card:this.idcard, password:this.UserPsd}
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
+            console.log("哈哈哈哈哈哈哈哈哈哈")
             console.log(response.data);
             if(response.data.status=='ok'){
               sessionStorage.setItem("uid", response.data.data.uid);
@@ -87,6 +88,7 @@ export default {
               that.sex=response.data.data.sex;
               sessionStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
+                localStorage.setItem("id_card", response.data.data.id_card);
               // sessionStorage.setItem("mobile", response.data.data.mobile);
               // sessionStorage.setItem("name", response.data.data.name);
               // sessionStorage.setItem("id_card", response.data.data.id_card);

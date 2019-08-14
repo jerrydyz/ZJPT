@@ -406,7 +406,7 @@ export default {
               this.name=response.data.data.name;
               that.$router.push({ path: 'my' });
               sessionStorage.setItem("mobile", response.data.data.mobile);
-              sessionStorage.setItem("id_card", response.data.data.id_card);
+              localStorage.setItem("id_card", response.data.data.id_card);
               
             }else if(response.data.status=='error'){
               that.$message.error({message:response.data.errormsg,duration:1600});
