@@ -263,6 +263,7 @@ export default {
       data: qs.stringify(datalaws) 
       }).then(function (response) {
         if(response.data.status=="ok"){
+          that.lawsjson.state=1;
           console.log("laws")
           that.lawsjson.list=response.data.data.data
           console.log(response.data.data.data)
@@ -278,6 +279,7 @@ export default {
       data: qs.stringify(dataworks) 
       }).then(function (response) {
         if(response.data.status=="ok"){
+          that.worksjson.state=1;
           console.log("works")
           that.worksjson.list=response.data.data.data
           console.log(response.data.data.data)
@@ -293,6 +295,7 @@ export default {
       data: qs.stringify(datahelps) 
       }).then(function (response) {
         if(response.data.status=="ok"){
+          that.helpsjson.state=1;
           console.log("helps")
           that.helpsjson.list=response.data.data.data
           console.log(response.data.data.data)
