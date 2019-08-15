@@ -61,9 +61,12 @@
 						<div class="section_bj"> </div>
 						<a class="fl ksname">{{itemlist.title}}</a>
 						<div class="section-cur section" v-for="item in itemlist.jie" :key="item.id" @click="palyvideo(item.id)">
-							<div class="section_bj" :style="'width:'+jieprogress+'%;background-color:green;'"    v-if="item.active"> </div>
+							<div class="section_bj" :style="'width:'+jieprogress+'%;background-color:green;'" v-if="item.active"> </div>
 							<a class="fl ksname" >{{item.title}}</a>
+							<span class="per-progress">50%</span>
 							<span class="per-progress" v-if="item.active">{{jieprogress}}%</span>
+							<!-- <span class="per-progress">{{parseInt(keshijindu[index].progress)}}%</span> -->
+							<!-- <span class="per-progress" v-if="item.active">{{jieprogress}}%</span> -->
 						</div> 
 					</div>              
 				</div>
@@ -143,7 +146,10 @@ export default {
 		  jiealltime:0,
 		  //正在播放视频已看时长
 		  curtime:0,
+		  //websocket定时器
 		  T:'',
+		  //每个小节的进度
+		  keshijindu:'',
 		}
 		
   },
@@ -173,9 +179,6 @@ export default {
 		}
 	});
 	
-
-	
-
   },
   methods: {
 	  tabstate1:function(){
@@ -200,6 +203,8 @@ export default {
 	//播放视频
 	palyvideo:function(id){
 		let that = this;
+		//调用获取课时进度方法
+		this.getKeshiProgress(this.$route.query.courseId);
 		//每点击一个视频，初始化数据
 		that.jieprogress=0;
 		that.jiealltime=0;
@@ -217,9 +222,7 @@ export default {
 			console.log("跳转过来的")
 			videoId=this.$route.query.vid;
 		}
-		//调用获取课时进度方法
-		this.getKeshiProgress(videoId);
-
+	
 		for(let i=0;i<that.ZHang.length;i++){
 			for(let j=0;j<that.ZHang[i].jie.length;j++){
 				if(that.ZHang[i].jie[j].id==videoId){
@@ -301,21 +304,21 @@ export default {
 	},
 	
 	//获取该课程进度包含的章节进度
-	getKeshiProgress:function(vid){
+	getKeshiProgress:function(courseid){
 		let that = this;
-		let zhangProgress={kecheng_id:vid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let zhangProgress={kecheng_id:courseid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_keshi_jindu',
 			data: qs.stringify(zhangProgress) 
 			}).then(function (response) {
-				console.log("获取每节进度get_kecheng_keshi_jindu")
-				console.log(response.data);
 			if(response.data.status=="ok"){
 				console.log("获取每小节进度")
-				console.log(response.data)
+				console.log(response.data.data.keshi_jindu)
+				that.keshijindu=response.data.data.keshi_jindu;
 			}else if(response.data.status=="error"){
-				that.$message.error({message:response.data.errormsg,duration:1600});
+				//如果为error进度未获取到，先让进度为0
+				//that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
 				that.$message.error({message:"重新登录",duration:1600});
 			}
