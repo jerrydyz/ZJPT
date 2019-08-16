@@ -13,448 +13,109 @@
       <!-- 面包屑导航 start -->
       <div class="topbox bg3f">
         <div class="screen-outer">
-          <div class="screen-outer">
+          <div class="screen-outer clearfix">
             <div class="exercises-left" style="position: fiexd; margin-top: 0px; top: 20px;">
               <div class="study-record">
                 <!--答题卡-->
                 <dl class="answer-sheet">
                   <dt>答题卡</dt>
-                  <dd>
-                    1
-                  </dd>
-                  <dd>
-                   2
-                  </dd>
-                  <dd>
-                    3
-                  </dd>
-                  <dd>
-                    4
-                  </dd>
-                  <dd>
-                    5
-                  </dd>
-                  <dd>
-                    6
-                  </dd>
-                  <dd>
-                    7
-                  </dd>
-                  <dd>
-                    8
-                  </dd>
+                  <dd>1</dd>
+                  <dd>2</dd>
+                  <dd>3</dd>
+                  <dd>4</dd>
+                  <dd>5</dd>
+                  <dd>6</dd>
+                  <dd>7</dd>
+                  <dd>8</dd>
                 </dl>
               </div>
             </div>
             <!--答题-->
             <div class="exercises-content">
               <ul class="test-paper-box">
-                <h3>国际商务与国际营销</h3>
+                <h3>{{tit}}</h3>
                 <!--单选题-->
-                <li class="test-paper" id="ex1" data-question-num="1">
+                <li
+                  class="test-paper"
+                  id="ex1"
+                  data-question-num="1"
+                  v-for="(item,index) in datalist1"
+                  :key="item.id"
+                >
                   <h5>
-                    <small>1</small>（单选题,10 分）
+                    <small>{{index+1}}</small>
+                    <span v-html="msg"></span>
+                    {{fen}}
+                    <span>分）</span>
                   </h5>
                   <p></p>
-                  <p>1+8=？</p>
+                  <p>{{item.question}}</p>
                   <p></p>
                   <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>3</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>9</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>23</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>32</p>
+                    <li v-for="(key,val) in xuanze">
+                      <b>{{val}}、</b>
+                      <p>{{key}}</p>
                     </li>
                   </ul>
-                  <div class="choice">
+                  <div class="choice" v-show="choice">
                     <ul>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[64]" value="A" />A
+                      <li  v-for="(key,val) in xuanze" :class="{checked:index=='n'}" @click="radio($event,item.id)" style="border:1px solid red;">
+                        
+                        <input
+                          type="radio"
+                          :value="val"
+                            v-model="radioValue"
+                        />
+                          <label>
+                              {{val}}
                         </label>
+                        
                       </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[64]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[64]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[64]" value="D" />D
-                        </label>
-                      </li>
+                      {{radioValue}}
                     </ul>
-                    <div class="collection">
-                      <span
-                        class="like"
-                        style="display:none;"
-                        data-question_id="64"
-                        data-action="1"
-                      >
-                        <i class="icon iconlike"></i>
-                        <small>收藏题目</small>
-                      </span>
+                  </div>
+                  <div class="tips">
+                    <span @click="showtips(index)">提示:</span>
+                    <span v-show="showtip">12345</span>
+                  </div>
+                  <div v-show="showdaan">
+                    <div class="lu-ms-tim">
+                      <em>
+                        正确答案
+                        <strong>{{rightkey1}}</strong>
+                      </em>
                     </div>
-                  </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>B</strong>
-                    </em>
-                  </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>小学老师教的8</p>
-                  </div>
-                </li>
-                <li class="test-paper" id="ex2" data-question-num="2">
-                  <h5>
-                    <small>2</small>（单选题,10 分）
-                  </h5>
-                  <p></p>
-                  <p>1+5=？</p>
-                  <p></p>
-                  <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>6</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>2</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>3</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>4</p>
-                    </li>
-                  </ul>
-                  <div class="choice">
-                    <ul>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[61]" value="A" />A
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[61]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[61]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[61]" value="D" />D
-                        </label>
-                      </li>
-                    </ul>
-                    <div class="collection">
-                      <span
-                        class="like"
-                        style="display:none;"
-                        data-question_id="61"
-                        data-action="1"
-                      >
-                        <i class="icon iconlike"></i>
-                        <small>收藏题目</small>
-                      </span>
+                    <div class="fz">
+                      <b>解析：</b>
+                      <p>{{jiexi1}}</p>
                     </div>
-                  </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>A</strong>
-                    </em>
-                  </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>小学老师教的5</p>
-                  </div>
-                </li>
-                <li class="test-paper" id="ex3" data-question-num="3">
-                  <h5>
-                    <small>3</small>（单选题,10 分）
-                  </h5>
-                  <p></p>
-                  <p>1+1=？</p>
-                  <p></p>
-                  <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>1</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>2</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>3</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>4</p>
-                    </li>
-                  </ul>
-                  <div class="choice">
-                    <ul>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[57]" value="A" />A
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[57]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[57]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[57]" value="D" />D
-                        </label>
-                      </li>
-                    </ul>
-                    <div class="collection">
-                      <span
-                        class="like"
-                        style="display:none;"
-                        data-question_id="57"
-                        data-action="1"
-                      >
-                        <i class="icon iconlike"></i>
-                        <small>收藏题目</small>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>B</strong>
-                    </em>
-                  </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>小学老师教的</p>
-                  </div>
-                </li>
-                <li class="test-paper" id="ex4" data-question-num="4">
-                  <h5>
-                    <small>4</small>（单选题,10 分）
-                  </h5>
-                  <p></p>
-                  <p>1+4=？</p>
-                  <p></p>
-                  <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>2</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>3</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>4</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>5</p>
-                    </li>
-                  </ul>
-                  <div class="choice">
-                    <ul>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[60]" value="A" />A
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[60]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[60]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[60]" value="D" />D
-                        </label>
-                      </li>
-                    </ul>
-                    <div class="collection">
-                      <span
-                        class="like"
-                        style="display:none;"
-                        data-question_id="60"
-                        data-action="1"
-                      >
-                        <i class="icon iconlike"></i>
-                        <small>收藏题目</small>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>D</strong>
-                    </em>
-                  </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>小学老师教的4</p>
-                  </div>
-                </li>
-                <li class="test-paper" id="ex5" data-question-num="5">
-                  <h5>
-                    <small>5</small>（单选题,10 分）
-                  </h5>
-                  <p></p>
-                  <p>
-                    1+2=?
-                    <br />
-                  </p>
-                  <p></p>
-                  <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>1</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>2</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>3</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>4</p>
-                    </li>
-                  </ul>
-                  <div class="choice">
-                    <ul>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[58]" value="A" />A
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[58]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[58]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="radio" name="user_answer[58]" value="D" />D
-                        </label>
-                      </li>
-                    </ul>
-                    <div class="collection">
-                      <span
-                        class="like"
-                        style="display:none;"
-                        data-question_id="58"
-                        data-action="1"
-                      >
-                        <i class="icon iconlike"></i>
-                        <small>收藏题目</small>
-                      </span>
-                    </div>
-                  </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>C</strong>
-                    </em>
-                  </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>小学老师教的2</p>
                   </div>
                 </li>
                 <!--多选题-->
-                <li class="test-paper" id="ex6" data-question-num="6">
+                <li
+                  class="test-paper"
+                  id="ex6"
+                  data-question-num="6"
+                  v-for="(check,index) in datalist2"
+                  :key="check.id"
+                >
                   <h5>
-                    <small>6</small>（多选题,10 分）
+                    <small>{{index}}</small>（多选题,10 分）
                   </h5>
                   <p></p>
-                  <p>以下城市那些是中国古代的都城？</p>
+                  <p>{{check.question}}</p>
                   <p></p>
                   <ul class="answer">
-                    <li>
-                      <b>A、</b>
-                      <p>北京</p>
-                    </li>
-                    <li>
-                      <b>B、</b>
-                      <p>南京</p>
-                    </li>
-                    <li>
-                      <b>C、</b>
-                      <p>洛阳</p>
-                    </li>
-                    <li>
-                      <b>D、</b>
-                      <p>开封</p>
+                    <li v-for="(key,val) in xuanze2">
+                      <b>{{val}}、</b>
+                      <p>{{key}}</p>
                     </li>
                   </ul>
                   <div class="choice">
                     <ul>
-                      <li>
+                      <li v-for="(key,val) in xuanze2">
                         <label>
-                          <input type="checkbox" name="user_answer[76][]" value="A" />A
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" name="user_answer[76][]" value="B" />B
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" name="user_answer[76][]" value="C" />C
-                        </label>
-                      </li>
-                      <li>
-                        <label>
-                          <input type="checkbox" name="user_answer[76][]" value="D" />D
+                          <input type="checkbox" name="user_answer[76][]" :value="val"  @click="checkbox($event)"/>{{val}}
                         </label>
                       </li>
                     </ul>
@@ -470,31 +131,41 @@
                       </span>
                     </div>
                   </div>
-                  <div class="lu-ms-tim">
-                    <em>
-                      正确答案
-                      <strong>ABCD</strong>
-                    </em>
+                  <div class="tips">
+                    <span @click="showtips(index)">提示:</span>
+                    <span v-show="showtip">12345</span>
                   </div>
-                  <div class="fz">
-                    <b>解析：</b>
-                    <p>中国的历史古都...</p>
+                  <div v-show="showdaan">
+                    <div class="lu-ms-tim" v-for="(it,index) in rightkey2" :key="index">
+                      <em>
+                        正确答案
+                        <strong>{{item}}</strong>
+                      </em>
+                    </div>
+                    <div class="fz">
+                      <b>解析：</b>
+                      <p>{{jiexi2}}</p>
+                    </div>
                   </div>
                 </li>
-                <!--单选题-->
-                <li class="test-paper" id="ex7" data-question-num="7">
+                <!--判断题-->
+                <li
+                  class="test-paper"
+                  id="ex7"
+                  data-question-num="7"
+                  v-for="(panduan,index) in datalist3"
+                  :key="panduan.id"
+                >
                   <h5>
-                    <small>7</small>（判断题,10 分）
+                    <small>{{index+1}}</small>（判断题,10 分）
                   </h5>
                   <p></p>
-                  <p>中国的首都是北京吗？</p>
+                  <p>{{panduan.question}}</p>
                   <p></p>
                   <ul class="answer">
-                    <li>
-                      <b>A、</b>正确
-                    </li>
-                    <li>
-                      <b>B、</b>错误
+                    <li v-for="(val,key) in xuanze3">
+                      <b>{{key=='true'?"A":"B"}} 、</b>
+                      {{val}}
                     </li>
                   </ul>
                   <div class="choice">
@@ -510,7 +181,7 @@
                         </label>
                       </li>
                     </ul>
-                    <div class="collection">
+                    <!-- <div class="collection">
                       <span
                         class="like"
                         style="display:none;"
@@ -520,35 +191,41 @@
                         <i class="icon iconlike"></i>
                         <small>收藏题目</small>
                       </span>
-                    </div>
+                    </div>-->
                   </div>
-                  <div class="lu-ms-tim">
+                  <div class="tips">
+                    <span @click="showtips(index)">提示:</span>
+                    <span v-show="showtip">12345</span>
+                  </div>
+                  <div class="lu-ms-tim" v-show="showdaan">
                     <em>
                       正确答案
-                      <strong>A</strong>
+                      <strong>{{rightkey3}}</strong>
                     </em>
                   </div>
                   <div class="fz">
                     <b>解析：</b>
-                    <p>首都北京</p>
+                    <p>{{jiexi3}}</p>
                   </div>
                 </li>
                 <!--填空题-->
-                <li class="test-paper" id="ex8" data-question-num="8">
+                <li
+                  class="test-paper"
+                  id="ex8"
+                  data-question-num="8"
+                  v-for="(tiankong,index) in datalist4"
+                  :key="tiankong.id"
+                >
                   <h5>
-                    <small>8</small>（填空题,10 分）
+                    <small>{{index+1}}</small>（填空题,10 分）
                   </h5>
                   <p></p>
-                  <p>_________中国的首都，_________是河南的省会</p>
+                  <p>{{tiankong.question}}</p>
                   <p></p>
                   <div class="choice">
                     <ul class="blanks">
-                      <li>
-                        <b>1</b>
-                        <input type="text" name="user_answer[78][]" />
-                      </li>
-                      <li>
-                        <b>2</b>
+                      <li v-for="(val,key) in xuanze4">
+                        <b>{{index+1}}</b>
                         <input type="text" name="user_answer[78][]" />
                       </li>
                     </ul>
@@ -564,18 +241,18 @@
                       </span>
                     </div>
                   </div>
-                  <div class="lu-ms-tim">
+                  <div class="tips">
+                    <span @click="showtips(index)">提示:</span>
+                    <span v-show="showtip">12345</span>
+                  </div>
+                  <div class="lu-ms-tim" v-show="showdaan">
                     <em class="blank-cls">
                       正确答案
                       <ul>
-                        <li>
+                        <li v-for="(item,index) in rightkey2" :key="index">
                           <span>
-                            <b>1</b>、北京
-                          </span>
-                        </li>
-                        <li>
-                          <span>
-                            <b>2</b>、郑州
+                            <b>{{index+1}}</b>
+                            、{{item}}
                           </span>
                         </li>
                       </ul>
@@ -587,6 +264,7 @@
                   </div>
                 </li>
               </ul>
+              <div id="btn">提交试卷</div>
             </div>
           </div>
         </div>
@@ -595,24 +273,218 @@
   </div>
 </template>
 <script>
+import qs from "qs";
 export default {
-  data (){
-     return{
-       top:''
-
-     }
+  data() {
+    return {
+      top: "",
+      uid: "45",
+      token: "2be5b8e9daf2ad23154bd76fb828d8ea",
+      shijuanid: "13",
+      kaoshi_id: "2",
+      data: [],
+      tit: "",
+      datalist1: [],
+      datalist2: [],
+      datalist3: [],
+      datalist4: [],
+      fen: "10",
+      msg: "（单选题，",
+      xuanze: {},
+      xuanze2: {},
+      xuanze3: {},
+      xuanze4: {},
+      daan: "",
+      B: "",
+      D: "",
+      F: "",
+      H: "",
+      showdaan: true,
+      choice: true,
+      tips: "",
+      showtip: false,
+      answerdata: [],
+      answerlist: [],
+      rightkey1: "",
+      rightkey2: [],
+      rightkey3: "",
+      rightkey4: [],
+      jiexi1: "",
+      jiexi2: "",
+      jiexi3: "",
+      jiexi4: "",
+      radioValue:"",//单选值
+      index:''
+    };
   },
-  created (){
-     
-  } ,
-  watch:{
-     top:function(val,oldval){
-        console.log(val)
-        console.log(oldval)
-        
-     },deep:true
+  created() {
+    // this.uid= sessionStorage.getItem('uid')
+    //   this.token=sessionStorage.getItem('token')
+    this.getshijuan();
+    this.getAnswer();
+    // this.submitpapers()
+  },
+  watch: {
+    top: function(val, oldval) {
+      console.log(val);
+      console.log(oldval);
+    },
+    deep: true
+  },
+  methods: {
+    //获取单选按钮的值
+    radio(e,id) {
+      console.log(e.target.value,id);
+      console.log(typeof id)
+      this.index=id
+
+    },
+    //获取多选按钮的值
+    checkbox (e){
+       console.log(e.target.value);
+    },
+    //获取判断的值
+    panduan (e){
+       console.log(e.target.value);
+    },
+    getshijuan() {
+      var that = this;
+      this.$axios
+        .post(
+          "http://jixujiaoyu_api.songlongfei.club/kaoshi/get_shijuan_info",
+          qs.stringify({
+            uid: this.uid,
+            token: this.token,
+            user_shijuan_id: this.shijuanid
+          })
+        )
+        .then(res => {
+          console.log("获取试卷信息");
+          console.log(res);
+          if (res.data.status == "ok") {
+            that.tit = res.data.data.title;
+            that.data = that.data.concat(res.data.data.shijuan_bankuai);
+            for (var i = 0; i < that.data.length; i++) {
+              if (that.data[i].type == 1) {
+                that.msg = "单选题";
+                that.datalist1 = res.data.data.shijuan_bankuai[i].shiti;
+                console.log(that.datalist1);
+                for (var j = 0; j < that.datalist1.length; j++) {
+                  var A = that.datalist1[j].answer_options;
+                  that.B = that.datalist1[j].question;
+                  var jsonobj = JSON.parse(A);
+                  that.xuanze = jsonobj;
+                }
+              }
+              if (that.data[i].type == 2) {
+                that.datalist2 = res.data.data.shijuan_bankuai[i].shiti;
+                console.log(that.datalist2);
+                for (var k = 0; k < that.datalist2.length; k++) {
+                  var C = that.datalist2[k].answer_options;
+                  that.D = that.datalist2[k].question;
+                  var jsonobj2 = JSON.parse(C);
+                  that.xuanze2 = jsonobj2;
+                }
+              }
+              if (that.data[i].type == 3) {
+                that.datalist3 = res.data.data.shijuan_bankuai[i].shiti;
+                console.log(that.datalist3);
+                for (var h = 0; h < that.datalist3.length; h++) {
+                  console.log("=============================================");
+                  var E = that.datalist3[h].answer_options;
+                  that.F = that.datalist3[h].question;
+                  var jsonobj3 = JSON.parse(E);
+                  that.xuanze3 = jsonobj3;
+                  console.log("哈哈哈");
+                  console.log(that.xuanze3);
+                  that.tips = that.datalist3[i].tips;
+                }
+              }
+              if (that.data[i].type == 4) {
+                that.datalist4 = res.data.data.shijuan_bankuai[i].shiti;
+                console.log(that.datalist4);
+                for (var f = 0; f < that.datalist4.length; f++) {
+                  var G = that.datalist4[f].answer_options;
+                  that.H = that.datalist4[f].question;
+                  var jsonobj4 = JSON.parse(G);
+                  that.xuanze4 = jsonobj4;
+                }
+              }
+            }
+          }
+        });
+    },
+    showtips(val) {
+      console.log(val + 1);
+      this.showtip = !this.showtip;
+    },
+    getAnswer() {
+      var that = this;
+      this.$axios
+        .post(
+          "http://jixujiaoyu_api.songlongfei.club/kaoshi/get_kaoshi_log_info",
+          qs.stringify({
+            uid: this.uid,
+            token: this.token,
+            kaoshi_id: this.kaoshi_id
+          })
+        )
+        .then(res => {
+          console.log("获取考试答案");
+          console.log(res);
+          if (res.data.status == "ok") {
+            that.answerdata = that.answerdata.concat(
+              res.data.data.shijuan.shijuan_bankuai
+            );
+            for (var i = 0; i < that.answerdata.length; i++) {
+              that.answerlist = that.answerdata[i].shiti;
+              for (var j = 0; j < that.answerlist.length; j++) {
+                if (that.answerlist[j].type == 1) {
+                  that.rightkey1 = that.answerlist[j].answer;
+                  that.jiexi1 = that.answerlist[j].jiexi;
+                }
+                if (that.answerlist[j].type == 2) {
+                  that.rightkey2 = that.answerlist[j].answer;
+                  that.jiexi2 = that.answerlist[j].jiexi;
+                }
+                if (that.answerlist[j].type == 3) {
+                  that.rightkey3 = that.answerlist[j].answer;
+                  that.jiexi3 = that.answerlist[j].jiexi;
+                }
+                if (that.answerlist[j].type == 4) {
+                  that.rightkey4 = that.answerlist[j].answer;
+                  that.jiexi4 = that.answerlist[j].jiexi;
+                }
+              }
+            }
+          }
+        });
+    },
+    //提交试卷
+    submitpapers() {
+      var that = this;
+      var data = {
+        uid: 45,
+        token: "69ea0f972cd086b9df242569ab63019e",
+        user_shijuan_id: this.shijuanid,
+        use_time: "",
+        answers: [
+          { shiti_id: id, answer: e.target.value },
+          { shiti_id: "4", answer: ["A", "B", "D"] },
+          { shiti_id: "5", answer: "true" },
+          { shiti_id: "8", answer: ["kong1", "kong2", "kong3"] }
+        ]
+      };
+      
+      this.$axios.
+        post(
+          "http://jixujiaoyu_api.songlongfei.club/kaoshi/submit_shijuan"
+        ).then(res => {
+          console.log("提交考试试卷");
+          console.log(res);
+        });
+    }
   }
-  
 };
 </script>
 <style scoped lang="less">
@@ -658,39 +530,39 @@ export default {
       float: left;
     }
     .exercises-left .study-record {
-    width: 100%;
-        overflow: hidden;
-    background-color: #fff;
-    border-radius: 4px;
-    float: right;
-    margin-top: 30px;
-}
-.answer-sheet {
-    margin-top: 40px;
-    border: 1px solid #eee;
-    float: left;
-    width: 99%;
-    overflow: auto;
-}
-.answer-sheet dt {
-    color: #656565;
-    font-size: 16px;
-    text-align: center;
-    line-height: 50px;
-    background: #eee;
-}
-.answer-sheet dd {
-    background: #fff;
-    color: #888;
-    border: 1px solid #eee;
-    width: 24.6%;
-    height: 54px;
-    line-height: 54px;
-    text-align: center;
-    float: left;
-    cursor: pointer;
-    margin: 20px 6px 10px 10px;
-}
+      width: 100%;
+      overflow: hidden;
+      background-color: #fff;
+      border-radius: 4px;
+      float: right;
+      margin-top: 30px;
+    }
+    .answer-sheet {
+      margin-top: 40px;
+      border: 1px solid #eee;
+      float: left;
+      width: 99%;
+      overflow: auto;
+    }
+    .answer-sheet dt {
+      color: #656565;
+      font-size: 16px;
+      text-align: center;
+      line-height: 50px;
+      background: #eee;
+    }
+    .answer-sheet dd {
+      background: #fff;
+      color: #888;
+      border: 1px solid #eee;
+      width: 24.6%;
+      height: 54px;
+      line-height: 54px;
+      text-align: center;
+      float: left;
+      cursor: pointer;
+      margin: 20px 6px 10px 10px;
+    }
     .exercises-content {
       float: right;
       width: 960px;
@@ -721,6 +593,7 @@ export default {
       background: #e82f24;
       color: #fff;
       border-radius: 50%;
+      margin-right: 10px;
     }
     .test-paper p {
       font-size: 16px;
@@ -745,14 +618,24 @@ export default {
       display: inline-block;
     }
     .test-paper .choice {
-      float: left;
+      // float: left;
       width: 100%;
-      margin: 36px 0;
+      margin: 15px 0;
       font-size: 14px;
       color: #656565;
+      height: 30px;
+      line-height: 30px;
+    }
+    .test-paper .tips {
+      color: red;
+      margin-bottom: 15px;
+      span {
+        display: inline-block;
+        padding: 0 10px;
+      }
     }
     .test-paper .choice ul {
-      float: left;
+      // float: left;
       margin-left: 40px;
     }
     .test-paper .choice li {
@@ -825,6 +708,19 @@ export default {
       cursor: pointer;
       display: none;
     }
+    #btn {
+      // border:1px solid red;
+      text-align: center;
+      height: 50px;
+      line-height: 50px;
+      width: 150px;
+      margin: 0 auto;
+      background-color: #51cb96;
+      color: #fff;
+      cursor: default;
+      border-radius: 10px;
+    }
   }
+ 
 }
 </style>

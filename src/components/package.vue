@@ -54,7 +54,7 @@ export default {
       used:10,
       id:[],
       year:'',
-      msg:'购买',
+      msg:'课程包详情',
       pageNo:1,
       idd:''
         

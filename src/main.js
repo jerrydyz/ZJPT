@@ -26,6 +26,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 
 import VueVideoPlayer from 'vue-video-player'
+// import store from './store/index'
 Vue.use(VueVideoPlayer)
 
 Vue.config.productionTip = false
@@ -34,6 +35,7 @@ Vue.config.productionTip = false
 new Vue({
     el: '#app',
     router,
+
     components: { App },
     template: '<App/>'
 })

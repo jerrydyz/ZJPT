@@ -21,7 +21,7 @@
        <el-pagination
 					layout="prev, pager, next"
 					:current-page.sync="pageNo"
-					:total="allcourse.length"
+					:total="count"
 					:page-size="6"
 					@current-change="changePage()"
 				></el-pagination>
@@ -41,8 +41,8 @@ export default {
       token: "",
       // num: 2,
       allcourse: [],
-      count: "",
-      pagesize: "",
+      count: 1,
+      pagesize: 1,
       yenum: "",
       allxueshi: "",
       kechengxueshi: "",
@@ -57,8 +57,6 @@ export default {
     this.token = sessionStorage.getItem("token");
     var date = new Date();
     this.year = date.getFullYear();
-    // this.id=sessionStorage.getItem('id')
-    console.log(this.allcourse)
     this.getallcourse();
   },
   methods: {
@@ -80,9 +78,8 @@ export default {
           console.log(res);
           that.allcourse=[];
           that.allcourse = that.allcourse.concat(res.data.data.data);
-          that.count = res.data.data.count;
+          that.count = parseInt(res.data.data.count);
           that.pagesize = res.data.data.pagesize;
-          sessionStorage.setItem("id", res.data.data.data.id);
           for(var i=0 ;i<res.data.data.data.length;i++){
               that.id=that.id.concat(res.data.data.data[i].id)
           }
@@ -124,9 +121,9 @@ export default {
         })
       
     },
-    changePage (page){
-      this.pageNo=page
-      console.log(page)
+    changePage (){
+      // this.pageNo=page
+      console.log(this.pageNo)
        this.getallcourse()
     }
   }

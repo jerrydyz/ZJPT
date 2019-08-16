@@ -35,13 +35,15 @@
           <div class="block" style="text-align:right;margin-top:20px;">
             <el-pagination
                 layout="prev, pager, next"
-                :total="data.length"
-                :page-size="5"    
+                :page-size="5" 
+                :total="data.length"   
                 @current-change="current_change" 
                 :current-page.sync="page" 
+                :page-count='6'
                 >
             </el-pagination>
             </div>
+           
            
         </div>
     </div>
@@ -81,7 +83,7 @@ export default {
                 console.log("订单列表")
                 console.log(res)
                 if(res.data.status=="ok"){
-                    // that.data=[]
+                    that.data=[]
                      that.data=that.data.concat(res.data.data)
                      console.log(that.data)
                 }

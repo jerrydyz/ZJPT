@@ -72,7 +72,7 @@ export default {
                     year:this.year,
                     uid:this.uid,
                     token:this.token,
-                    psge:this.page,
+                    page:this.page,
                     num:this.num
                 })
             ).then(res =>{
@@ -80,7 +80,6 @@ export default {
                 console.log(res)
                 that.data=that.data.concat(res.data.data.data)
                 console.log(that.data)
-                
                 if(res.data.data.data){
                     that.nodata=false
                 }else{
