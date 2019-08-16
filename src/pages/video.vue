@@ -57,16 +57,16 @@
 			<div id="tagcontent_box">
 				<!--课程-->
 				<div class="m-chapterList" id="tagcontent0" v-show="tabstate==1">
-					<div class="section bigsection" v-for="(itemlist,index) in courseInfo.zhang" :key="index">
+					<div class="section bigsection" v-for="(itemlist,index) in newzhang" :key="index">
 						<div class="section_bj"> </div>
 						<a class="fl ksname">{{itemlist.title}}</a>
 						<div class="section-cur section" v-for="item in itemlist.jie" :key="item.id" @click="palyvideo(item.id)">
+							<div class="section_bj" :style="'width:100%;background-color:blue;'" v-if="item.progress>=100"> </div>
+							<div class="section_bj" :style="'width:'+item.progress+'%;background-color:green;'" v-if="item.progress>0 && item.progress<100"> </div>
 							<div class="section_bj" :style="'width:'+jieprogress+'%;background-color:green;'" v-if="item.active"> </div>
 							<a class="fl ksname" >{{item.title}}</a>
-							<span class="per-progress">50%</span>
+							<span class="per-progress"> {{parseInt(item.progress)}}% </span>
 							<span class="per-progress" v-if="item.active">{{jieprogress}}%</span>
-							<!-- <span class="per-progress">{{parseInt(keshijindu[index].progress)}}%</span> -->
-							<!-- <span class="per-progress" v-if="item.active">{{jieprogress}}%</span> -->
 						</div> 
 					</div>              
 				</div>
@@ -110,7 +110,7 @@ import 'vue-video-player/src/custom-theme.css'
 import qs from 'qs'
 //引入hls.js
 import 'videojs-contrib-hls.js/src/videojs.hlsjs'
-
+import $jquery from 'jquery'
 export default {
   name:'videoPage',
   data () {
@@ -136,24 +136,27 @@ export default {
 	        notSupportedMessage: '此视频暂无法播放，请稍后再试' //允许覆盖Video.js无法播放媒体源时显示的默认信息。
 		  },
 		  courseInfo:'',
+		  newcourseInfo:'',
 		  jiangshi:'',
 		  ZHang:'',
+		  newzhang:'',
 		  curVideoId:'',
 		  tabstate:1,
 		  //正在播放视频百分比进度
 		  jieprogress:0,
 		  //正在播放视频总时长
 		  jiealltime:0,
-		  //正在播放视频已看时长
+		  //自己定时器累加正在播放视频已看时长
 		  curtime:0,
 		  //websocket定时器
 		  T:'',
 		  //每个小节的进度
-		  keshijindu:'',
+		  keshijindu:[],
 		}
 		
   },
   mounted () {
+	
 	//获取播放课程信息
 	let that = this;
 	let datacourse={kecheng_id:this.$route.query.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
@@ -165,7 +168,11 @@ export default {
 		if(response.data.status=="ok"){
 			console.log("该播放课程信息")
 			console.log(response.data.data)
+			//课程进度初始化0，每个小节初始化进度0
+			//请求进度接口 
+			
 			that.courseInfo=response.data.data;
+		
 			that.ZHang=response.data.data.zhang;
 			console.log("该播放课程zhangjie")
 			console.log(that.ZHang)
@@ -198,21 +205,19 @@ export default {
 	},
 	 //点击video暂停按钮
 	onplayerpause:function(){
-
+		clearInterval(this.T);
 	},
-	//播放视频
+	//播放视频初始化
 	palyvideo:function(id){
 		let that = this;
-		//调用获取课时进度方法
-		this.getKeshiProgress(this.$route.query.courseId);
-		//每点击一个视频，初始化数据
-		that.jieprogress=0;
-		that.jiealltime=0;
-		that.curtime=0;
-		if(this.T){clearInterval(this.T)}
 		
-		//获取播放器dom
-		let myPlayer = this.$refs.videoPlayer.player;
+		//每点击一个视频，初始化数据
+		//调用获取课时进度方法
+		that.getKeshiProgress(this.$route.query.courseId);
+		// that.jieprogress=0;
+		// that.jiealltime=0;
+		// that.curtime=0;
+		if(this.T){clearInterval(this.T)}
 		//判断是点击课程还是跳转过来
 		let videoId;
 		if(id){
@@ -222,24 +227,43 @@ export default {
 			console.log("跳转过来的")
 			videoId=this.$route.query.vid;
 		}
-	
-		for(let i=0;i<that.ZHang.length;i++){
-			for(let j=0;j<that.ZHang[i].jie.length;j++){
-				if(that.ZHang[i].jie[j].id==videoId){
+		//调用告诉后台当前观看视频id
+		that.curplayvideoId(videoId);
+		//获得播放视频时长信息
+		that.getCurvideoTime(videoId);
+		
+		
+	},
+
+	//获得播放视频时长信息
+	getCurvideoTime:function(videoId){
+		let that = this;
+		//获取播放器dom
+		let myPlayer = this.$refs.videoPlayer.player;
+
+		for(let i=0;i<that.newzhang.length;i++){
+			for(let j=0;j<that.newzhang[i].jie.length;j++){
+				if(that.newzhang[i].jie[j].id==videoId){
 					console.log(videoId);
 					that.curVideoId = videoId;
-					myPlayer.src(that.ZHang[i].jie[j].video_url);
-					that.ZHang[i].jie[j].active = true;
+					myPlayer.src(that.newzhang[i].jie[j].video_url);
+					that.newzhang[i].jie[j].active = true;
 					//本节视频总时长
-					that.jiealltime=parseInt(that.ZHang[i].jie[j].video_shichang_seconds) 
+					that.jiealltime = parseInt(that.newzhang[i].jie[j].video_shichang_seconds);
+					//本节视频已看时长
+					that.curtime = parseInt(that.newzhang[i].jie[j].read_shichang_seconds);  
+					that.jieprogress = parseInt(that.newzhang[i].jie[j].progress);
 					console.log("播放视频url");
-					console.log(that.ZHang[i].jie[j].video_url);
+					console.log(that.newzhang[i].jie[j].video_url);
 				}else{
-					that.ZHang[i].jie[j].active = false;
+					that.newzhang[i].jie[j].active = false;
 				}
 			};
 		};
-		//告诉后台当前观看视频id
+	},
+
+	//告诉后台当前观看视频id
+	curplayvideoId:function(videoId){
 		let playcourse={kecheng_jie_id:videoId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
@@ -248,7 +272,8 @@ export default {
 			}).then(function (response) {
 			if(response.data.status=="ok"){
 				console.log("告诉后台观看的视频id成功")
-				console.log(response.data)
+				console.log(response.data);
+				
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
@@ -257,6 +282,7 @@ export default {
 		});
 
 	},
+		
 	//每隔5秒websocket.send()
 	countVideoTime:function(){
 		let that = this;
@@ -304,6 +330,7 @@ export default {
 	},
 	
 	//获取该课程进度包含的章节进度
+	
 	getKeshiProgress:function(courseid){
 		let that = this;
 		let zhangProgress={kecheng_id:courseid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
@@ -316,6 +343,7 @@ export default {
 				console.log("获取每小节进度")
 				console.log(response.data.data.keshi_jindu)
 				that.keshijindu=response.data.data.keshi_jindu;
+				that.bidui();
 			}else if(response.data.status=="error"){
 				//如果为error进度未获取到，先让进度为0
 				//that.$message.error({message:response.data.errormsg,duration:1600});
@@ -324,13 +352,29 @@ export default {
 			}
 		});
 	},
-	
+	bidui:function(){
+		let that = this;
+		// this.$nextTick( ()=>{
+		// 	console.log("========++++++++++++++==========")
+		// 	console.log(this.$refs.myjie)
+		// })
+		console.log("章节信息=========")
+		console.log(that.ZHang)
+		console.log("课时进度=========")
+		console.log(that.keshijindu);
+		
+		that.newzhang = that.ZHang.map(item => ({...item, jie: item.jie.map(node => Object.assign(node, that.keshijindu.find(child => child.kecheng_jie_id === node.id)))}));
+		console.log("合并数组=========")
+		console.log(that.newzhang)
+		
+	},
 
   } 
 }
+
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
   .videopage{width: 100%;height: 100%;background-color: #000;display:flex;
 	.videopage-left{width: calc(100% - 370px);box-sizing: border-box;height: calc(100% - 60px);
 		.video-top{ height:60px; line-height:60px; background:#3C3C3C; width:calc(100% + 20px);color:#CBCBCB;
@@ -353,6 +397,8 @@ export default {
 	.videopage-right{width: 370px;}
   }
   
+.video-js .vjs-big-play-button{border-radius: 50%!important;}
+
 .m-chapterList{border-top:0; text-align:left; position:relative;padding-bottom:1em; font-size:14px; color:#999999;background-color: #333;}
 .m-chapterList .chapter{height:40px; color:#666; font-size:14px; font-family:'微软雅黑'; font-weight:bolder; padding:10px 12px 0 12px; line-height:40px; cursor:default;}
 .m-chapterList .ch{width:41px; height:40px; text-align:left;}

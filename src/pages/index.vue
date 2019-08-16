@@ -402,11 +402,11 @@ export default {
               sessionStorage.setItem("uid", response.data.data.uid);
               sessionStorage.setItem("token", response.data.data.token);
               sessionStorage.setItem("login1", "1");
-              this.login1=1;
+              that.login1=1;
               sessionStorage.setItem("sex", response.data.data.sex);
-              this.sex=response.data.data.sex;
+              that.sex=response.data.data.sex;
               sessionStorage.setItem("name", response.data.data.name);
-              this.name=response.data.data.name;
+              that.name=response.data.data.name;
               that.$router.push({ path: 'my' });
               sessionStorage.setItem("mobile", response.data.data.mobile);
               localStorage.setItem("id_card", response.data.data.id_card);
@@ -448,6 +448,14 @@ export default {
               that.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=="relogin"){
               that.$message.error({message:"请重新登录",duration:1600});
+              sessionStorage.removeItem("login1");
+              sessionStorage.removeItem("uid");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("sex");
+              sessionStorage.removeItem("name");
+              sessionStorage.removeItem("mobile");
+              sessionStorage.removeItem("id_card");
+              that.login1=0;
             }
           });
         sessionStorage.setItem("login1", "0");
