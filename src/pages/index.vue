@@ -447,6 +447,7 @@ export default {
             }else if(response.data.status=="error"){
               that.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=="relogin"){
+              that.login1=0;
               that.$message.error({message:"请重新登录",duration:1600});
               sessionStorage.removeItem("login1");
               sessionStorage.removeItem("uid");
@@ -455,7 +456,6 @@ export default {
               sessionStorage.removeItem("name");
               sessionStorage.removeItem("mobile");
               sessionStorage.removeItem("id_card");
-              that.login1=0;
             }
           });
         sessionStorage.setItem("login1", "0");
@@ -584,7 +584,7 @@ export default {
              .year-choose{display: flex;align-items: flex-start;height: 36px;
                 .year-title{font-size: 16px;color:#3d3d3d;padding-bottom: 5px;}
                 .year{display: flex;list-style: none;
-                  li{font-size: 16px;color:#3d3d3d;margin: 0 14px;padding-bottom: 5px;cursor: pointer;
+                  li{font-size: 16px;color:#3d3d3d;margin: 0 10px;padding-bottom: 5px;cursor: pointer;
                       &:hover{border-bottom: 2px solid #eb2d2d;}
                    }
                    .on{border-bottom: 2px solid #eb2d2d;}
@@ -593,7 +593,7 @@ export default {
              .course-choose{display: flex;align-items: flex-start;height: 36px;
                 .course-title{font-size: 16px;color:#3d3d3d;padding-bottom: 5px;}
                 .course{display: flex;list-style: none;
-                  li{font-size: 16px;color:#3d3d3d;margin: 0 14px;padding-bottom: 5px;cursor: pointer;
+                  li{font-size: 16px;color:#3d3d3d;margin: 0 10px;padding-bottom: 5px;cursor: pointer;
                     &:hover{border-bottom: 2px solid #eb2d2d;}
                   }
                   .on{border-bottom: 2px solid #eb2d2d;}
@@ -602,7 +602,7 @@ export default {
              .kinds-choose{display: flex;align-items: flex-start;height: 36px;
                 .kinds-title{font-size: 16px;color:#3d3d3d;padding-bottom: 5px;}
                 .kinds{display: flex;list-style: none;
-                  li{font-size: 16px;color:#3d3d3d;margin: 0 14px;padding-bottom: 5px;cursor: pointer;
+                  li{font-size: 16px;color:#3d3d3d;margin: 0 10px;padding-bottom: 5px;cursor: pointer;
                      &:hover{border-bottom: 2px solid #eb2d2d;}
                   }
                   .on{border-bottom: 2px solid #eb2d2d;}

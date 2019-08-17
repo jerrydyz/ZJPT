@@ -88,15 +88,19 @@ export default {
               that.sex=response.data.data.sex;
               sessionStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
-                localStorage.setItem("id_card", response.data.data.id_card);
-              // sessionStorage.setItem("mobile", response.data.data.mobile);
-              // sessionStorage.setItem("name", response.data.data.name);
-              // sessionStorage.setItem("id_card", response.data.data.id_card);
-              that.$router.push({ path: 'personal' });
+              that.$router.push({ path: '/my' });
             }else if(response.data.status=='error'){
               this.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=='relogin'){
-              
+              that.$message.error({message:"请重新登录",duration:1600});
+              sessionStorage.removeItem("login1");
+              sessionStorage.removeItem("uid");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("sex");
+              sessionStorage.removeItem("name");
+              sessionStorage.removeItem("mobile");
+              sessionStorage.removeItem("id_card");
+              that.login1=0;
             }
             
           })
