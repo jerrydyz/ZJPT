@@ -31,6 +31,8 @@ import couse from '../pages/couse'
 import my from '../pages/my'
 import textpaper from '../pages/textpaper'
 import packagedetail from '../pages/packagedetail'
+import kaoshi from '../pages/kaoshi'
+import submit from '../pages/submit'
 Vue.use(Router)
 
 export default new Router({
@@ -194,6 +196,14 @@ export default new Router({
             path: '/packagedetail',
             name: 'packagedetail',
             component: packagedetail
+        }, {
+            path: '/kaoshi',
+            name: 'kaoshi',
+            component: kaoshi
+        }, {
+            path: '/submit',
+            name: 'submit',
+            component: submit
         }
 
 

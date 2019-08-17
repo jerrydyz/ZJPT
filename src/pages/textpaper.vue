@@ -59,12 +59,12 @@
                   </ul>
                   <div class="choice" v-show="choice">
                     <ul>
-                      <li  v-for="(key,val) in xuanze" :class="{checked:index=='n'}" @click="radio($event,item.id)" style="border:1px solid red;">
+                      <li  v-for="(key,val) in xuanze"  @click="radio($event,item.id)">
                         
                         <input
                           type="radio"
-                          :value="val"
-                            v-model="radioValue"
+                          :value="key"
+                          :name="item.id"
                         />
                           <label>
                               {{val}}
@@ -279,7 +279,7 @@ export default {
     return {
       top: "",
       uid: "45",
-      token: "2be5b8e9daf2ad23154bd76fb828d8ea",
+      token: "641ec4adcc15913536861f9f5596ca48",
       shijuanid: "13",
       kaoshi_id: "2",
       data: [],
