@@ -13,7 +13,10 @@
 			</div>
 			<div class="player-container">
 				<div class="videobox">
-					<video-player class="vjs-custom-skin" :options="playerOptions" ref="videoPlayer" @play="onplayerplay" @pause="onplayerpause"></video-player>
+					<div class="middlebox">
+						<video-player class="vjs-custom-skin" :options="playerOptions" ref="videoPlayer" @play="onplayerplay" @pause="onplayerpause"></video-player>
+					</div>
+					
 				</div>
 				<div class="cl-info f-cb">
 					<div style="" title="分享" class="cli-share j-sharebox">
@@ -63,7 +66,7 @@
 						<div class="section-cur section" v-for="item in itemlist.jie" :key="item.id" @click="palyvideo(item.id)">
 							<div class="section_bj" :style="'width:100%;background-color:blue;'" v-if="item.progress>=100"> </div>
 							<div class="section_bj" :style="'width:'+item.progress+'%;background-color:green;'" v-if="item.progress>0 && item.progress<100"> </div>
-							<div class="section_bj" :style="'width:'+jieprogress+'%;background-color:green;'" v-if="item.active"> </div>
+							<div class="section_bj" :style="'width:'+jieprogress+'%;'" v-if="item.active"> </div>
 							<a class="fl ksname" >{{item.title}}</a>
 							<span class="per-progress"> {{parseInt(item.progress)}}% </span>
 							<span class="per-progress" v-if="item.active">{{jieprogress}}%</span>
@@ -77,23 +80,35 @@
 						<div class="tips1 l5">我的笔记</div>
 						<div class="editwrap_tittle mt22">
 							<div class="tips r5">标题限<span id="notetittle_length">45</span>字符内</div>
-							<textarea  class="j-edittxt edittxt" maxlength="45" id="notetittle" placeholder="在此输入笔记标题... " onblur=""></textarea>
+							<textarea  class="j-edittxt edittxt" maxlength="45" id="notetittle" placeholder="在此输入笔记标题... " v-model="bijiTitle"></textarea>
 							<label for="edittxt" class="j-hint hint" id="auto-id-drt6TisVISpRhnQa"></label>
 						</div>
 						<div class="editwrap mt22">
 							<div class="tips r5">内容限<span id="notecont_length">200</span>字符内</div>
-							<textarea  class="j-edittxt edittxt" maxlength="200" id="notecont" placeholder="在此记录你的想法... "></textarea>
+							<textarea  class="j-edittxt edittxt" maxlength="200" id="notecont" placeholder="在此记录你的想法... " v-model="bijiContent"></textarea>
 							<label for="edittxt" class="j-hint hint" id="auto-id-drt6TisVISpRhnQa"></label>
 						</div>
 						<div class="mt5 clearfix">
-							<label class="checklabel fl" style="display: none;">
-								<input type="checkbox" class="j-privatecheck" hidefocus="true" id="note_isopen" checked="checked" value="1">
-								&nbsp;公开</label>
-							<input type="button" onclick="noteaddBang(this,92,1)" class="bg_btn_gray Secrecy fr" style="cursor:pointer" value="保存">
+							<input type="button" @click="addjieBiji" class="bg_btn_gray Secrecy fr" style="cursor:pointer" value="保存">
 						</div>
 					</form>
-					<ul class="video-list"></ul>
-					<div style="margin-top:28px;" class="wie" id="txtmydianbonote">
+					<ul class="video-list" v-show="bijistate==1">
+						<li class="li position-rt" v-for="item in allbiji" :key="item.id">
+							<div class="width">
+								<div class="li-fl"><a><img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/middle.jpg"></a></div>
+								<div class="li-fr">
+									<div class="reply-star clearfix">
+										<label class="form-label  fl f3" for="score"><a class="f3">{{name}}</a> <span class=" f9">的笔记</span></label>
+									</div>
+									<a><p>{{item.title}}</p></a>
+									<div class="replymegfooter">
+										<div class="wenda-time"> <em>时间：{{item.time}}</em> </div>
+									</div>
+								</div>
+							</div>
+						</li>
+					</ul>
+					<div style="margin-top:28px;" class="wie" id="txtmydianbonote" v-show="bijistate==0">
 						<div style="text-align:center;height:auto;overflow:hidden; color:#999999; font-size:12px">暂无数据</div>
 					</div>
 				</div>
@@ -104,9 +119,10 @@
 </template>
 
 <script>
+import 'vue-video-player/src/custom-theme.css'
 //引入video样式
 import 'video.js/dist/video-js.css'
-import 'vue-video-player/src/custom-theme.css'
+
 import qs from 'qs'
 //引入hls.js
 import 'videojs-contrib-hls.js/src/videojs.hlsjs'
@@ -131,7 +147,7 @@ export default {
 					src: 'http://jixujiaoyu_api.songlongfei.club/hls/576537c51c12c29adb33c072b48dda2f.m3u8'
 				}
 			],
-	        poster: "/static/images/index/index-banner1.jpg", //你的封面地址
+	        //poster: " ", //你的封面地址
 	        //width: document.documentElement.clientWidth,
 	        notSupportedMessage: '此视频暂无法播放，请稍后再试' //允许覆盖Video.js无法播放媒体源时显示的默认信息。
 		  },
@@ -152,6 +168,16 @@ export default {
 		  T:'',
 		  //每个小节的进度
 		  keshijindu:[],
+		  //笔记title
+		  bijiTitle:'',
+		  //笔记内容
+		  bijiContent:'',
+		  //笔记内容有无数据
+		  bijistate:1,
+		  //所有笔记内容
+		  allbiji:'',
+		  //笔记作者
+		  name:sessionStorage.getItem("name"),
 		}
 		
   },
@@ -168,11 +194,7 @@ export default {
 		if(response.data.status=="ok"){
 			console.log("该播放课程信息")
 			console.log(response.data.data)
-			//课程进度初始化0，每个小节初始化进度0
-			//请求进度接口 
-			
 			that.courseInfo=response.data.data;
-		
 			that.ZHang=response.data.data.zhang;
 			console.log("该播放课程zhangjie")
 			console.log(that.ZHang)
@@ -182,9 +204,12 @@ export default {
 		}else if(response.data.status=="error"){
 			that.$message.error({message:response.data.errormsg,duration:1600});
 		}else if(response.data.status=="relogin"){
-			that.$message.error({message:"重新登录",duration:1600});
+			that.clearSessionData();
 		}
 	});
+	//获取课程小节笔记
+	this.getbiji();
+
 	
   },
   methods: {
@@ -207,33 +232,57 @@ export default {
 	onplayerpause:function(){
 		clearInterval(this.T);
 	},
+
+
+
 	//播放视频初始化
 	palyvideo:function(id){
 		let that = this;
 		
-		//每点击一个视频，初始化数据
 		//调用获取课时进度方法
 		that.getKeshiProgress(this.$route.query.courseId);
-		// that.jieprogress=0;
-		// that.jiealltime=0;
-		// that.curtime=0;
+		
 		if(this.T){clearInterval(this.T)}
 		//判断是点击课程还是跳转过来
 		let videoId;
 		if(id){
 			videoId=id;
-			console.log("点击第几节")
+			console.log("点击第几节");
+			that.$router.push({ path:'/video',query:{courseId:this.$route.query.courseId,vid:id} });
 		}else{
 			console.log("跳转过来的")
 			videoId=this.$route.query.vid;
 		}
 		//调用告诉后台当前观看视频id
 		that.curplayvideoId(videoId);
-		//获得播放视频时长信息
-		that.getCurvideoTime(videoId);
+		
 		
 		
 	},
+
+	//告诉后台当前观看视频id
+	curplayvideoId:function(videoId){
+		let that = this;
+		let playcourse={kecheng_jie_id:videoId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		this.$axios({
+			method: 'post',
+			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/set_user_kecheng_jie_id',
+			data: qs.stringify(playcourse) 
+			}).then(function (response) {
+			if(response.data.status=="ok"){
+				console.log("告诉后台观看的视频id成功")
+				console.log(response.data);
+				//获得播放视频时长信息
+				that.getCurvideoTime(videoId);
+			}else if(response.data.status=="error"){
+				that.$message.error({message:response.data.errormsg,duration:1600});
+			}else if(response.data.status=="relogin"){
+				that.clearSessionData();
+			}
+		});
+
+	},
+		
 
 	//获得播放视频时长信息
 	getCurvideoTime:function(videoId){
@@ -247,45 +296,38 @@ export default {
 					console.log(videoId);
 					that.curVideoId = videoId;
 					myPlayer.src(that.newzhang[i].jie[j].video_url);
+					console.log("播放视频url");
+					console.log(that.newzhang[i].jie[j].video_url);
 					that.newzhang[i].jie[j].active = true;
 					//本节视频总时长
 					that.jiealltime = parseInt(that.newzhang[i].jie[j].video_shichang_seconds);
 					//本节视频已看时长
 					that.curtime = parseInt(that.newzhang[i].jie[j].read_shichang_seconds);  
 					that.jieprogress = parseInt(that.newzhang[i].jie[j].progress);
-					console.log("播放视频url");
-					console.log(that.newzhang[i].jie[j].video_url);
+					
 				}else{
 					that.newzhang[i].jie[j].active = false;
 				}
 			};
 		};
-	},
-
-	//告诉后台当前观看视频id
-	curplayvideoId:function(videoId){
-		let playcourse={kecheng_jie_id:videoId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
-		this.$axios({
-			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/set_user_kecheng_jie_id',
-			data: qs.stringify(playcourse) 
-			}).then(function (response) {
-			if(response.data.status=="ok"){
-				console.log("告诉后台观看的视频id成功")
-				console.log(response.data);
-				
-			}else if(response.data.status=="error"){
-				that.$message.error({message:response.data.errormsg,duration:1600});
-			}else if(response.data.status=="relogin"){
-				that.$message.error({message:"重新登录",duration:1600});
-			}
-		});
 
 	},
-		
-	//每隔5秒websocket.send()
+
+	
+	
 	countVideoTime:function(){
 		let that = this;
+		//获取播放器dom
+		let myPlayer = this.$refs.videoPlayer.player;
+		if(that.curtime<that.jiealltime){
+			myPlayer.currentTime(that.curtime);
+		}else{
+			if(this.T){clearInterval(this.T)}
+		}
+		
+		console.log("当前播放时长")
+		console.log(myPlayer.currentTime());
+		//每隔5秒websocket.send()
 		this.T = window.setInterval(wslink, 5000);
 		//websocket连接
 		function wslink(){
@@ -303,7 +345,6 @@ export default {
 				{ 
 					let jsonduixiang=JSON.parse(evt.data)
 					//视频已经看的时长
-					
 					if(jsonduixiang.status=="ok"){
 						if(that.curtime<=that.jiealltime){
 							that.curtime+=5;
@@ -315,7 +356,7 @@ export default {
 							console.log(that.jiealltime);
 							console.log(that.jieprogress);
 						}else{
-							clearInterval(T)
+							clearInterval(that.T)
 						}	
 					}else if(jsonduixiang.status=="error"){
 						that.$message.error({message:jsonduixiang.msg,duration:1600});
@@ -348,16 +389,12 @@ export default {
 				//如果为error进度未获取到，先让进度为0
 				//that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.$message.error({message:"重新登录",duration:1600});
+				that.clearSessionData();
 			}
 		});
 	},
 	bidui:function(){
 		let that = this;
-		// this.$nextTick( ()=>{
-		// 	console.log("========++++++++++++++==========")
-		// 	console.log(this.$refs.myjie)
-		// })
 		console.log("章节信息=========")
 		console.log(that.ZHang)
 		console.log("课时进度=========")
@@ -367,6 +404,64 @@ export default {
 		console.log("合并数组=========")
 		console.log(that.newzhang)
 		
+	},
+
+	//添加课程小节笔记  kecheng/add_kecheng_xiaojie_biji
+	addjieBiji:function(){
+		let that = this;
+		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,title:that.bijiTitle,contents:that.bijiContent,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		this.$axios({
+			method: 'post',
+			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/add_kecheng_xiaojie_biji',
+			data: qs.stringify(kecheng_jie) 
+			}).then(function (response) {
+				console.log(response);
+			if(response.data.status=="ok"){
+				that.$message.success({message:"添加笔记成功",duration:1600});
+				//获取课程小节笔记
+				that.getbiji();
+			}else if(response.data.status=="error"){
+				that.$message.error({message:response.data.errormsg,duration:1600});
+			}else if(response.data.status=="relogin"){
+				that.clearSessionData();
+			}
+		});
+	},
+
+	//获取课程小节笔记 /kecheng/get_kecheng_xiaojie_biji
+	getbiji:function(){
+		let that = this;
+		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		this.$axios({
+			method: 'post',
+			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_xiaojie_biji',
+			data: qs.stringify(kecheng_jie) 
+			}).then(function (response) {
+			if(response.data.status=="ok"){
+				console.log("该播放课程笔记信息");
+				console.log(response.data.data);
+				that.allbiji=response.data.data.reverse();
+			}else if(response.data.status=="error"){
+				that.$message.error({message:response.data.errormsg,duration:1600});
+			}else if(response.data.status=="relogin"){
+				that.clearSessionData();
+			}
+		});
+
+	},
+	
+
+	//状态为relogin时清除session数据
+	clearSessionData:function(){
+		let that = this;
+		that.$message.error({message:"请重新登录",duration:1600});
+		sessionStorage.removeItem("login1");
+		sessionStorage.removeItem("uid");
+		sessionStorage.removeItem("token");
+		sessionStorage.removeItem("sex");
+		sessionStorage.removeItem("name");
+		sessionStorage.removeItem("mobile");
+		sessionStorage.removeItem("id_card");
 	},
 
   } 
@@ -391,7 +486,9 @@ export default {
 			}
 		}
 		.player-container{width: 100%;height: calc(100% - 60px);position: absolute;top:60px;bottom:0;background-color: #000;
-			.videobox{height: 100%;width: calc(100% - 370px);}
+			.videobox{height: 100%;width: calc(100% - 370px);
+				.middlebox{height: 100%;}
+			}
 		}
 	}
 	.videopage-right{width: 370px;}
@@ -455,7 +552,7 @@ export default {
 #tagcontent0,#tagcontent1{width:370px; position: absolute; overflow-x: hidden; overflow-y: auto; top:250px; bottom:0;right: 0; }
 .checklabel{color:#999999;}
 .m-videoReportDialog .checklabel:hover{color:#16914E;}
-.cl-info{ height:42px; line-height:42px; color:#b7babe; font-size:12px;position: absolute;bottom: 0;width: calc(100% - 370px);}
+.cl-info{ height:42px; line-height:42px; color:#b7babe; font-size:12px;position: absolute;bottom: 0;right: 370px;}
 .cl-info .clis-im{margin-right:20px;}
 .cl-info .clis-im span{background-position:-114px -527px; padding-left:24px; color:#fff;}
 .cli-intro span{background-position:0 0px;}
@@ -485,4 +582,24 @@ export default {
 .tips {color: #B2B2B2;height: 26px;line-height: 27px;font-weight: bold;position: absolute;right: 0;top: -27px;font-size: 12px;}
 .tips span {color: #FF0000;font-size: 12px;}
 .edittxt{outline: none;resize: none; border: 0;background: none repeat scroll 0 0 transparent;border: medium none;font-size: 12px;height: 65px;line-height: 16px;overflow-x: hidden;overflow-y: auto; width: 100%;}
+
+
+/*问答*/
+.video-list{ width:330px; float:left; height:auto; overflow:hidden; padding-top:10px;}
+.video-list .li{ width:100%; float:left; height:auto; font-size:12px; padding:10px 0 10px 0;border-bottom:1px solid #eeeeee;}
+.video-list .li-fl{ width:40px; float:left; height: auto; margin-right:10px; text-align:center}
+.video-list .li-fl span{ width:40px;height: 30px; display: block; overflow: hidden;  text-overflow: ellipsis;white-space: nowrap;word-break:keep-all;-o-text-overflow:ellipsis; float:left;text-align:center}
+.video-list .li-fr h3{ width:270px;  height: 30px; line-height:30px; font-weight:100;display: block; overflow: hidden;  text-overflow: ellipsis;white-space: nowrap;word-break:keep-all;-o-text-overflow:ellipsis;}
+.video-list .li-fl img{ width:40px; float:left; height: 40px;-moz-border-radius: 100px;-webkit-border-radius: 100px;border-radius:100px;}
+.video-list .li-fr{ width:270px; float:left; height: auto;}
+.video-list .li-fr .reply-star{ line-height:30px; height:30px;}
+.video-list .li-fr .star_ul{ margin:3px 0 0 10px ;}
+.video-list .replymegfooter {margin-top: 4px;color: #dddddd;width: 605px;font-size: 12px;}
+.video-list .replymegfooter em {font-style: normal;display: inline-block;width: 170px;font-size: 12px;}
+.video-list .replymegfooter .formcourse {color: #eeeeee;font-size: 12px;margin-left: 18px;}
+.wenda-time,.keyword-list{float:left;}
+
+
+.video-js .vjs-control-bar{bottom:25px!important;}
+
 </style>
