@@ -32,38 +32,7 @@
 
               <dl class="answer-sheet">
                 <dt>答题卡</dt>
-
-                <dd>
-                  <a href="#ex1">1</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex2">2</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex3">3</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex4">4</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex5">5</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex6">6</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex7">7</a>
-                </dd>
-
-                <dd>
-                  <a href="#ex8">8</a>
-                </dd>
+                <dd v-for="item in nums">{{item}}</dd>
               </dl>
             </div>
           </div>
@@ -114,9 +83,9 @@
                   </ul>
                   <div class="choice" v-show="choice">
                     <ul>
-                      <li v-for="(key,val) in xuanze" @click="radio($event,item.id)">
+                      <li v-for="(key,val) in xuanze">
                         <label>
-                          <input class="anserItem" type="radio" :name="item.id" :value="val" />
+                          <input class="anserItem" type="radio" :name="item.id" :value="val1"  @click="radio($event)"/>
                           {{val}}
                         </label>
                       </li>
@@ -219,7 +188,7 @@
                     <ul>
                       <li v-for="(key,val) in xuanze3">
                         <label>
-                          <input class="anserItem" type="radio" :name="dan.id" :value="val" />
+                          <input class="anserItem" type="radio" :name="dan.id" :value="val"/>
                           {{key}}
                         </label>
                       </li>
@@ -300,7 +269,7 @@ export default {
     return {
       top: "",
       uid: "45",
-      token: "dd3e1e1410ae1508000a1f77754fbb5c",
+      token: "9ce2e83ef62c26725dd42f54654c9472",
       shijuanid: "13",
       kaoshi_id: "2",
       data: [],
@@ -347,6 +316,12 @@ export default {
       lookcollect: false, //查看解析按钮
       shitiid1:[],
       shitidaan1:[],
+      shitiid2:[],
+      shitidaan2:[],
+      n:0,
+      nums:[1,2,3,4,5,6,7,8,9,10,11,12,13],  
+      pick1:'',
+      val1:''
     };
   },
   created() {
@@ -360,22 +335,26 @@ export default {
   methods: {
     //获取单选按钮的值
     radio(e) {
-      // console.log(this.datalist1)
-      for (var i = 0; i < this.datalist1.length; i++) {
-        this.shitiid1=this.datalist1[i].id
-        this.shitidaan1=e.target.value;
-        // console.log(this.shitiid1)
-        console.log( this.shitidaan1)
-      }
+      // var that =this
+      // for (var i = 0; i < this.datalist1.length; i++) {
+      //   this.shitiid1=this.datalist1[i].id
+      //   this.shitidaan1=e.target.value;
+      //   // console.log(this.shitiid1)
+      //   console.log( this.shitidaan1)
+
+      // }
     },
     //获取多选按钮的值
-    checkbox(e, da) {
-      console.log("11111111");
-      console.log(e.target.value, da);
+    checkbox(e) {
+       for (var i = 0; i < this.datalist2.length; i++) {
+        this.shitiid2=this.datalist2[i].id
+        this.shitidaan2=e.target.value;
+        console.log( this.shitidaan2)
+      }
     },
     //获取判断的值
     panduan(e) {
-      console.log(e.target.value);
+      console.log(checked)
     },
     lookjiexi(dat) {
       console.log("1111");
@@ -506,15 +485,15 @@ export default {
     submitpapers() {
       var that = this;
       var data = {
-        uid: 45,
-        token: "dd3e1e1410ae1508000a1f77754fbb5c",
+        uid: 251,
+        token: this.token,
         user_shijuan_id: this.shijuanid,
         use_time: "",
         answers: [
-         { shiti_id: this.shitiid1, answer: this.shitidaan1 },
-          { shiti_id: "4", answer: ["A", "B", "D"] },
-          { shiti_id: "5", answer: "true" },
-          { shiti_id: "8", answer: ["kong1", "kong2", "kong3"] }
+          {"shiti_id": 2,"answer":"A"},
+          {"shiti_id": 4,"answer":["A","B","D"]},
+          {'shiti_id': 5, answer: "true" },
+          {'shiti_id': 8, answer: ["kong1", "kong2", "kong3"] }
         ]
       };
       this.$axios
@@ -523,7 +502,8 @@ export default {
           console.log("提交考试试卷");
           console.log(res);
         });
-    }
+    },
+   
   }
 };
 </script>
@@ -915,5 +895,8 @@ export default {
 
 .test-paper .block {
   display: block !important;
+}
+.checked{
+   background-color: red;
 }
 </style>
