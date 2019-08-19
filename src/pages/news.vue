@@ -39,11 +39,6 @@ export default {
           englishTitle:'NEWS INFORMATION',
           list:''
       },
-      lawsdata:{
-          title:'政策法规',
-          englishTitle:'POLICIES REGULATIONS',
-          list:''
-      },
     }
   },
   mounted() {
@@ -55,14 +50,16 @@ export default {
           if(this.page>=1){
             this.ajaxdata();
           }else{
-              this.page=1;
-              this.ajaxdata();
-              console.log("page小于1")
+              this.$message.error({message:"没有更多资讯了哦",duration:1600});
           }
       },
       next:function(){
-          this.page+=1;
-          this.ajaxdata();
+          if(parseInt(this.newsdata.list.length) % 15 > 0 && this.newsdata.list.length > 15){
+            this.page+=1;
+            this.ajaxdata();
+          }else{
+              this.$message.error({message:"没有更多资讯了哦",duration:1600});
+          }
       },
       ajaxdata:function(){
         let that=this;
@@ -76,12 +73,27 @@ export default {
             if(response.data.status=="ok"){
               console.log("news")
               that.newsdata.list=response.data.data.data
-              console.log(response.data.data.data)
-            }else{
+              console.log(response.data.data.data);
               
-            }
+            }else if(response.data.status=="error"){
+				that.$message.error({message:response.data.errormsg,duration:1600});
+			}else if(response.data.status=="relogin"){
+				that.clearSessionData();
+			}
           });
-      }
+      },
+      //状态为relogin时清除session数据
+	  clearSessionData:function(){
+		let that = this;
+		that.$message.error({message:"请重新登录",duration:1600});
+		sessionStorage.removeItem("login1");
+		sessionStorage.removeItem("uid");
+		sessionStorage.removeItem("token");
+		sessionStorage.removeItem("sex");
+		sessionStorage.removeItem("name");
+		sessionStorage.removeItem("mobile");
+		sessionStorage.removeItem("id_card");
+	  },
   },
 }
 </script>
