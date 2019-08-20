@@ -205,7 +205,6 @@ export default {
   
   created(){
     this.createCode();
-    sessionStorage.setItem("sex","1");
     if(sessionStorage.getItem("login1")){
       this.type=false
     }
@@ -398,6 +397,7 @@ export default {
         }else if(this.checkLpicma() == true){
           let userinfo={id_card:this.idcard, password:this.UserPsd}
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
+            console.log("登陆成功返回信息");
             console.log(response.data);
             if(response.data.status=='ok'){
               sessionStorage.setItem("uid", response.data.data.uid);
@@ -414,6 +414,7 @@ export default {
               that.$router.push({ path: 'my' });
               
             }else if(response.data.status=='error'){
+              this.createCode();//刷新验证码 
               that.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=='relogin'){
 
@@ -441,6 +442,8 @@ export default {
               that.clearSessionData();
               that.type=true;
             }else if(response.data.status=="error"){
+              that.login1=0;
+               that.clearSessionData();
               that.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=="relogin"){
               that.login1=0;

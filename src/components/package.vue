@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <ul>
-        <li class="clearfix" v-for="(item,index) in list" :key="index" @click="gopackdetail">
+        <li class="clearfix xiaoshou" v-for="(item,index) in list" :key="index" @click="gopackdetail">
           <div class="left fl">
             <img :src="item.img_url" alt />
           </div>
@@ -24,7 +24,7 @@
             <div class="price">
               <span class="rmb">￥{{item.price}} 元</span>
             </div>
-            <div type="button" class="btn-now" @click="xuexi" v-html="msg"></div>
+            <div type="button" class="btn-now" @click.stop="xuexi" v-html="msg"></div>
           </div>
         </li>
         
@@ -54,7 +54,7 @@ export default {
       used:10,
       id:[],
       year:'',
-      msg:'课程包详情',
+      msg:'购买',
       pageNo:1,
       idd:''
         
@@ -102,7 +102,8 @@ export default {
       });
       },
       xuexi (){
-         this.$emit('more','mykecheng')
+         this.$emit('more','mykecheng');
+         console.log("购买")
       },
       getbaoprogress (){
          var that=this
@@ -172,6 +173,7 @@ export default {
         border-bottom: 1px solid #c9c9c9;
         box-sizing: border-box;
         margin-bottom:10px;
+        cursor: pointer;
         .left {
           margin-right: 30px;
           width: 173px;
@@ -210,11 +212,13 @@ export default {
             width: 120px;
             height: 40px;
             font-size: 16px;
+            font-weight: bold;
             text-align: center;
             line-height: 40px;
             margin: 35px auto 0;
             background-color: #329df5;
-            color: #fff;
+            color: #ff0000;
+            letter-spacing: 5px;
             cursor: pointer;
           }
         }

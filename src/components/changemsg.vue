@@ -54,7 +54,7 @@
         <li>
           <span>民族 :</span>
           <span>
-            <select name id @click="getminzu($event)">
+            <select name id @change="getminzu">
               <option value >请选择民族</option>
                <option v-for="item in minzu" :key="item.id" >{{item.name}}</option>
               
@@ -64,7 +64,7 @@
         <li>
           <span>政治面貌 :</span>
           <span>
-            <select name id @click="getmianmao($event)">
+            <select name id @change="getmianmao">
               <option value>请选择政治面貌</option>
               <option v-for="item in mao" :key="item.id" >{{item.name}}</option>
             </select>
@@ -73,7 +73,7 @@
         <li>
           <span>学历 :</span>
           <span>
-            <select name id @click="getxueli($event)">
+            <select name id @change="getxueli">
               <option value>请选择学历</option>
               <option v-for="(item,index) in opt" :key="index">{{item.name}}</option>
               
@@ -117,7 +117,7 @@
           </span>
         </li>
       </ul>
-      <div class="btn" @click="baseData">保存</div>
+      <div class="btn" @click="xiugaibaseData">保存</div>
     </div>
     <!-- 修改密码 -->
     <div class="changepwd" v-show="changepwd">
@@ -201,6 +201,25 @@ export default {
          this.idcode=localStorage.getItem('id_card')
          this.phone=sessionStorage.getItem('mobile')
   },
+  mounted () {
+      //获取学历
+       var that=this
+       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_xueli').then(res=>{
+          that.opt=res.data.data
+       })
+    
+     //获取政治面貌
+       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_zhengzhimianmao').then(res=>{
+          that.mao=res.data.data
+       })
+  
+     //获取民族
+       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_minzu').then(res=>{
+          that.minzu=res.data.data
+       })
+   
+
+  },
   methods: {
     sect (e){
         console.log(e.target.value)
@@ -239,8 +258,8 @@ export default {
             console.log(response)
               if(response.data.status=="ok"){
                   that.$message.success({message: '密码修改成功',duration:1600});
+                  that.clearSessionData();
                   that.$router.push('/login')
-                  sessionStorage.removeItem('token')
                   sessionStorage.removeItem('lin')
               }else{
                  that.$message.error({message: response.data.errormsg,duration:1600});
@@ -248,8 +267,20 @@ export default {
           });
       }
     },
+
+     //状态为relogin时清除session数据
+      clearSessionData:function(){
+        sessionStorage.removeItem("login1");
+        sessionStorage.removeItem("uid");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("sex");
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("mobile");
+        sessionStorage.removeItem("id_card");
+      },
+
     // 修改资料
-    baseData (){
+    xiugaibaseData (){
        var that=this
        var datamsg ={
           uid:this.uid,
@@ -315,27 +346,18 @@ export default {
     },
     //获取学历
     getxueli (e){
-       var that=this
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_xueli').then(res=>{
-          that.opt=res.data.data
-          that.xuelilist=e.target.value
-       })
+      this.xuelilist=e.target.value
+      console.log(this.xuelilist);
     },
      //获取政治面貌
     getmianmao (e){
-       var that=this
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_zhengzhimianmao').then(res=>{
-          that.mao=res.data.data
-          that.zhengzhilist=e.target.value
-       })
+      this.zhengzhilist=e.target.value
+      console.log(this.zhengzhilist);
     },
      //获取民族
     getminzu (e){
-       var that=this
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_minzu').then(res=>{
-          that.minzu=res.data.data
-          that.minzulist=e.target.value
-       })
+      this.minzulist=e.target.value
+      console.log(this.minzulist);
     },
   }
 };
@@ -431,6 +453,7 @@ export default {
       margin-left: 110px;
       text-align: center;
       margin-bottom:20px;
+      cursor: pointer;
     }
   }
   .changepwd{
@@ -470,6 +493,7 @@ export default {
             margin-left: 77px;
             line-height: 40px;
             text-align: center;
+            cursor: pointer;
       }
   }
 }

@@ -87,6 +87,7 @@ export default {
               sessionStorage.setItem("sex", response.data.data.sex);
               that.sex=response.data.data.sex;
               sessionStorage.setItem("name", response.data.data.name);
+              sessionStorage.setItem("phone", response.data.data.mobile);
               this.name=response.data.data.name;
               that.$router.push({ path: '/my' });
             }else if(response.data.status=='error'){

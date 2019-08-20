@@ -24,10 +24,10 @@ export default {
   },
   methods:{
     toPersonal:function(){
-      if(localStorage.getItem("login1")==1){
+      if(sessionStorage.getItem("login1")==1){
         this.$router.push({ path: '/my' })
       }else{
-        alert("您还未登陆");
+        this.$router.push({ path: '/login' })
       }
         
     },

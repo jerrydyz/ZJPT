@@ -115,7 +115,7 @@ export default {
     todetail (val){
       console.log(val)
         this.$router.push({
-           name:'courseDetails',
+          name:'courseDetails',
           params:{
             courseId:val
           }
@@ -161,6 +161,7 @@ export default {
         border-radius: 5px;
         padding: 10px;
         background-color: #fff;
+        cursor: pointer;
         p {
           &.imm {
             height: 130px;

@@ -4,7 +4,7 @@
     <div class="title">
       <div class="top w clearfix">
         <p class="fl">河南省继续教育学会在线学习平台</p>
-        <p class="fr">
+        <p class="fr xiaoshou">
           <span class="spn1" @click="more('rate')" >首页</span>
           <span @click="goback">退出</span>
         </p>
@@ -121,9 +121,22 @@ export default {
              token:this.token
            })
           ).then(res =>{
+            that.$message.success({message:"退出成功",duration:1600});
+            that.clearSessionData();
             sessionStorage.removeItem('token')
             that.$router.push('/index')
           })
+      },
+
+      //状态为relogin时清除session数据
+      clearSessionData:function(){
+        sessionStorage.removeItem("login1");
+        sessionStorage.removeItem("uid");
+        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("sex");
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("mobile");
+        sessionStorage.removeItem("id_card");
       },
      
 
@@ -176,11 +189,13 @@ export default {
       .spn1 {
         margin-right: 45px;
       }
+      span{cursor: pointer;}
     }
   }
   .content {
     font-size: 14px;
     margin-top:20px;
+    min-height: 680px;
     .leftcon {
       width: 242px;
       margin-right:10px;
@@ -225,6 +240,7 @@ export default {
               background-color: #fff;
               margin: 0 auto;
               color:#51a3ef;
+              cursor: pointer;
           }
       }
       .leftbot{
@@ -242,6 +258,7 @@ export default {
                letter-spacing: 1px;
                padding: 0 20px;
               box-sizing: border-box;
+              cursor: pointer;
                 i.fl{
                     margin-right:20px;
                     font-size:20px;

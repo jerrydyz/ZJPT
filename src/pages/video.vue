@@ -65,11 +65,11 @@
 						<a class="fl ksname">{{itemlist.title}}</a>
 						<div class="section-cur section" v-for="item in itemlist.jie" :key="item.id" @click="palyvideo(item.id)">
 							<div class="section_bj" :style="'width:100%;background-color:blue;'" v-if="item.progress>=100"> </div>
-							<div class="section_bj" :style="'width:'+item.progress+'%;background-color:green;'" v-if="item.progress>0 && item.progress<100"> </div>
-							<div class="section_bj" :style="'width:'+jieprogress+'%;'" v-if="item.active"> </div>
+							<div class="section_bj" :style="'width:'+item.progress+'%;background-color:green;'" v-if="item.progress>=0 && item.progress<100"> </div>
+							<div class="section_bj myactive" :style="'width:'+jieprogress+'%;background-color:green;'" v-if="item.active"> </div>
 							<a class="fl ksname" >{{item.title}}</a>
 							<span class="per-progress"> {{parseInt(item.progress)}}% </span>
-							<span class="per-progress" v-if="item.active">{{jieprogress}}%</span>
+							<span class="per-progress  myjindu" v-if="item.active">{{jieprogress}}%</span>
 						</div> 
 					</div>              
 				</div>
@@ -182,36 +182,10 @@ export default {
 		
   },
   mounted () {
-	
-	//获取播放课程信息
-	let that = this;
-	let datacourse={kecheng_id:this.$route.query.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
-	this.$axios({
-		method: 'post',
-		url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
-		data: qs.stringify(datacourse) 
-		}).then(function (response) {
-		if(response.data.status=="ok"){
-			console.log("该播放课程信息")
-			console.log(response.data.data)
-			that.courseInfo=response.data.data;
-			that.ZHang=response.data.data.zhang;
-			console.log("该播放课程zhangjie")
-			console.log(that.ZHang)
-			that.jiangshi=response.data.data.jiangshi;
-			//刚进入页面播放哪个视频
-			that.palyvideo();
-		}else if(response.data.status=="error"){
-			that.$message.error({message:response.data.errormsg,duration:1600});
-		}else if(response.data.status=="relogin"){
-			that.clearSessionData();
-		}
-	});
-	//获取课程小节笔记
-	this.getbiji();
-
-	
+	  //初始化数据
+	this.init();
   },
+
   methods: {
 	  tabstate1:function(){
 		 this.tabstate=1;
@@ -225,41 +199,74 @@ export default {
 	  },
 	  //点击video播放按钮
 	onplayerplay:function(){
-
 		this.countVideoTime();
 	},
 	 //点击video暂停按钮
 	onplayerpause:function(){
 		clearInterval(this.T);
 	},
-
+	//刚开始mounted的数据迁移到这
+	init:function(){
+		//获取播放课程信息
+		let that = this;
+		let datacourse={kecheng_id:this.$route.query.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		this.$axios({
+			method: 'post',
+			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
+			data: qs.stringify(datacourse) 
+			}).then(function (response) {
+			if(response.data.status=="ok"){
+				console.log("该播放课程信息")
+				console.log(response.data.data)
+				that.courseInfo=response.data.data;
+				that.ZHang=response.data.data.zhang;
+				console.log("该播放课程zhangjie")
+				console.log(that.ZHang)
+				that.jiangshi=response.data.data.jiangshi;
+				//获取课程小节笔记
+				that.getbiji();
+				
+				that.getInfo();
+			}else if(response.data.status=="error"){
+				that.$message.error({message:response.data.errormsg,duration:1600});
+			}else if(response.data.status=="relogin"){
+				that.clearSessionData();
+			}
+		});
+	},
 
 
 	//播放视频初始化
 	palyvideo:function(id){
-		let that = this;
-		
-		//调用获取课时进度方法
-		that.getKeshiProgress(this.$route.query.courseId);
-		
 		if(this.T){clearInterval(this.T)}
-		//判断是点击课程还是跳转过来
-		let videoId;
-		if(id){
-			videoId=id;
-			console.log("点击第几节");
-			that.$router.push({ path:'/video',query:{courseId:this.$route.query.courseId,vid:id} });
-		}else{
-			console.log("跳转过来的")
-			videoId=this.$route.query.vid;
-		}
-		//调用告诉后台当前观看视频id
-		that.curplayvideoId(videoId);
-		
-		
-		
+		this.$router.push({ path:'/video',query:{courseId:this.$route.query.courseId,vid:id} });
+		this.init();		
 	},
+	//获取信息
+	getInfo:function(){
+		let that = this;
+		for(let i=0;i<that.ZHang.length;i++){
+			for(let j=0;j<that.ZHang[i].jie.length;j++){
+				that.ZHang[i].jie[j].progress = "0";
+				that.ZHang[i].jie[j].read_shichang_seconds = "0";
+				if(that.ZHang[i].jie[j].id==that.$route.query.vid){
+					that.ZHang[i].jie[j].active = true;
+				}else{
+					that.ZHang[i].jie[j].active = false;
+				}
+				
+			};
+		};
+		//调用获取课时进度方法
+		that.getKeshiProgress(that.$route.query.courseId);
+		setTimeout(() => {
+			//获得播放视频时长信息
+			that.getCurvideoTime(that.$route.query.vid);
+			//调用告诉后台当前观看视频id
+			that.curplayvideoId(that.$route.query.vid);
+		}, 500);
 
+	},
 	//告诉后台当前观看视频id
 	curplayvideoId:function(videoId){
 		let that = this;
@@ -272,8 +279,7 @@ export default {
 			if(response.data.status=="ok"){
 				console.log("告诉后台观看的视频id成功")
 				console.log(response.data);
-				//获得播放视频时长信息
-				that.getCurvideoTime(videoId);
+				
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
@@ -298,15 +304,18 @@ export default {
 					myPlayer.src(that.newzhang[i].jie[j].video_url);
 					console.log("播放视频url");
 					console.log(that.newzhang[i].jie[j].video_url);
-					that.newzhang[i].jie[j].active = true;
+					console.log("新的newzhang");
+					console.log(that.newzhang);
 					//本节视频总时长
 					that.jiealltime = parseInt(that.newzhang[i].jie[j].video_shichang_seconds);
+					console.log("总时长")
+					console.log(that.jiealltime)
 					//本节视频已看时长
 					that.curtime = parseInt(that.newzhang[i].jie[j].read_shichang_seconds);  
 					that.jieprogress = parseInt(that.newzhang[i].jie[j].progress);
+					console.log("已看时长")
+					console.log(that.newzhang[i].jie[j].read_shichang_seconds);
 					
-				}else{
-					that.newzhang[i].jie[j].active = false;
 				}
 			};
 		};
@@ -337,7 +346,8 @@ export default {
 				if(websock)return true;var ws = new WebSocket(url);
 				ws.onopen = function(){
 					websock = true;
-					let jsondata={"kecheng_jie_id":that.curVideoId,"uid":sessionStorage.getItem("uid"),"token":sessionStorage.getItem("token"),"url":"incr@jindu"};
+					let myjieid=that.$route.query.vid
+					let jsondata={"kecheng_jie_id":myjieid,"uid":sessionStorage.getItem("uid"),"token":sessionStorage.getItem("token"),"url":"incr@jindu"};
 					let duixiang = JSON.stringify(jsondata);
 					ws.send(duixiang);
 				};
@@ -348,13 +358,18 @@ export default {
 					if(jsonduixiang.status=="ok"){
 						if(that.curtime<=that.jiealltime){
 							that.curtime+=5;
-							that.jieprogress=parseInt(that.curtime*100/that.jiealltime);
 							if(that.jieprogress>100){
 								that.jieprogress=100;
+							}else{
+								that.jieprogress=parseInt(that.curtime*100/that.jiealltime);
 							}
+							console.log("已观看时间");
 							console.log(that.curtime);
+							console.log("总时间");
 							console.log(that.jiealltime);
+							console.log("进度百分比");
 							console.log(that.jieprogress);
+							
 						}else{
 							clearInterval(that.T)
 						}	
@@ -371,7 +386,6 @@ export default {
 	},
 	
 	//获取该课程进度包含的章节进度
-	
 	getKeshiProgress:function(courseid){
 		let that = this;
 		let zhangProgress={kecheng_id:courseid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
@@ -380,31 +394,27 @@ export default {
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_keshi_jindu',
 			data: qs.stringify(zhangProgress) 
 			}).then(function (response) {
+				console.log("章节进度");
+				console.log(response.data);
 			if(response.data.status=="ok"){
 				console.log("获取每小节进度")
-				console.log(response.data.data.keshi_jindu)
+				console.log(response.data.data.keshi_jindu);
+				console.log(response.data);
 				that.keshijindu=response.data.data.keshi_jindu;
-				that.bidui();
+				that.newzhang = that.ZHang.map(item => ({...item, jie: item.jie.map(node => Object.assign(node, that.keshijindu.find(child => child.kecheng_jie_id === node.id)))}));
+				console.log("合并数组=========")
+				console.log(that.newzhang)
 			}else if(response.data.status=="error"){
-				//如果为error进度未获取到，先让进度为0
 				//that.$message.error({message:response.data.errormsg,duration:1600});
+				console.log("新章节")
+				that.newzhang=that.ZHang;
+				console.log(that.newzhang)
 			}else if(response.data.status=="relogin"){
 				that.clearSessionData();
 			}
 		});
 	},
-	bidui:function(){
-		let that = this;
-		console.log("章节信息=========")
-		console.log(that.ZHang)
-		console.log("课时进度=========")
-		console.log(that.keshijindu);
-		
-		that.newzhang = that.ZHang.map(item => ({...item, jie: item.jie.map(node => Object.assign(node, that.keshijindu.find(child => child.kecheng_jie_id === node.id)))}));
-		console.log("合并数组=========")
-		console.log(that.newzhang)
-		
-	},
+	
 
 	//添加课程小节笔记  kecheng/add_kecheng_xiaojie_biji
 	addjieBiji:function(){
