@@ -38,16 +38,13 @@
             <div class="coursetopitem btn">
               <form
                 action="#"
-                method="POST"
-                target="_blank"
-                id="pay_form"
               >
-                <input type="hidden" value="16" name="vid" />
-                <input type="hidden" value="zy_album" name="check_type" />
+                <input type="hidden" value="" name="vid" />
+                <input type="hidden" value="" name="check_type" />
 
-                <input type="hidden" value="班级：国际商务与国际营销(43课时)" name="title" />
+                <input type="hidden" value="" name="title" />
 
-                <input type="hidden" id="money" value="180" name="money" />
+                <input type="hidden" id="money" value="" name="money" />
               </form>
 
               <span id="charge_video" class="buy" @click="gopackdetail">购买</span>

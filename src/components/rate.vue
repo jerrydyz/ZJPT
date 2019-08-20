@@ -47,14 +47,15 @@
                  </div>
              </div>
               <div class="blocks" style="text-align:right;margin-right:20px;margin-top:20px;">
-              <el-pagination
+              <!-- <el-pagination
+                 small
                 layout="prev, pager, next"
-                :total="allcourse.length"
+                :total="count"
                 :current-page.sync="pageNo"
-                :page-size="2"
+                :page-size="6"
                 @current-change="changePage()"
                 >
-              </el-pagination>
+              </el-pagination> -->
             </div>
          </div>
          
@@ -76,7 +77,6 @@ export default {
             allcourse:[],
              list:[],
             count:'',
-            pagesize:'',
             yenum:'',
             allxueshi:'',
             kechengxueshi:'',
@@ -85,7 +85,10 @@ export default {
             idd:'',
             data:[],
             nums:0,
-            pageNo:1
+            totalPage: [],
+             pageNo:1,
+             dataShow: "",//默认当前显示第一页
+             currentPage: 0
         }
     },
     created (){
@@ -181,8 +184,7 @@ export default {
               console.log('获取全部课程')
               console.log(res)
               that.allcourse=that.allcourse.concat(res.data.data.data)
-              that.count=res.data.data.count
-              that.pagesize=res.data.data.pagesize
+              that.count=Number(res.data.data.data.length)
               sessionStorage.setItem("id", res.data.data.data.id);
                 for(var i=0 ;i<res.data.data.data.length;i++){
                     // console.log(i)

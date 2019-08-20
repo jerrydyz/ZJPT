@@ -98,8 +98,8 @@ export default {
       if(sessionStorage.getItem('types')){
          this.more( sessionStorage.getItem('types'))
       }
-     this.name= sessionStorage.getItem('name')
-       this.uid= sessionStorage.getItem('uid')
+        this.name= sessionStorage.getItem('name')
+        this.uid= sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
        this.id_card=localStorage.getItem('id_card')
         var leng=this.id_card.length

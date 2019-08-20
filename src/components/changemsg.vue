@@ -198,7 +198,7 @@ export default {
         this.uid=sessionStorage.getItem('uid')
         this.token=sessionStorage.getItem('token')
          this.name= sessionStorage.getItem('name')
-         this.idcode=sessionStorage.getItem('id_card')
+         this.idcode=localStorage.getItem('id_card')
          this.phone=sessionStorage.getItem('mobile')
   },
   methods: {

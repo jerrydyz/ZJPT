@@ -30,12 +30,12 @@ import VueVideoPlayer from 'vue-video-player'
 Vue.use(VueVideoPlayer)
 
 Vue.config.productionTip = false
-
+import store from '../src/store/index'
 /* eslint-disable no-new */
 new Vue({
     el: '#app',
     router,
-
+    store,
     components: { App },
     template: '<App/>'
 })

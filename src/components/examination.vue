@@ -88,9 +88,15 @@ export default {
             })
        },
        gostady (){
+           var that=this
            for(var i=0;i<this.data.length;i++){
                 if(this.data[i].enable_kaoshi==1){
-                    this.$emit('more' ,'rate')
+                    that.$router.push({
+                        path:'/kaoshi',
+                        query:{
+                            token:that.token
+                        }
+                    })
                 }
                 }
           

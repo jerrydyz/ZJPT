@@ -36,26 +36,14 @@
               </dl>
             </div>
           </div>
-
           <input type="hidden" name="reply_time" value="30" />
-
-          <form
-            name="answers"
-            method="POST"
-            action="http://ceshi2.jxjyedu.club/index.php?c=exams&amp;m=Index&amp;a=doHaddleExams"
-          >
+          <div class="from">
             <input type="hidden" name="anser_time" id="anser_time" value="38" />
-
             <input type="hidden" name="exams_mode" value="2" />
-
             <input type="hidden" name="paper_id" value="18" />
-
             <input type="hidden" name="ch_id" value />
-
             <input type="hidden" name="is_timeout" value="0" />
-
             <!--答题-->
-
             <div class="exercises-content">
               <ul class="test-paper-box">
                 <h3>{{tit}}</h3>
@@ -246,16 +234,16 @@
 
                   <div class="fz">
                     <b>提示：</b>
-                    <p>{{item.tips}}</p>
+                    <p>{{items.tips}}</p>
                   </div>
                 </li>
               </ul>
               <!--下一题-->
-              <div class="next-exercises" style="display: none;">
+              <div class="next-exercises" v-show="next">
                 <a href="javascript:;">下一题</a>
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -269,7 +257,7 @@ export default {
     return {
       top: "",
       uid: "45",
-      token: "9ce2e83ef62c26725dd42f54654c9472",
+      token: "",
       shijuanid: "13",
       kaoshi_id: "2",
       data: [],
@@ -321,13 +309,15 @@ export default {
       n:0,
       nums:[1,2,3,4,5,6,7,8,9,10,11,12,13],  
       pick1:'',
-      val1:''
+      val1:'',
+      next:false,//下一题
     };
   },
   created() {
     var that=this
     // this.uid= sessionStorage.getItem('uid')
     //   this.token=sessionStorage.getItem('token')
+    this.token =this.$route.query.token
     this.getshijuan();
     this.getAnswer();
   },

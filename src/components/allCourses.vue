@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <ul class="clearfix">
-        <li class="fl" v-for="item in allcourse" :key="item.id" @click="todetail">
+        <li class="fl" v-for="item in allcourse" :key="item.id" @click="todetail(item.id)">
           <p class="imm">
             <img :src="item.img_url" alt />
           </p>
@@ -112,11 +112,12 @@ export default {
         })
     },
     //到课程详情页
-    todetail (){
+    todetail (val){
+      console.log(val)
         this.$router.push({
            name:'courseDetails',
           params:{
-            courseId:this.idd
+            courseId:val
           }
         })
       
