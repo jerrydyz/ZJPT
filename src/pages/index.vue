@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <div class="swiper-news-login">
-      <swiper :options="swiperOption" ref="mySwiper" class="myswiper" v-if="swiperdata.length>0">
+      <swiper :options="swiperOption" ref="mySwiper" class="myswiper">
         <!-- slides -->
         <swiper-slide v-for="(item,index) in swiperdata" :key="index" class="slider"><img :src="item.img_url"></swiper-slide>
         <!-- Optional controls -->
@@ -375,9 +375,8 @@ export default {
       checkLpicma(){
           this.picLyanzhengma.toUpperCase();//取得输入的验证码并转化为大写         
           if(this.picLyanzhengma == '') {
-            this.$message.error({message:"验证码不能为空",duration:1600});
-          }
-          if(this.picLyanzhengma.toUpperCase() != this.checkCode ) { //若输入的验证码与产生的验证码不一致时  
+            this.$message.error({message:"请输入验证码",duration:1600});
+          }else if(this.picLyanzhengma.toUpperCase() != this.checkCode ) { //若输入的验证码与产生的验证码不一致时  
             this.$message.error({message:"验证码不正确",duration:1600});
             this.createCode();//刷新验证码   
             this.picLyanzhengma = '';
@@ -403,19 +402,19 @@ export default {
               sessionStorage.setItem("uid", response.data.data.uid);
               sessionStorage.setItem("token", response.data.data.token);
               sessionStorage.setItem("login1", "1");
+              that.login1=1;
               sessionStorage.setItem("sex", response.data.data.sex);
+              that.sex=response.data.data.sex;
               sessionStorage.setItem("name", response.data.data.name);
+              that.name=response.data.data.name;
+              that.$router.push({ path: 'my' });
               sessionStorage.setItem("mobile", response.data.data.mobile);
               localStorage.setItem("id_card", response.data.data.id_card);
-              
-              that.login1=1;
-              that.name=response.data.data.name;
-              that.sex=response.data.data.sex;
-              that.$router.push({ path: 'my' });
               
             }else if(response.data.status=='error'){
               this.createCode();//刷新验证码 
               that.$message.error({message:response.data.errormsg,duration:1600});
+
             }else if(response.data.status=='relogin'){
 
             }
@@ -437,9 +436,14 @@ export default {
           }).then(function (response) {
             
             if(response.data.status=="ok"){
-              that.login1=0;
               that.$message.success({message:"退出成功",duration:1600});
-              that.clearSessionData();
+              sessionStorage.removeItem("login1");
+              sessionStorage.removeItem("uid");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("sex");
+              sessionStorage.removeItem("name");
+              sessionStorage.removeItem("mobile");
+              sessionStorage.removeItem("id_card");
               that.type=true;
             }else if(response.data.status=="error"){
               that.login1=0;
@@ -448,7 +452,13 @@ export default {
             }else if(response.data.status=="relogin"){
               that.login1=0;
               that.$message.error({message:"请重新登录",duration:1600});
-              that.clearSessionData();
+              sessionStorage.removeItem("login1");
+              sessionStorage.removeItem("uid");
+              sessionStorage.removeItem("token");
+              sessionStorage.removeItem("sex");
+              sessionStorage.removeItem("name");
+              sessionStorage.removeItem("mobile");
+              sessionStorage.removeItem("id_card");
             }
           });
         sessionStorage.setItem("login1", "0");
@@ -506,16 +516,7 @@ export default {
             }
           });
       },
-      //状态为relogin时清除session数据
-      clearSessionData:function(){
-        sessionStorage.removeItem("login1");
-        sessionStorage.removeItem("uid");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("sex");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("mobile");
-        sessionStorage.removeItem("id_card");
-      },
+  
 
 
   },

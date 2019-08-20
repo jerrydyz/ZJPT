@@ -50,16 +50,14 @@ export default {
           if(this.page>=1){
             this.ajaxdata();
           }else{
-              this.$message.error({message:"没有更多资讯了哦",duration:1600});
+              this.page=1;
+              this.ajaxdata();
+              console.log("page小于1")
           }
       },
       next:function(){
-          if(parseInt(this.helpsdata.list.length) % 15 > 0 && this.helpsdata.list.length > 15){
-            this.page+=1;
-            this.ajaxdata();
-          }else{
-              this.$message.error({message:"没有更多资讯了哦",duration:1600});
-          }
+          this.page+=1;
+          this.ajaxdata();
       },
       ajaxdata:function(){
         let that=this;

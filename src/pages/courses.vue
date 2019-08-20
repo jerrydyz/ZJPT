@@ -216,7 +216,7 @@ export default {
     .label-choose-box .year-choose .year,.label-choose-box .course-choose .course,.label-choose-box .kinds-choose .kinds{display: flex;list-style: none;}
     .label-choose-box .year-choose .more,.label-choose-box .course-choose .more,.label-choose-box .kinds-choose .more{font-size: 16px;position: absolute;right: 0;color:#808080;}
     .label-choose-box .year-choose .year-title,.label-choose-box .course-choose .course-title,.label-choose-box .kinds-choose .kinds-title{font-size: 16px;padding-bottom: 5px;}
-    .label-choose-box .year-choose .year li,.label-choose-box .course-choose .course li,.label-choose-box .kinds-choose .kinds li{font-size: 16px;margin: 0 10px;padding-bottom: 5px;cursor: pointer;}
+    .label-choose-box .year-choose .year li,.label-choose-box .course-choose .course li,.label-choose-box .kinds-choose .kinds li{font-size: 16px;margin: 0 14px;padding-bottom: 5px;cursor: pointer;}
     .label-choose-box  .on{border-bottom: 2px solid #eb2d2d;}
     .label-choose-box  li:hover{border-bottom: 2px solid #eb2d2d;}
 

@@ -454,7 +454,6 @@ export default {
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.$message.error({message:"请重新登录",duration:1600});
 				that.clearSessionData();
 			}
 		});
@@ -464,6 +463,8 @@ export default {
 
 	//状态为relogin时清除session数据
 	clearSessionData:function(){
+		let that = this;
+		that.$message.error({message:"请重新登录",duration:1600});
 		sessionStorage.removeItem("login1");
 		sessionStorage.removeItem("uid");
 		sessionStorage.removeItem("token");
