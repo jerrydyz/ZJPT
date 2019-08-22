@@ -1,6 +1,6 @@
 <template>
   <div class="packagedetail">
-    <div class="title">
+    <!-- <div class="title">
       <div class="top wrap clearfix">
         <p class="fl">河南省继续教育学会在线学习平台</p>
 
@@ -10,7 +10,7 @@
           <span>退出</span>
         </p>
       </div>
-    </div>
+    </div> -->
 
     <div class="topbox coursebg">
       <div class="wrap">
@@ -26,7 +26,7 @@
             <h3>{{title}}({{xueshi}}课时)</h3>
             <div class="coursetopitem">可得学时：{{xueshi}}学时</div>
             <div class="coursetopitem">适合区域：河南省</div>
-             <div>年份：{{year}}</div>
+            <div class="coursetopitem">年份：{{year}}</div>
             <div class="coursetopitem">
               <div class="fl">价格：</div>
               <div class="new_price">
@@ -36,18 +36,7 @@
             </div>
            
             <div class="coursetopitem btn">
-              <form
-                action="#"
-              >
-                <input type="hidden" value="" name="vid" />
-                <input type="hidden" value="" name="check_type" />
-
-                <input type="hidden" value="" name="title" />
-
-                <input type="hidden" id="money" value="" name="money" />
-              </form>
-
-              <span id="charge_video" class="buy" @click="gopackdetail">购买</span>
+              <!-- <span id="charge_video" class="buy" @click="gopackdetail">购买</span> -->
             </div>
           </div>
         </div>
@@ -73,7 +62,7 @@
           <div class="coursemain-bd" style="display: block;">
             <div class="coursemain_con">
               <ul class="coursemainlist">
-                <li v-for="item in data" :key="item.id">
+                <li v-for="item in data" :key="item.id" @click="coursedetail(item.id)">
                     <img
                       :src="item.img_url"
                     />
@@ -137,14 +126,24 @@ export default {
               }
           })     
           },
-           gopackdetail (){
-               this.$router.push({
-               name:'courseDetails',
-                params:{
-                    courseId:this.idd
-                }
-         })
-    }
+    // gopackdetail (){
+    //   this.$router.push({
+    //     name:'courseDetails',
+    //     params:{
+    //         courseId:this.idd
+    //     }
+    //   })
+    // },
+    coursedetail(id){
+      this.$router.push({
+        name:'courseDetails',
+        params:{
+            courseId:id
+        }
+      });
+    },
+
+
   },
 };
 </script>
@@ -196,10 +195,11 @@ export default {
     position: relative;
     display: inline-block;
     vertical-align: top;
-    margin-left: 20px;
+    margin-left: 50px;
     height: 320px;
   }
   .coursetopbox h3 {
+    margin-top: 40px;
     margin-bottom: 10px;
     color: #333;
     font-size: 24px;
@@ -223,10 +223,10 @@ export default {
   .coursetopitem {
     color: #333;
     font-size: 14px;
-    line-height: 30px;
+    line-height: 50px;
   }
   .coursetopitem .fl {
-    line-height: 30px;
+    line-height: 40px;
     font-size: 14px;
   }
   .coursetopitem .new_price {
@@ -302,6 +302,7 @@ export default {
     // position: relative;
     padding: 25px 30px 25px 170px; // height: 78px;
     border-bottom: solid 1px #e2e2e2; //  border: 1px solid red;
+    cursor: pointer;
   }
   .coursemainlist li > a {
     display: block;

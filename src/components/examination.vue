@@ -59,8 +59,8 @@ export default {
         var that=this
          var date=new Date;
        this.year=date.getFullYear()
-        this.uid=sessionStorage.getItem('uid')
-        this.token=sessionStorage.getItem('token')
+        this.uid=localStorage.getItem('uid')
+        this.token=localStorage.getItem('token')
         this.getdata ()
 
     },

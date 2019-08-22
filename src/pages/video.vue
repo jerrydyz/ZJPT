@@ -3,7 +3,7 @@
 		<div class="videopage-left">
 			<div class="video-top">
 				<div class="video-top-l">
-					<a href=""><i class="video-fh"></i><span @click="returnMyCourse">返回我的课程&nbsp;&nbsp;&nbsp;|</span></a>
+					<a><i class="video-fh"></i><span @click="returnMyCourse">返回我的课程&nbsp;&nbsp;&nbsp;|</span></a>
 				</div>
 				<div class="video-top-con">
 					<a class="cl-prev"></a>
@@ -177,7 +177,7 @@ export default {
 		  //所有笔记内容
 		  allbiji:'',
 		  //笔记作者
-		  name:sessionStorage.getItem("name"),
+		  name:localStorage.getItem("name"),
 		}
 		
   },
@@ -195,7 +195,13 @@ export default {
 	  },
 
 	  returnMyCourse:function(){
-		 
+		  let val = this.$route.query.courseId;
+		  this.$router.push({
+          name:'courseDetails',
+          params:{
+            courseId:val
+          }
+        })
 	  },
 	  //点击video播放按钮
 	onplayerplay:function(){
@@ -209,7 +215,7 @@ export default {
 	init:function(){
 		//获取播放课程信息
 		let that = this;
-		let datacourse={kecheng_id:this.$route.query.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let datacourse={kecheng_id:this.$route.query.courseId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
@@ -230,7 +236,7 @@ export default {
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.clearSessionData();
+				that.clearlocalData();
 			}
 		});
 	},
@@ -239,7 +245,7 @@ export default {
 	//播放视频初始化
 	palyvideo:function(id){
 		if(this.T){clearInterval(this.T)}
-		this.$router.push({ path:'/video',query:{courseId:this.$route.query.courseId,vid:id} });
+		this.$router.push({ path:'video',query:{courseId:this.$route.query.courseId,vid:id} });
 		this.init();		
 	},
 	//获取信息
@@ -270,7 +276,7 @@ export default {
 	//告诉后台当前观看视频id
 	curplayvideoId:function(videoId){
 		let that = this;
-		let playcourse={kecheng_jie_id:videoId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let playcourse={kecheng_jie_id:videoId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/set_user_kecheng_jie_id',
@@ -283,7 +289,7 @@ export default {
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.clearSessionData();
+				that.clearlocalData();
 			}
 		});
 
@@ -347,7 +353,7 @@ export default {
 				ws.onopen = function(){
 					websock = true;
 					let myjieid=that.$route.query.vid
-					let jsondata={"kecheng_jie_id":myjieid,"uid":sessionStorage.getItem("uid"),"token":sessionStorage.getItem("token"),"url":"incr@jindu"};
+					let jsondata={"kecheng_jie_id":myjieid,"uid":localStorage.getItem("uid"),"token":localStorage.getItem("token"),"url":"incr@jindu"};
 					let duixiang = JSON.stringify(jsondata);
 					ws.send(duixiang);
 				};
@@ -388,7 +394,7 @@ export default {
 	//获取该课程进度包含的章节进度
 	getKeshiProgress:function(courseid){
 		let that = this;
-		let zhangProgress={kecheng_id:courseid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let zhangProgress={kecheng_id:courseid,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_keshi_jindu',
@@ -410,7 +416,7 @@ export default {
 				that.newzhang=that.ZHang;
 				console.log(that.newzhang)
 			}else if(response.data.status=="relogin"){
-				that.clearSessionData();
+				that.clearlocalData();
 			}
 		});
 	},
@@ -419,7 +425,7 @@ export default {
 	//添加课程小节笔记  kecheng/add_kecheng_xiaojie_biji
 	addjieBiji:function(){
 		let that = this;
-		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,title:that.bijiTitle,contents:that.bijiContent,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,title:that.bijiTitle,contents:that.bijiContent,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/add_kecheng_xiaojie_biji',
@@ -433,7 +439,7 @@ export default {
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.clearSessionData();
+				that.clearlocalData();
 			}
 		});
 	},
@@ -441,7 +447,7 @@ export default {
 	//获取课程小节笔记 /kecheng/get_kecheng_xiaojie_biji
 	getbiji:function(){
 		let that = this;
-		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
 			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_xiaojie_biji',
@@ -454,24 +460,27 @@ export default {
 			}else if(response.data.status=="error"){
 				that.$message.error({message:response.data.errormsg,duration:1600});
 			}else if(response.data.status=="relogin"){
-				that.clearSessionData();
+				that.clearlocalData();
 			}
 		});
 
 	},
 	
 
-	//状态为relogin时清除session数据
-	clearSessionData:function(){
+	//状态为relogin时清除local数据
+	clearlocalData:function(){
 		let that = this;
 		that.$message.error({message:"请重新登录",duration:1600});
-		sessionStorage.removeItem("login1");
-		sessionStorage.removeItem("uid");
-		sessionStorage.removeItem("token");
-		sessionStorage.removeItem("sex");
-		sessionStorage.removeItem("name");
-		sessionStorage.removeItem("mobile");
-		sessionStorage.removeItem("id_card");
+		localStorage.removeItem("login1");
+		localStorage.removeItem("uid");
+		localStorage.removeItem("token");
+		localStorage.removeItem("sex");
+		localStorage.removeItem("name");
+		localStorage.removeItem("mobile");
+		localStorage.removeItem("id_card");
+		setTimeout(() => {
+			that.$router.push({ path: 'login' });
+		}, 1600);
 	},
 
   } 
@@ -484,7 +493,7 @@ export default {
 	.videopage-left{width: calc(100% - 370px);box-sizing: border-box;height: calc(100% - 60px);
 		.video-top{ height:60px; line-height:60px; background:#3C3C3C; width:calc(100% + 20px);color:#CBCBCB;
 			.video-top-l{ width:180px;position:absolute; left:20px; top:0;
-				a{color:#CBCBCB;
+				a{color:#CBCBCB;cursor: pointer;
 					.video-fh{ width:20px; float:left; background:url(/static/images/coursedetails/ico.png) no-repeat -112px -64px;height:17px; margin:22px 10px 0 0;background-size:270px 356px;}
 				}
 			}

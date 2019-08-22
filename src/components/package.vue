@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <ul>
-        <li class="clearfix xiaoshou" v-for="(item,index) in list" :key="index" @click="gopackdetail">
+        <li class="clearfix xiaoshou" v-for="(item,index) in list" :key="index" @click="gopackdetail(item.id)">
           <div class="left fl">
             <img :src="item.img_url" alt />
           </div>
@@ -130,11 +130,11 @@ export default {
         this.pageNo=val
           console.log(this.pageNo)
       },
-       gopackdetail (){
+       gopackdetail (id){
        this.$router.push({
          path:'/packagedetail',
          query:{
-              codeid:this.idd
+              codeid:id
            }
            
          

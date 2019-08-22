@@ -48,7 +48,8 @@
           </div>
         </div>
         <div class="classtopitem btn clearfix">
-          <span class="buy" @click="nowbuy">立即购买</span>
+          <span class="buy" @click="nowbuy" v-show="btnbuycourse==0">立即购买</span>
+          <span class="buy" @click="nowstudy" v-show="btnbuycourse==1">开始学习</span>
         </div>
       </div>
     </div>
@@ -143,10 +144,39 @@ export default {
       //点击购买未登录显示登陆弹窗
       loginstate:0,
       buyCourseId:'',
+      btnbuycourse:0,
     };
   },
   created(){
     this.createCode();
+    if(localStorage.getItem("login1")=="1"){
+      let that =this;
+      let courseId={kecheng_id:this.$route.params.courseId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
+      this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/check_kecheng_is_buy",qs.stringify(courseId))
+      .then(response => {
+        if(response.data.status=="ok"){
+          if(response.data.data.check_res=="0"){
+            that.btnbuycourse=0;
+          }else if(response.data.data.check_res=="1"){
+            that.btnbuycourse=1;
+          } 
+        }else if((response.data.status=="error")){
+          console.log(response);
+          this.$message.error({message:response.data.errormsg,duration:1600});
+        }else if((response.data.status=="relogin")){
+          console.log(response);
+          this.$message.error({message:"重新登录",duration:1600});
+          that.removeInfo();
+          setTimeout(() => {
+            that.$router.push({ path: '/login' });
+          }, 1600);
+        }
+        
+      })
+    }else{
+      this.loginstate=1;
+    }
+    
   },
   mounted() {
     let that =this;
@@ -198,9 +228,9 @@ export default {
       },
       //立即购买
       nowbuy(){
-        if(sessionStorage.getItem("login1")=="1"){
+        if(localStorage.getItem("login1")=="1"){
           let that =this;
-          let courseId={kecheng_id:this.$route.params.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+          let courseId={kecheng_id:this.$route.params.courseId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/check_kecheng_is_buy",qs.stringify(courseId))
           .then(response => {
             if(response.data.status=="ok"){
@@ -215,12 +245,34 @@ export default {
             }else if((response.data.status=="relogin")){
               console.log(response);
               this.$message.error({message:"重新登录",duration:1600});
+              that.removeInfo();
+              setTimeout(() => {
+                that.$router.push({ path: '/my' });
+              }, 1600);
             }
             
           })
         }else{
           this.loginstate=1;
         }
+      },
+      //立即学习
+      nowstudy(){
+        let Vid='';
+        for(var i=0; i<this.courseInfo.length;i++){
+          for(let j=0; j<this.courseInfo[i].jie.length; j++){
+            Vid=this.courseInfo[0].jie[0].id
+          }
+        }
+        this.$router.push({ path:'/video',query:{courseId:this.buyCourseId,vid:Vid} });
+      },
+      removeInfo(){
+        localStorage.removeItem("uid");
+        localStorage.removeItem("token");
+        localStorage.removeItem("sex");
+        localStorage.removeItem("name");
+        localStorage.removeItem("mobile");
+        localStorage.removeItem("id_card");
       },
       closeLogin(){
         this.loginstate=0;
@@ -239,26 +291,40 @@ export default {
           this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
             console.log(response.data);
             if(response.data.status=='ok'){
-              sessionStorage.setItem("uid", response.data.data.uid);
-              sessionStorage.setItem("token", response.data.data.token);
-              sessionStorage.setItem("login1", "1");
+              localStorage.setItem("uid", response.data.data.uid);
+              localStorage.setItem("token", response.data.data.token);
+              localStorage.setItem("login1", "1");
               this.login1=1;
-              sessionStorage.setItem("sex", response.data.data.sex);
+              localStorage.setItem("sex", response.data.data.sex);
               this.sex=response.data.data.sex;
-              sessionStorage.setItem("name", response.data.data.name);
+              localStorage.setItem("name", response.data.data.name);
               this.name=response.data.data.name;
               that.loginstate=0;
-              // sessionStorage.setItem("mobile", response.data.data.mobile);
-              // sessionStorage.setItem("id_card", response.data.data.id_card);
+              localStorage.setItem("mobile", response.data.data.mobile);
+              ocalStorage.setItem("id_card", response.data.data.id_card);
               
+            }else if(response.data.status=='error'){
+              this.$message.error({message:response.data.errormsg,duration:1600});
+            }else if(response.data.status=='relogin'){
+              that.$message.error({message:"请重新登录",duration:1600});
+              localStorage.removeItem("login1");
+              that.removeInfo();
+              setTimeout(() => {
+                that.$router.push({ path: '/my' });
+              }, 1600);
             }
             
-          })
-          .catch(response => {
-            console.log(response);
           });
         }
-      },
+    },
+    removeInfo(){
+      localStorage.removeItem("uid");
+      localStorage.removeItem("token");
+      localStorage.removeItem("sex");
+      localStorage.removeItem("name");
+      localStorage.removeItem("mobile");
+      localStorage.removeItem("id_card");
+    },
     teacherDetails:function(){
       if(this.zhankai==0){
         this.zhankai=1;
@@ -272,8 +338,8 @@ export default {
     watchVideo:function(Vid){
 
       let that =this;
-      if(sessionStorage.getItem("uid") && sessionStorage.getItem("token")){
-        let courseId={kecheng_id:this.$route.params.courseId,uid:sessionStorage.getItem("uid"),token:sessionStorage.getItem("token")}
+      if(localStorage.getItem("uid") && localStorage.getItem("token")){
+        let courseId={kecheng_id:this.$route.params.courseId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
         this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/check_kecheng_is_buy",qs.stringify(courseId))
         .then(response => {
           if(response.data.status=="ok"){

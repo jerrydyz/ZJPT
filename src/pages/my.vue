@@ -95,22 +95,22 @@ export default {
       }
     },
     created(){
-      if(sessionStorage.getItem('types')){
-         this.more( sessionStorage.getItem('types'))
+      if(localStorage.getItem('types')){
+        this.more( localStorage.getItem('types'))
       }
-        this.name= sessionStorage.getItem('name')
-        this.uid= sessionStorage.getItem('uid')
-        this.token=sessionStorage.getItem('token')
-       this.id_card=localStorage.getItem('id_card')
-        var leng=this.id_card.length
-       this.id_card = this.id_card.substr(0, 3) + '****' + this.id_card.substr(leng - 4);
+        this.name= localStorage.getItem('name')
+        this.uid= localStorage.getItem('uid')
+        this.token=localStorage.getItem('token')
+        this.id_card=localStorage.getItem('id_card')
+        var leng=this.id_card.length;
+        this.id_card = this.id_card.substr(0, 3) + '****' + this.id_card.substr(leng - 4);
 
     },
     methods:{
       more(val){
         this.con=val
         this.bgcolor=val
-        sessionStorage.setItem('types',this.con)
+        localStorage.setItem('types',this.con)
       },
       //返回按钮
       goback (){
@@ -122,21 +122,22 @@ export default {
            })
           ).then(res =>{
             that.$message.success({message:"退出成功",duration:1600});
-            that.clearSessionData();
-            sessionStorage.removeItem('token')
-            that.$router.push('/index')
+            that.clearlocalData();
+            setTimeout(() => {
+              that.$router.push({ path: 'index' });
+            }, 1600);
           })
       },
 
-      //状态为relogin时清除session数据
-      clearSessionData:function(){
-        sessionStorage.removeItem("login1");
-        sessionStorage.removeItem("uid");
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("sex");
-        sessionStorage.removeItem("name");
-        sessionStorage.removeItem("mobile");
-        sessionStorage.removeItem("id_card");
+      //状态为relogin时清除local数据
+      clearlocalData:function(){
+        localStorage.removeItem("login1");
+        localStorage.removeItem("uid");
+        localStorage.removeItem("token");
+        localStorage.removeItem("sex");
+        localStorage.removeItem("name");
+        localStorage.removeItem("mobile");
+        localStorage.removeItem("id_card");
       },
      
 
@@ -154,13 +155,13 @@ export default {
        allCourses,
        detail
     },
-    destroyed (){
-       sessionStorage.removeItem('token')
-       sessionStorage.removeItem('type')
-       sessionStorage.removeItem('name')
-       sessionStorage.removeItem('id_card')
-       sessionStorage.removeItem('uid')
-    }
+    // destroyed (){
+    //    localStorage.removeItem('token')
+    //    localStorage.removeItem('type')
+    //    localStorage.removeItem('name')
+    //    localStorage.removeItem('id_card')
+    //    localStorage.removeItem('uid')
+    // }
 };
 </script>
 

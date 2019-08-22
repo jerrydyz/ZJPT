@@ -5,7 +5,7 @@
     </div>
     <div class="content">
         <ul class="clearfix" v-show="datalist.length">
-            <li class="fl" v-for="item in datalist" :key="item.id">
+            <li class="fl" v-for="item in datalist" :key="item.id" @click="todetail(item.id)">
                 <p><img :src="item.img_url" alt=""></p>
                 <p class="txt">{{item.title}}(<span>{{item.xueshi_num}}</span>课时)</p>
                 <p class="tit">{{item.title}}</p>  
@@ -40,8 +40,8 @@ export default {
       }
     },
     created (){
-        this.uid=sessionStorage.getItem('uid')
-        this.token=sessionStorage.getItem('token')
+        this.uid=localStorage.getItem('uid')
+        this.token=localStorage.getItem('token')
          var date=new Date;
         this.year=date.getFullYear()
         this.checkkecheng()
@@ -72,7 +72,18 @@ export default {
            }
          }) 
       },
-          //获取课程进度
+      //到课程详情页
+    todetail (val){
+      console.log(val)
+        this.$router.push({
+          name:'courseDetails',
+          params:{
+            courseId:val
+          }
+        })
+      
+    },
+    //获取课程进度
     getprogress (){
         var that=this
         that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',

@@ -93,8 +93,8 @@ export default {
     },
     created (){
         var that=this
-         this.uid= sessionStorage.getItem('uid')
-        this.token=sessionStorage.getItem('token')
+         this.uid= localStorage.getItem('uid')
+        this.token=localStorage.getItem('token')
         var date=new Date;
         this.year=date.getFullYear()
         this.getyeartime ()
@@ -185,7 +185,7 @@ export default {
               console.log(res)
               that.allcourse=that.allcourse.concat(res.data.data.data)
               that.count=Number(res.data.data.data.length)
-              sessionStorage.setItem("id", res.data.data.data.id);
+              localStorage.setItem("id", res.data.data.data.id);
                 for(var i=0 ;i<res.data.data.data.length;i++){
                     // console.log(i)
                     that.id.push(res.data.data.data[i].id)

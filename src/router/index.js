@@ -195,7 +195,11 @@ export default new Router({
         }, {
             path: '/packagedetail',
             name: 'packagedetail',
-            component: packagedetail
+            components: {
+                comheader: commonHeader,
+                default: packagedetail,
+                comfooter: commonFooter,
+            }
         }, {
             path: '/kaoshi',
             name: 'kaoshi',

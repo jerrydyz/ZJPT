@@ -66,6 +66,14 @@ export default {
               return true;
           } 
       },
+      removeInfo(){
+        localStorage.removeItem("uid");
+        localStorage.removeItem("token");
+        localStorage.removeItem("sex");
+        localStorage.removeItem("name");
+        localStorage.removeItem("mobile");
+        localStorage.removeItem("id_card");
+      },
       //用户登录 
       Login(){
         let that=this;
@@ -81,26 +89,28 @@ export default {
             console.log("哈哈哈哈哈哈哈哈哈哈")
             console.log(response.data);
             if(response.data.status=='ok'){
-              sessionStorage.setItem("uid", response.data.data.uid);
-              sessionStorage.setItem("token", response.data.data.token);
-              sessionStorage.setItem("login1", "1");
-              sessionStorage.setItem("sex", response.data.data.sex);
+              localStorage.setItem("uid", response.data.data.uid);
+              localStorage.setItem("token", response.data.data.token);
+              localStorage.setItem("sex", response.data.data.sex);
+              localStorage.setItem("name", response.data.data.name);
+              localStorage.setItem("mobile", response.data.data.mobile);
+              localStorage.setItem("id_card", response.data.data.id_card);
+              localStorage.setItem("login1", "1");
               that.sex=response.data.data.sex;
-              sessionStorage.setItem("name", response.data.data.name);
-              sessionStorage.setItem("phone", response.data.data.mobile);
               this.name=response.data.data.name;
-              that.$router.push({ path: '/my' });
+              that.$message.success({message:"登陆成功，即将前往个人中心页",duration:1600});
+              setTimeout(() => {
+                that.$router.push({ path: '/my' });
+              }, 1600);
             }else if(response.data.status=='error'){
               this.$message.error({message:response.data.errormsg,duration:1600});
             }else if(response.data.status=='relogin'){
               that.$message.error({message:"请重新登录",duration:1600});
-              sessionStorage.removeItem("login1");
-              sessionStorage.removeItem("uid");
-              sessionStorage.removeItem("token");
-              sessionStorage.removeItem("sex");
-              sessionStorage.removeItem("name");
-              sessionStorage.removeItem("mobile");
-              sessionStorage.removeItem("id_card");
+              localStorage.removeItem("login1");
+              that.removeInfo();
+              setTimeout(() => {
+                that.$router.push({ path: '/my' });
+              }, 1600);
               that.login1=0;
             }
             

@@ -46,10 +46,10 @@ export default {
     created (){
         var date=new Date;
        this.year=date.getFullYear()
-        this.uid=sessionStorage.getItem('uid')
-        this.token=sessionStorage.getItem('token')
-         this.name= sessionStorage.getItem('name')
-         this.id_card=sessionStorage.getItem('id_card')
+        this.uid=localStorage.getItem('uid')
+        this.token=localStorage.getItem('token')
+         this.name= localStorage.getItem('name')
+         this.id_card=localStorage.getItem('id_card')
         this.dangan()
     },
     methods:{

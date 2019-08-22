@@ -44,8 +44,8 @@ export default {
         }
     },
     created (){
-            this.uid=sessionStorage.getItem('uid')
-            this.token=sessionStorage.getItem('token')
+            this.uid=localStorage.getItem('uid')
+            this.token=localStorage.getItem('token')
             this.kaoshi()
     },
     methods:{
