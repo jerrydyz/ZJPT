@@ -49,63 +49,6 @@
              <dd>8</dd>
             </dl>
           </div>
-          <!--排名-->
-          <!-- <div class="ranking-exam">
-            <h3>排行榜</h3>
-            <p>您当前排名为第22名</p>
-            <ul>
-              <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-            <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-              <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-             <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-            <li class="clearfix">
-                 <span class="fl spn1"> <img src="http://ceshi2.jxjyedu.club/addons/theme/stv2/_static/images/noavatar/small.jpg" alt=""><i class="num01"></i></span>
-               <span class="fl spn2"> 张三</span>
-               <span class="fr spn3">100.0分</span>
-              </li>
-            </ul>
-          </div> -->
         </div>
         <!--答题-->
         <div class="score-content fl">
