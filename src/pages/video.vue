@@ -195,6 +195,7 @@ export default {
 	  },
 
 	  returnMyCourse:function(){
+		  clearInterval(this.T);
 		  let val = this.$route.query.courseId;
 		  this.$router.push({
           name:'courseDetails',
