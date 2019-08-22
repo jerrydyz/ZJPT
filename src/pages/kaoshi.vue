@@ -12,37 +12,38 @@
     <div class="topbox bg3f">
       <div class="screen-outer">
         <div class="screen-outer">
-          <div class="exercises-left" style="position: static; margin-top: 0px; top: 20px;">
+          <div class="exercises-left"  style="position: static; margin-top: 0px; top: 20px;">
             <div class="study-record">
               <ul class="study-record-box">
                 <li class="bgclr">
-                  <i class="icon icondate"></i>
+                 <!-- <p> 用时</p> -->
+                 <p id="stime" v-html="time"></p>
                 </li>
-
                 <li @click="submitpapers">我要交卷</li>
-
                 <li>
                   <label>
-                    <input type="checkbox" id="single_mod" />单题模式
+                    <input type="checkbox" id="single_mod"  @click="ckecktype($event)"/>单题模式
                   </label>
                 </li>
               </ul>
-
               <!--答题卡-->
-
               <dl class="answer-sheet">
                 <dt>答题卡</dt>
-                <dd v-for="item in nums">{{item}}</dd>
+                <dd v-for="(item,index) in datalist1" @click="leftBtn($event)">{{index+1}}</dd>
+                <dd v-for="(item,index) in datalist2"  @click="leftBtn($event)">{{index+datalist1.length+1}}</dd>
+                 <dd v-for="(item,index) in datalist3"  @click="leftBtn($event)">{{index+datalist1.length+datalist2.length+1}}</dd>
+                  <dd v-for="(item,index) in datalist3"  @click="leftBtn($event)">{{index+datalist1.length+datalist2.length+datalist3.length+1}}</dd>
               </dl>
             </div>
+            
           </div>
-          <input type="hidden" name="reply_time" value="30" />
+          <!-- <input type="hidden" name="reply_time" value="30" />
           <div class="from">
             <input type="hidden" name="anser_time" id="anser_time" value="38" />
             <input type="hidden" name="exams_mode" value="2" />
             <input type="hidden" name="paper_id" value="18" />
             <input type="hidden" name="ch_id" value />
-            <input type="hidden" name="is_timeout" value="0" />
+            <input type="hidden" name="is_timeout" value="0" /> -->
             <!--答题-->
             <div class="exercises-content">
               <ul class="test-paper-box">
@@ -50,8 +51,6 @@
                 <!--单选题-->
                 <li
                   class="test-paper"
-                  id="ex1"
-                  data-question-num="1"
                   v-for="(item,index) in datalist1"
                   :key="item.id"
                 >
@@ -72,10 +71,10 @@
                   <div class="choice" v-show="choice">
                     <ul>
                       <li v-for="(key,val) in xuanze">
-                        <label>
-                          <input class="anserItem" type="radio" :name="item.id" :value="val1"  @click="radio($event)"/>
+                        <label for="item.id"></label>
+                          <input class="anserItem" type="radio" :id="item.id" :name="item.id" :value="val"  @click="radio($event,item.id,index)" />
                           {{val}}
-                        </label>
+                        
                       </li>
                     </ul>
                     <div class="collection">
@@ -103,7 +102,7 @@
                   :key="check.id"
                 >
                   <h5>
-                    <small>{{index}}</small> (
+                    <small>{{index+datalist1.length+1}}</small> (
                     <span>{{msg2}} {{score2}} 分</span>)
                   </h5>
 
@@ -123,11 +122,11 @@
 
                   <div class="choice">
                     <ul>
-                      <li v-for="(key,val) in xuanze2" @click="checkbox($event,index)">
-                        <label>
-                          <input class="anserItem" type="checkbox" :value="val" />
-                        </label>
+                      <li v-for="(key,val) in xuanze2" >
+                        <label for="check.id">
+                          <input class="anserItem" :id="check.id" type="checkbox"  :name="check.id" :value="val" @click="checkbox($event,check.id,index)"/>
                         {{key}}
+                        </label>
                       </li>
                     </ul>
 
@@ -146,7 +145,7 @@
                   </div>
                 </li>
 
-                <!--单选题-->
+                <!--判断题-->
 
                 <li
                   class="test-paper"
@@ -156,7 +155,7 @@
                   :key="dan.id"
                 >
                   <h5>
-                    <small>{{index}}</small>（
+                    <small>{{index+datalist1.length+datalist2.length+1}}</small>（
                     <span>{{msg3}} {{score3}}</span> 分）
                   </h5>
 
@@ -176,7 +175,7 @@
                     <ul>
                       <li v-for="(key,val) in xuanze3">
                         <label>
-                          <input class="anserItem" type="radio" :name="dan.id" :value="val"/>
+                          <input class="anserItem" type="radio" :name="dan.id" :value="val" @click="panduan($event,dan.id)"/>
                           {{key}}
                         </label>
                       </li>
@@ -201,13 +200,13 @@
 
                 <li
                   class="test-paper"
-                  id="ex8"
+                
                   data-question-num="8"
                   v-for="(tian,index) in datalist4"
                   :key="tian.id"
                 >
                   <h5>
-                    <small>8</small>(
+                    <small>{{index+datalist1.length+datalist2.length+datalist3.length+1}}</small>(
                     <span>{{msg4}} {{score4}}</span> )
                   </h5>
 
@@ -221,7 +220,7 @@
                     <ul class="blanks">
                       <li v-for="(items,index) in xuanze4">
                         <b>{{index+1}}</b>
-                        <input class="anserItem" type="text" name="user_answer[78][]" />
+                        <input class="anserItem" type="text" :name="tian.id" v-model="raduo4" />
                       </li>
                     </ul>
                     <div class="collection">
@@ -252,10 +251,11 @@
 
 <script>
 import qs from "qs";
+import Vue from 'vue'
 export default {
   data() {
     return {
-      top: "",
+      time:'',
       uid: "45",
       token: "",
       shijuanid: "13",
@@ -298,54 +298,84 @@ export default {
       jiexi2: "",
       jiexi3: "",
       jiexi4: "",
-      radioValue: "", //单选值
-      ids1: [], //单选题的id
-      val1: [], //单选题的值
       lookcollect: false, //查看解析按钮
-      shitiid1:[],
-      shitidaan1:[],
-      shitiid2:[],
-      shitidaan2:[],
-      n:0,
-      nums:[1,2,3,4,5,6,7,8,9,10,11,12,13],  
       pick1:'',
-      val1:'',
+      val:'',
       next:false,//下一题
+      raduo1:[],//单选题答案
+      id1:"",//单选题id
+      raduo2:[],//多选题答案
+      id2:"",//单选题id
+      raduo3:'',//判断题答案
+      id3:"",//判断题id
+      raduo4:'',//填空题答案
+      id4:"",//填空题id,
+      ss:0,
+      mm:0,
+      hh:0,
+      ss_str:'',
+      mm_str:'',
+      answers:[],
+      replay:{},
+      replay2:{},
+      replay3:{},
+      radio_id:'',
+      radio_answer:'',
+      arrcheck:[]
+
     };
   },
   created() {
     var that=this
-    // this.uid= sessionStorage.getItem('uid')
-    //   this.token=sessionStorage.getItem('token')
+    // this.uid= localStorage.getItem('uid') 
+    //   this.token=localStorage.getItem('token')
     this.token =this.$route.query.token
     this.getshijuan();
-    this.getAnswer();
+    // this.getAnswer();
+    setInterval(function(){
+      that.usetime ()
+    },1000)
   },
   watch: {},
   methods: {
+    //考试用时
+    usetime (){
+      this.ss++; //秒值以1为单位递增   
+      if(this.ss>=60) { //当秒数大于等于60     
+     this.mm+=1; //分钟加1      
+     this.ss=0; //秒数退回0   
+     }   
+  if(this.mm>=60) { //当分钟大于等于60      
+      this.hh+=1; //小时数加1      
+      this.mm=0; //分钟数退回0   
+     }   
+      this.ss_str=(this.ss<10 ? "0" + this.ss : this.ss); //格式化秒数   
+     this.mm_str=(this.mm<10 ? "0" + this.mm : this.mm); //格式化分钟数   
+      this.tMsg="考试用时: " + this.hh + "小时" + this.mm_str + "分" + this.ss_str + "秒"; //输出的字串   
+      this.time=this.tMsg;
+    },
     //获取单选按钮的值
-    radio(e) {
-      // var that =this
-      // for (var i = 0; i < this.datalist1.length; i++) {
-      //   this.shitiid1=this.datalist1[i].id
-      //   this.shitidaan1=e.target.value;
-      //   // console.log(this.shitiid1)
-      //   console.log( this.shitidaan1)
-
-      // }
+    radio(e,id,num) {
+      Vue.set(this.answers,num,{'shiti_id':id,'answer':e.target.value})
     },
     //获取多选按钮的值
-    checkbox(e) {
-       for (var i = 0; i < this.datalist2.length; i++) {
-        this.shitiid2=this.datalist2[i].id
-        this.shitidaan2=e.target.value;
-        console.log( this.shitidaan2)
-      }
+    checkbox(e,id,num) {
+      console.log(e.target.value,id,num)
+       this.arrcheck.push(e.target.value)
+       Vue.set(this.replay2,'shiti_id',id)
+      Vue.set(this.replay2,'answer',this.arrcheck)
+        // Vue.set(this.answers,num,{'shiti_id':id,'answer':arr})
+      this.answers.push(Object.assign({},this.replay2))
     },
     //获取判断的值
-    panduan(e) {
-      console.log(checked)
+    panduan(e,id) {
+      console.log(e.target.value,id)
+        Vue.set(this.replay3,'shiti_id',id)
+      Vue.set(this.replay3,'answer',e.target.value)
+      this.answers.push(this.replay3)
+      console.log( this.answers3)
     },
+   // 查看解析
     lookjiexi(dat) {
       console.log("1111");
       this.lookcollect = !this.lookcollect;
@@ -379,7 +409,8 @@ export default {
                   that.B = that.datalist1[j].question;
                   var jsonobj = JSON.parse(A);
                   that.xuanze = jsonobj;
-                }
+                 
+                 }
               }
               if (that.data[i].type == 2) {
                 that.datalist2 = res.data.data.shijuan_bankuai[i].shiti;
@@ -475,24 +506,51 @@ export default {
     submitpapers() {
       var that = this;
       var data = {
-        uid: 251,
+        uid: this.uid,
         token: this.token,
         user_shijuan_id: this.shijuanid,
         use_time: "",
-        answers: [
-          {"shiti_id": 2,"answer":"A"},
-          {"shiti_id": 4,"answer":["A","B","D"]},
-          {'shiti_id': 5, answer: "true" },
-          {'shiti_id': 8, answer: ["kong1", "kong2", "kong3"] }
-        ]
+        answers:this.answers
+        //  [
+          
+          // this.replay2,
+          // this.replay3
+          // {"shiti_id": "2","answer"},
+          // {"shiti_id": this.id2,"answer":this.raduo2},
+          // {'shiti_id': this.id3, 'answer': this.raduo3 },
+          // {'shiti_id': this.id4, 'answer': this.raduo4 }
+        // ]
       };
+      var obj={"uid":40,
+               "token":"839e72df1873d05b7c51759cfc5ddc46",
+               "user_shijuan_id":"1",
+               "use_time":"10\u520622\u79d2",
+               "answers":[{"shiti_id":"2","answer":"A"},
+               {"shiti_id":"4","answer":["A","B","D"]},
+               {"shiti_id":"5","answer":"true"},
+               {"shiti_id":"8",
+               "answer":["kong1","kong2","kong3"]}]
+               }
+      console.log("张撒N")
+      console.log(data)
       this.$axios
-        .post("http://jixujiaoyu_api.songlongfei.club/kaoshi/submit_shijuan")
+        .post("http://jixujiaoyu_api.songlongfei.club",qs.stringify(data))
         .then(res => {
           console.log("提交考试试卷");
           console.log(res);
         });
     },
+    //单体模式
+    ckecktype (e){
+          console.log(e.target.checked)
+          if(e.target.checked){
+              
+          }
+    },
+  //左侧按钮
+    leftBtn (e){
+       console.log(e.target.innerHTML)
+    }
    
   }
 };
