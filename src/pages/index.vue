@@ -1,7 +1,7 @@
 <template>
   <div class="index">
     <div class="swiper-news-login">
-      <swiper :options="swiperOption" ref="mySwiper" class="myswiper">
+      <swiper :options="swiperOption" ref="mySwiper" class="myswiper" v-if="swiperdata.length>0">
         <!-- slides -->
         <swiper-slide v-for="(item,index) in swiperdata" :key="index" class="slider"><img :src="item.img_url"></swiper-slide>
         <!-- Optional controls -->
@@ -411,7 +411,9 @@ export default {
               that.login1=1;
               that.sex=response.data.data.sex;
               that.name=response.data.data.name;
+              localStorage.setItem("types", "rate");
               that.$router.push({ path: 'my' });
+              
             }else if(response.data.status=='error'){
               this.createCode();//刷新验证码 
               that.$message.error({message:response.data.errormsg,duration:1600});

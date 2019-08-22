@@ -13,18 +13,11 @@
             <div class="item-title">{{item.title}}</div>
             <div class="item-time clearfix">
             </div>
-            <div class="total-time">
-              学时：
-              <span>
-                 {{item.xueshi_num}}
-              </span>
-            </div>
+            <div class="total-time">学时：<span>{{item.xueshi_num}}</span></div>
           </div>
           <div class="price-box fr">
-            <div class="price">
-              <span class="rmb">￥{{item.price}} 元</span>
-            </div>
-            <div type="button" class="btn-now" @click.stop="xuexi" v-html="msg"></div>
+            <div class="price"><span class="rmb">￥{{item.price}} 元</span></div>
+            <div type="button" class="btn-now" @click.stop="xuexi(item.id)" v-html="msg"></div>
           </div>
         </li>
         
@@ -101,9 +94,25 @@ export default {
             }
       });
       },
-      xuexi (){
-         this.$emit('more','mykecheng');
-         console.log("购买")
+      xuexi (packageid) {
+        let that =this;
+        let courseId={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),kecheng_bao_id:packageid}
+        this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/check_kecheng_bao_is_buy",qs.stringify(courseId))
+          .then(response => {
+            if(response.data.status=="ok"){
+              if(response.data.data.check_res=="0"){
+                this.$router.push({path:'packagebuy',query:{packid:packageid}});
+              }else if(response.data.data.check_res=="1"){
+                this.$message.error({message: "您已购买过该课程包",duration:1600});
+              } 
+            }else if(response.data.status=="error"){
+              this.$message.error({message: response.data.msg,duration:1600});
+            }else if(response.data.status=="relogin"){
+              that.clearlocalData();
+            }
+            
+        });
+         
       },
       getbaoprogress (){
          var that=this

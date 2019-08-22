@@ -76,7 +76,7 @@
 import qs from 'qs'
 import { Message } from 'element-ui';
 export default {
-  name: "courseBuyDetails",
+  name: "packagebuy",
   data() {
     return {
       selectstate: 1,
@@ -92,20 +92,29 @@ export default {
   
   mounted () {
     let that =this;
-    this.buycourseId=this.$route.query.id
-    let courseId={kecheng_id:this.buycourseId}
-    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_info",qs.stringify(courseId))
+    this.buycourseId=this.$route.query.packid;
+    let courseId={year:''}
+    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list",qs.stringify(courseId))
       .then(response => {
         if(response.data.status=="ok"){
           console.log(response.data.data);
-          that.courseInfo=response.data.data;
-          that.teacher=response.data.data.jiangshi
+          let alldata = response.data.data;
+          for(let i=0;i<alldata.length;i++){
+              if(alldata[i].id==this.buycourseId){
+                  that.courseInfo=alldata[i];
+                  console.log(that.courseInfo);
+              }
+          }
+        //   that.teacher=response.data.data.jiangshi
         }else if(response.data.status=="error"){
           this.$message.error({message: response.data.msg,duration:1600});
         }else if(response.data.status=="relogin"){
           that.clearlocalData();
         }
         
+      })
+      .catch(response => {
+        console.log(response);
       });
   },
   methods:{
@@ -131,7 +140,7 @@ export default {
           this.selectstate=2;
       },
       useCardPay:function(){
-            let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId,code:this.xueshika}
+            let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'1',type_id:this.buycourseId,code:this.xueshika}
             this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/xueshika",qs.stringify(buycourse))
             .then(response => {
                 if(response.data.status=="ok"){
@@ -152,11 +161,11 @@ export default {
           let that = this;
           if(this.selectstate==1){
               //alipay
-            var urllink='http://jixujiaoyu_api.songlongfei.club/pay/alipay?uid='+localStorage.getItem("uid")+'&token='+localStorage.getItem("token")+'&type='+2+'&type_id='+this.buycourseId+''
+            var urllink='http://jixujiaoyu_api.songlongfei.club/pay/alipay?uid='+localStorage.getItem("uid")+'&token='+localStorage.getItem("token")+'&type='+1+'&type_id='+this.buycourseId+''
             window.open(urllink);
           }else if(this.selectstate==2){
               //wxpay
-                let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId}
+                let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'1',type_id:this.buycourseId}
                 this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/wxpay",qs.stringify(buycourse))
                 .then(response => {
                     if(response.data.status=="ok"){

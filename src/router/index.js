@@ -12,6 +12,7 @@ import login from '@/pages/login'
 import findpw from '@/pages/findpw'
 import register from '@/pages/register'
 import courseBuyDetails from '@/pages/courseBuyDetails'
+import packagebuy from '@/pages/packagebuy'
 import video from '@/pages/video'
 
 import newsDetails from '@/commons/newsDetails'
@@ -142,6 +143,15 @@ export default new Router({
             components: {
                 comheader: commonHeader,
                 default: courseBuyDetails,
+                comfooter: commonFooter,
+            }
+        },
+        {
+            path: '/packagebuy',
+            name: 'packagebuy',
+            components: {
+                comheader: commonHeader,
+                default: packagebuy,
                 comfooter: commonFooter,
             }
         },
