@@ -199,6 +199,7 @@ export default {
       sex:localStorage.getItem("sex"),
       //name
       name:localStorage.getItem("name"),
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
       
     }
   },
@@ -215,7 +216,7 @@ export default {
     //轮播图
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/lunbotu/get_lunbotu_list'
+      url: this.apiurl+'/lunbotu/get_lunbotu_list'
     }).then(function (response) {
       if(response.data.status=="ok"){
         console.log("轮播图")
@@ -228,7 +229,7 @@ export default {
     //友情链接
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/link/get_list'
+      url: this.apiurl+'/link/get_list'
     }).then(function (response) {
       if(response.data.status=="ok"){
         console.log("友情链接")
@@ -242,7 +243,7 @@ export default {
     let datanews={type_id:'1',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
+      url: this.apiurl+'/news/get_news_list',
       data: qs.stringify(datanews) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -258,7 +259,7 @@ export default {
     let datalaws={type_id:'2',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
+      url: this.apiurl+'/news/get_news_list',
       data: qs.stringify(datalaws) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -274,7 +275,7 @@ export default {
     let dataworks={type_id:'3',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
+      url: this.apiurl+'/news/get_news_list',
       data: qs.stringify(dataworks) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -290,7 +291,7 @@ export default {
     let datahelps={type_id:'4',page:'1',num:'7'}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
+      url: this.apiurl+'/news/get_news_list',
       data: qs.stringify(datahelps) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -305,7 +306,7 @@ export default {
     //获取课程年份 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_year',
+      url: this.apiurl+'/kecheng/get_kecheng_year',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程年份")
@@ -318,7 +319,7 @@ export default {
      //获取课程类型 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_type',
+      url: this.apiurl+'/kecheng/get_kecheng_type',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程类型")
@@ -331,7 +332,7 @@ export default {
       //获取课程分类 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_category',
+      url: this.apiurl+'/kecheng/get_kecheng_category',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程分类")
@@ -345,7 +346,7 @@ export default {
     let datacourse={year:'2019', type_id:'',category_id:''}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+      url: this.apiurl+'/kecheng/get_kecheng_list',
       data: qs.stringify(datacourse) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -396,7 +397,7 @@ export default {
           this.$message.error({message:"密码不能为空",duration:1600});
         }else if(this.checkLpicma() == true){
           let userinfo={id_card:this.idcard, password:this.UserPsd}
-          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
+          this.$axios.post(this.apiurl+'/user/login',qs.stringify(userinfo)).then(response => {
             console.log("登陆成功返回信息");
             console.log(response.data);
             if(response.data.status=='ok'){
@@ -440,7 +441,7 @@ export default {
         let userinfo={uid:localStorage.getItem("uid"), token:localStorage.getItem("token")}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/user/logout',
+          url: this.apiurl+'/user/logout',
           data: qs.stringify(userinfo) 
           }).then(function (response) {
             
@@ -503,7 +504,7 @@ export default {
         let datacourse={year:yearid, type_id:typeid,category_id:categoryid,page:'1',num:'10'}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+          url: this.apiurl+'/kecheng/get_kecheng_list',
           data: qs.stringify(datacourse) 
           }).then(function (response) {
             if(response.data.status=="ok"){

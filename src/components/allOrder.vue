@@ -60,6 +60,7 @@ export default {
             page:1,
             data:[],
             // currentPage:1
+            apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
         }
     },
     created (){
@@ -77,7 +78,7 @@ export default {
                 page:this.page,
                 num:this.num
             }
-            this.$axios.post('http://jixujiaoyu_api.songlongfei.club/pay/get_pay_order',
+            this.$axios.post(this.apiurl+'/pay/get_pay_order',
             qs.stringify(data)
             ).then(res =>{
                 console.log("订单列表")

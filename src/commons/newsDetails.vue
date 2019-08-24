@@ -17,14 +17,15 @@ export default {
   name: 'newsDetails',
   data () {
     return {
-      msg: ''
+      msg: '',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   mounted() {
     let that=this;
     //url里传递过来的新闻唯一id this.$route.params 
     let datanewsid={id:this.$route.params.newsId};
-    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/news/get_contents",qs.stringify(datanewsid)).then(response => {
+    this.$axios.post(this.apiurl+'/news/get_contents',qs.stringify(datanewsid)).then(response => {
         console.log(response.data);
         console.log(response.data.data.contents);
         if(response.data.status=="ok"){

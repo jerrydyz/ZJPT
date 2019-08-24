@@ -177,6 +177,7 @@ export default {
       minzuSelected:'',
       maoSelected:'',
       xueliSelected:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     };
   },
   created (){
@@ -194,19 +195,19 @@ export default {
       
       let that = this;
       //获取学历
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_xueli').then(res=>{
+       this.$axios.get(this.apiurl+'/user/get_xueli').then(res=>{
           that.opt=res.data.data;
           console.log(that.opt);
        })
     
      //获取政治面貌
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_zhengzhimianmao').then(res=>{
+       this.$axios.get(this.apiurl+'/user/get_zhengzhimianmao').then(res=>{
           that.mao=res.data.data;
           console.log(that.mao);
        })
   
      //获取民族
-       this.$axios.get('http://jixujiaoyu_api.songlongfei.club/user/get_minzu').then(res=>{
+       this.$axios.get(this.apiurl+'/user/get_minzu').then(res=>{
           that.minzu=res.data.data;
           console.log(that.minzu);
        })
@@ -221,7 +222,7 @@ export default {
         let usreinfo={uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/user/get_user_info',
+          url: this.apiurl+'/user/get_user_info',
           data: qs.stringify(usreinfo) 
           }).then(function (response) {
           if(response.data.status=="ok"){
@@ -327,7 +328,7 @@ export default {
           let userinfo={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"), old_password:this.oldpwd,new_password:this.newpwd,}
           this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/user/update_password',
+          url: this.apiurl+'/user/update_password',
           data: qs.stringify(userinfo) 
           }).then(function (response) {
             console.log(response)
@@ -430,7 +431,7 @@ export default {
                datamsg.zhengshubianhao=that.baseExt.zhengshubianhao;
                console.log(datamsg.zhengshubianhao)
         }
-        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/user/edit',
+        that.$axios.post(this.apiurl+'/user/edit',
         qs.stringify(datamsg)).then(res =>{
             if(res.data.status=='ok'){
               this.$message.success({message: '修改成功',duration:1600});

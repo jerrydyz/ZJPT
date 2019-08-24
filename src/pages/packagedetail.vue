@@ -94,8 +94,8 @@ export default {
         year:'',
         imgs:'',
         title:'',
-        idd:''
-
+        idd:'',
+        apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     };
   },
   
@@ -107,7 +107,7 @@ export default {
   methods: {
       getkechengbao (){
           var that=this
-          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list_for_kechengbao_id",
+          this.$axios.post(this.apiurl+'/kecheng/get_kecheng_list_for_kechengbao_id',
           qs.stringify({
               kechengbao_id:this.codeid
           })

@@ -49,8 +49,8 @@ export default {
       year:'',
       msg:'购买',
       pageNo:1,
-      idd:''
-        
+      idd:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   created (){
@@ -66,7 +66,7 @@ export default {
        var that=this 
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list',
+          url: this.apiurl+'/kecheng/get_kechengbao_list',
           data:qs.stringify({
             year:this.year
           })
@@ -116,7 +116,7 @@ export default {
       },
       getbaoprogress (){
          var that=this
-          that.$axios.post('http://jixujiaoyu_api.songlongfei.club//kecheng/get_kecheng_keshi_jindu',
+          that.$axios.post(this.apiurl+'//kecheng/get_kecheng_keshi_jindu',
                     qs.stringify({
                       kecheng_id:that.idd,
                       uid:that.uid,

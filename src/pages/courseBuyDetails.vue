@@ -86,6 +86,7 @@ export default {
       wxPayQRcode:'',
       courseInfo:'',
       teacher:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
 
     };
   },
@@ -94,7 +95,7 @@ export default {
     let that =this;
     this.buycourseId=this.$route.query.id
     let courseId={kecheng_id:this.buycourseId}
-    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_info",qs.stringify(courseId))
+    this.$axios.post(this.apiurl+'/kecheng/get_kecheng_info',qs.stringify(courseId))
       .then(response => {
         if(response.data.status=="ok"){
           console.log(response.data.data);
@@ -132,7 +133,7 @@ export default {
       },
       useCardPay:function(){
             let buycourse={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"),type:'2',type_id:this.buycourseId,code:this.xueshika}
-            this.$axios.post("http://jixujiaoyu_api.songlongfei.club/pay/xueshika",qs.stringify(buycourse))
+            this.$axios.post(this.apiurl+'/pay/xueshika',qs.stringify(buycourse))
             .then(response => {
                 if(response.data.status=="ok"){
                     this.$message.success({message: "您已购买成功",duration:1600});
@@ -152,7 +153,7 @@ export default {
           let that = this;
           if(this.selectstate==1){
               //alipay
-            var urllink='http://jixujiaoyu_api.songlongfei.club/pay/alipay?uid='+localStorage.getItem("uid")+'&token='+localStorage.getItem("token")+'&type='+2+'&type_id='+this.buycourseId+''
+            var urllink=this.apiurl+'/pay/alipay?uid='+localStorage.getItem("uid")+'&token='+localStorage.getItem("token")+'&type='+2+'&type_id='+this.buycourseId+''
             window.open(urllink);
           }else if(this.selectstate==2){
               //wxpay

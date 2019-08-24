@@ -247,6 +247,7 @@ export default {
       oldpw:'',
       newpw:'',
       confirmnewpw:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     };
   },
   mounted(){
@@ -268,7 +269,7 @@ export default {
           let userinfo={uid:localStorage.getItem("uid"),token:localStorage.getItem("token"), old_password:this.oldpw,new_password:this.newpw,}
           this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/user/update_password',
+          url: this.apiurl+'/user/update_password',
           data: qs.stringify(userinfo) 
           }).then(function (response) {
               if(response.data.status=="ok"){

@@ -36,7 +36,8 @@ export default {
         token:'',
         year:'',
         datalist:[],
-        idd:''
+        idd:'',
+        apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
       }
     },
     created (){
@@ -50,7 +51,7 @@ export default {
       //我的课程
       checkkecheng(){
          var that=this
-         this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_list_for_buy',
+         this.$axios.post(this.apiurl+'/kecheng/get_list_for_buy',
           qs.stringify({
              uid:this.uid,
              token:this.token,
@@ -86,7 +87,7 @@ export default {
     //获取课程进度
     getprogress (){
         var that=this
-        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+        that.$axios.post(this.apiurl+'/kecheng/get_kecheng_jindu',
             qs.stringify({
               kecheng_id:that.idd,
               uid:that.uid,

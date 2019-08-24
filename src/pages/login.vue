@@ -35,6 +35,7 @@ export default {
       UserPsd:'',
       picLyanzhengma:'',
       checkCode:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     };
   },
   created(){
@@ -85,7 +86,7 @@ export default {
             alert("密码不能为空") 
         }else if(this.checkLpicma() == true){
           let userinfo={id_card:this.idcard, password:this.UserPsd}
-          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/login",qs.stringify(userinfo)).then(response => {
+          this.$axios.post(this.apiurl+'/user/login',qs.stringify(userinfo)).then(response => {
             console.log("哈哈哈哈哈哈哈哈哈哈")
             console.log(response.data);
             if(response.data.status=='ok'){

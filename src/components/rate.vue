@@ -88,7 +88,8 @@ export default {
             totalPage: [],
              pageNo:1,
              dataShow: "",//默认当前显示第一页
-             currentPage: 0
+             currentPage: 0,
+             apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
         }
     },
     created (){
@@ -114,7 +115,7 @@ export default {
        var that=this 
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kechengbao_list',
+          url: this.apiurl+'/kecheng/get_kechengbao_list',
           data:qs.stringify({
             year:this.year
           })
@@ -142,7 +143,7 @@ export default {
       //获取待考试个数
        getdata (){
             var that=this
-            this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kaoshi/get_shijuan_list',
+            this.$axios.post(this.apiurl+'/kaoshi/get_shijuan_list',
                 qs.stringify({
                     year:this.year,
                     uid:this.uid,
@@ -178,7 +179,7 @@ export default {
               page:1,
               num:2
           }
-          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+          this.$axios.post(this.apiurl+'/kecheng/get_kecheng_list',
             qs.stringify(datalist)
           ).then(res =>{
               console.log('获取全部课程')
@@ -203,7 +204,7 @@ export default {
       //获取年度学时
       getyeartime (){
           var that=this
-          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi',
+          this.$axios.post(this.apiurl+'/dangan/get_user_year_xueshi',
                 qs.stringify({
                     year:that.year,
                     uid:that.uid,
@@ -223,7 +224,7 @@ export default {
        //获取课程进度
     getprogress (){
         var that=this
-        that.$axios.post('http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_jindu',
+        that.$axios.post(this.apiurl+'/kecheng/get_kecheng_jindu',
             qs.stringify({
               kecheng_id:that.idd,
               uid:that.uid,

@@ -22,13 +22,14 @@ export default {
   name: 'aboutus',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      msg: 'Welcome to Your Vue.js App',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   mounted () {
     //关于我们页面
     let datamark={mark:'guanyuwomen'};
-    this.$axios.post("http://jixujiaoyu_api.songlongfei.club/html/index",qs.stringify(datamark)).then(response => {    
+    this.$axios.post(this.apiurl+'/html/index',qs.stringify(datamark)).then(response => {    
       if(response.data.status=="ok"){
         console.log(response.data.data)  
       }else{

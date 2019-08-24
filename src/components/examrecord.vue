@@ -40,7 +40,8 @@ export default {
             token:'',
             page:'1',
             num:'10',
-            data:[]
+            data:[],
+            apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
         }
     },
     created (){
@@ -60,7 +61,7 @@ export default {
             }
                 this.$axios({
                 method: 'post',
-                url: 'http://jixujiaoyu_api.songlongfei.club/kaoshi/get_kaoshi_log',
+                url: this.apiurl+'/kaoshi/get_kaoshi_log',
                 data:qs.stringify(data)
                 }).then(res => {
                     console.log(res)

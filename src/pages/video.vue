@@ -144,7 +144,7 @@ export default {
 	        sources: [
 				{
 					type: 'application/x-mpegURL',
-					src: ''
+					src: this.apiurl+'/hls/576537c51c12c29adb33c072b48dda2f.m3u8'
 				}
 			],
 	        //poster: " ", //你的封面地址
@@ -178,6 +178,7 @@ export default {
 		  allbiji:'',
 		  //笔记作者
 		  name:localStorage.getItem("name"),
+		  apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
 		}
 		
   },
@@ -219,7 +220,7 @@ export default {
 		let datacourse={kecheng_id:this.$route.query.courseId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_play',
+			url: this.apiurl+'/kecheng/get_kecheng_play',
 			data: qs.stringify(datacourse) 
 			}).then(function (response) {
 			if(response.data.status=="ok"){
@@ -280,7 +281,7 @@ export default {
 		let playcourse={kecheng_jie_id:videoId,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/set_user_kecheng_jie_id',
+			url: this.apiurl+'/kecheng/set_user_kecheng_jie_id',
 			data: qs.stringify(playcourse) 
 			}).then(function (response) {
 			if(response.data.status=="ok"){
@@ -398,7 +399,7 @@ export default {
 		let zhangProgress={kecheng_id:courseid,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_keshi_jindu',
+			url: this.apiurl+'/kecheng/get_kecheng_keshi_jindu',
 			data: qs.stringify(zhangProgress) 
 			}).then(function (response) {
 				console.log("章节进度");
@@ -429,7 +430,7 @@ export default {
 		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,title:that.bijiTitle,contents:that.bijiContent,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/add_kecheng_xiaojie_biji',
+			url: this.apiurl+'/kecheng/add_kecheng_xiaojie_biji',
 			data: qs.stringify(kecheng_jie) 
 			}).then(function (response) {
 				console.log(response);
@@ -451,7 +452,7 @@ export default {
 		let kecheng_jie={kecheng_jie_id:this.$route.query.vid,uid:localStorage.getItem("uid"),token:localStorage.getItem("token")}
 		this.$axios({
 			method: 'post',
-			url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_xiaojie_biji',
+			url: this.apiurl+'/kecheng/get_kecheng_xiaojie_biji',
 			data: qs.stringify(kecheng_jie) 
 			}).then(function (response) {
 			if(response.data.status=="ok"){

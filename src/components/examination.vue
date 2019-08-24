@@ -52,13 +52,14 @@ export default {
             token:'',
             page:1,
             num:10,
-            currentPage:1
+            currentPage:1,
+            apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
         }
     },
     created (){
         var that=this
-         var date=new Date;
-       this.year=date.getFullYear()
+        var date=new Date;
+        this.year=date.getFullYear()
         this.uid=localStorage.getItem('uid')
         this.token=localStorage.getItem('token')
         this.getdata ()
@@ -67,7 +68,7 @@ export default {
     methods :{
        getdata (){
             var that=this
-            this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kaoshi/get_shijuan_list',
+            this.$axios.post(this.apiurl+'/kaoshi/get_shijuan_list',
                 qs.stringify({
                     year:this.year,
                     uid:this.uid,

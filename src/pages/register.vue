@@ -120,6 +120,7 @@ export default {
       cityjson:'',
       //区数据
       qu:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   created(){
@@ -822,7 +823,7 @@ export default {
       registerNow:function(){
           let that= this;
           let userinfo={name:this.username,id_card:this.IDcard,mobile:this.phone,gongzuodanwei:this.company, password:this.pw}
-          this.$axios.post("http://jixujiaoyu_api.songlongfei.club/user/reg",qs.stringify(userinfo)).then(response => {
+          this.$axios.post(this.apiurl+'/user/reg',qs.stringify(userinfo)).then(response => {
               if(response.data.status=='ok'){
                 console.log(response);
                 that.$message.success({message:"您已注册成功，请重新登录",duration:2000});

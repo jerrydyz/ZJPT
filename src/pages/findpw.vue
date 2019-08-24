@@ -58,7 +58,7 @@ export default {
       idcard:'',
       oldpw:'',
       newpw:'',
-
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     };
   },
   methods:{
@@ -77,7 +77,7 @@ export default {
             let userinfo={id_card:this.idcard, name:this.username}
             this.$axios({
             method: 'post',
-            url: 'http://jixujiaoyu_api.songlongfei.club/user/check_id_card',
+            url: this.apiurl+'/user/check_id_card',
             data: qs.stringify(userinfo) 
             }).then(function (response) {
                 if(response.data.data.check_res=="1"){
@@ -103,7 +103,7 @@ export default {
             let userinfo={id_card:this.idcard, name:this.username,password:this.newpw,}
             this.$axios({
             method: 'post',
-            url: 'http://jixujiaoyu_api.songlongfei.club/user/reset_password',
+            url: this.apiurl+'/user/reset_password',
             data: qs.stringify(userinfo) 
             }).then(function (response) {
                 if(response.data.status=="ok"){

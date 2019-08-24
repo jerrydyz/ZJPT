@@ -39,6 +39,7 @@ export default {
           englishTitle:'POLICIES REGULATIONS',
           list:''
       },
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   mounted() {
@@ -65,7 +66,7 @@ export default {
         let datanews={type_id:'2',page:this.page,num:'15'}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/news/get_news_list',
+          url: this.apiurl+'/news/get_news_list',
           data: qs.stringify(datanews) 
           }).then(function (response) {
             if(response.data.status=="ok"){

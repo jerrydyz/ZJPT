@@ -69,6 +69,7 @@ export default {
       typetabState:'',
       //yeartabState
       categorytabState:'',
+      apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
     }
   },
   mounted(){
@@ -76,7 +77,7 @@ export default {
       //获取课程年份 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_year',
+      url: this.apiurl+'/kecheng/get_kecheng_year',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程年份")
@@ -89,7 +90,7 @@ export default {
      //获取课程类型 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_type',
+      url: this.apiurl+'/kecheng/get_kecheng_type',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程类型")
@@ -102,7 +103,7 @@ export default {
       //获取课程分类 
     this.$axios({
       method: 'get',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_category',
+      url: this.apiurl+'/kecheng/get_kecheng_category',
       }).then(function (response) {
         if(response.data.status=="ok"){
           console.log("课程分类")
@@ -116,7 +117,7 @@ export default {
     let datacourse={year:'2019', type_id:'',category_id:''}
     this.$axios({
       method: 'post',
-      url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+      url: this.apiurl+'/kecheng/get_kecheng_list',
       data: qs.stringify(datacourse) 
       }).then(function (response) {
         if(response.data.status=="ok"){
@@ -166,7 +167,7 @@ export default {
         let datacourse={year:yearid, type_id:typeid,category_id:categoryid,page:'1',num:'10'}
         this.$axios({
           method: 'post',
-          url: 'http://jixujiaoyu_api.songlongfei.club/kecheng/get_kecheng_list',
+          url: this.apiurl+'/kecheng/get_kecheng_list',
           data: qs.stringify(datacourse) 
           }).then(function (response) {
             if(response.data.status=="ok"){

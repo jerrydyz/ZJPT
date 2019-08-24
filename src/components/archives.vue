@@ -40,7 +40,8 @@ export default {
             year:'',
             list:[],//返回来的数据
             name:'',
-            id_card:''
+            id_card:'',
+            apiurl:'http://jixujiaoyu_api.songlongfei.club:1012',
         }
     },
     created (){
@@ -63,7 +64,7 @@ export default {
             }
                 this.$axios({
                 method: 'post',
-                url: 'http://jixujiaoyu_api.songlongfei.club/dangan/get_user_year_xueshi',
+                url: this.apiurl+'/dangan/get_user_year_xueshi',
                 data:qs.stringify(data)
                 }).then(res => {
                     console.log(res)
