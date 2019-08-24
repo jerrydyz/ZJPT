@@ -91,11 +91,12 @@ export default {
        gostady (){
            var that=this
            for(var i=0;i<this.data.length;i++){
+               var id =this.data[i].shijuan_id
                 if(this.data[i].enable_kaoshi==1){
                     that.$router.push({
                         path:'/kaoshi',
                         query:{
-                            token:that.token
+                            shijuan_id:id
                         }
                     })
                 }
@@ -115,6 +116,7 @@ export default {
     .examination{
         width: 948px;
         // border:1px solid red;
+        cursor: default;
         .title{
             width: 100%;
             height: 55px;
@@ -145,6 +147,7 @@ export default {
                     color:#fff;
                     text-align: center;
                     width: 20%;
+                    
                      &.l1{
                         text-align: left;
                         width: 15%;

@@ -246,7 +246,7 @@ export default {
       time:'',
       uid: "",
       token: "",
-      shijuanid: "14",
+      shijuanid: "",
       data: [],
       tit: "",
       datalist1: [],
@@ -315,10 +315,11 @@ export default {
   created() {
     var that=this
     this.uid= localStorage.getItem('uid') 
-      // this.token=localStorage.getItem('token')
-    this.token =this.$route.query.token
+      this.token=localStorage.getItem('token')
+    // this.token =this.$route.query.token
+    this.shijuanid=this.$route.query.shijuan_id
     this.getshijuan();
-    this.getAnswer();
+    // this.getAnswer();
     this.times=setInterval(function(){
       that.usetime ()
     },1000)
