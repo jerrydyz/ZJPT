@@ -20,11 +20,11 @@
                  <p id="stime" v-html="time"></p>
                 </li>
                 <li @click="submitpapers">我要交卷</li>
-                <li>
+                <!-- <li>
                   <label>
                     <input type="checkbox" id="single_mod"  @click="ckecktype($event)"/>单题模式
                   </label>
-                </li>
+                </li> -->
               </ul>
               <!--答题卡-->
               <dl class="answer-sheet">
@@ -35,16 +35,7 @@
                   <dd v-for="(item,index) in datalist3"  @click="leftBtn($event)">{{index+datalist1.length+datalist2.length+datalist3.length+1}}</dd>
               </dl>
             </div>
-            
           </div>
-          <!-- <input type="hidden" name="reply_time" value="30" />
-          <div class="from">
-            <input type="hidden" name="anser_time" id="anser_time" value="38" />
-            <input type="hidden" name="exams_mode" value="2" />
-            <input type="hidden" name="paper_id" value="18" />
-            <input type="hidden" name="ch_id" value />
-            <input type="hidden" name="is_timeout" value="0" /> -->
-            <!--答题-->
             <div class="exercises-content">
               <ul class="test-paper-box">
                 <h3>{{tit}}</h3>
@@ -68,23 +59,23 @@
                       <p>{{key}}</p>
                     </li>
                   </ul>
-                  <div class="choice" v-show="choice">
+                  <div class="choice shiti_select_div" :shiti_id="item.id" :shiti_type="item.type" >
                     <ul>
                       <li v-for="(key,val) in xuanze">
-                        <label for="item.id"></label>
-                          <input class="anserItem" type="radio" :id="item.id" :name="item.id" :value="val"  @click="radio($event,item.id,index)" />
+                        <label ></label>
+                          <input class="anserItem" type="radio" :name="['danxuan_'+item.id]" :value="val"  @click="radio($event,item.id,index)" />
                           {{val}}
                         
                       </li>
                     </ul>
-                    <div class="collection">
+                    <div class="collection" style="display:none">
                       <span class="look" @click="lookjiexi(index)">
                         <small>查看解析</small>
                         <i class="icon iconlook"></i>
                       </span>
                     </div>
                   </div>
-                  <div>
+                  <div style="display:none">
                     <div class="fz" v-show="lookcollect">
                       <b>解析：</b>
                       <p>{{item.tips}}</p>
@@ -113,24 +104,24 @@
                   <p></p>
 
                   <ul class="answer">
-                    <li v-for="(key,val) in xuanze2">
+                    <li v-for="(key,val) in xuanze2" :key="val">
                       <b>{{val}}、</b>
-
                       <p>{{key}}</p>
                     </li>
+
                   </ul>
 
-                  <div class="choice">
+                  <div class="choice shiti_select_div"  :shiti_id="check.id" :shiti_type="check.type">
                     <ul>
                       <li v-for="(key,val) in xuanze2" >
-                        <label for="check.id">
-                          <input class="anserItem" :id="check.id" type="checkbox"  :name="check.id" :value="val" @click="checkbox($event,check.id,index)"/>
+                        <label  @click="checkbox($event,check.id,index+Math.random())">
+                          <input class="anserItem" type="checkbox"  :name="['duoxuan_'+check.id+'[]']" :value='val'/>
                         {{key}}
                         </label>
                       </li>
                     </ul>
 
-                    <div class="collection">
+                    <div class="collection" style="display:none">
                       <span class="look">
                         <small>查看解析</small>
                         <i class="icon iconlook"></i>
@@ -138,7 +129,7 @@
                     </div>
                   </div>
 
-                  <div class="fz">
+                  <div class="fz" style="display:none">
                     <b>解析：</b>
 
                     <p>{{check.tips}}</p>
@@ -171,17 +162,17 @@
                     </li>
                   </ul>
 
-                  <div class="choice">
+                  <div class="choice shiti_select_div"  :shiti_id="dan.id" :shiti_type="dan.type">
                     <ul>
                       <li v-for="(key,val) in xuanze3">
                         <label>
-                          <input class="anserItem" type="radio" :name="dan.id" :value="val" @click="panduan($event,dan.id)"/>
+                          <input class="anserItem" type="radio" :name="['panduan_'+dan.id]" :value="val"  @click="panduan($event,dan.id,index+Math.random()*10)"/>
                           {{key}}
                         </label>
                       </li>
                     </ul>
 
-                    <div class="collection">
+                    <div class="collection" style="display:none">
                       <span class="look">
                         <small>查看解析</small>
                         <i class="icon iconlook"></i>
@@ -189,7 +180,7 @@
                     </div>
                   </div>
 
-                  <div class="fz">
+                  <div class="fz" style="display:none">
                     <b>解析：</b>
 
                     <p>{{dan.tips}}</p>
@@ -200,14 +191,12 @@
 
                 <li
                   class="test-paper"
-                
-                  data-question-num="8"
                   v-for="(tian,index) in datalist4"
                   :key="tian.id"
                 >
                   <h5>
                     <small>{{index+datalist1.length+datalist2.length+datalist3.length+1}}</small>(
-                    <span>{{msg4}} {{score4}}</span> )
+                    <span>{{msg4}} {{score4}}分</span> )
                   </h5>
 
                   <p></p>
@@ -216,14 +205,13 @@
 
                   <p></p>
 
-                  <div class="choice">
+                  <div class="choice shiti_select_div"  :shiti_id="tian.id" :shiti_type="tian.type">
                     <ul class="blanks">
-                      <li v-for="(items,index) in xuanze4">
-                        <b>{{index+1}}</b>
-                        <input class="anserItem" type="text" :name="tian.id" v-model="raduo4" />
+                      <li v-for="knum in tian.kong_num">
+                            <input type="text" :shiti_tiankong="['tiankong_'+tian.id]">
                       </li>
                     </ul>
-                    <div class="collection">
+                    <div class="collection" style="display:none">
                       <span class="look">
                         <small>查看提示</small>
                         <i class="icon iconlook"></i>
@@ -231,9 +219,8 @@
                     </div>
                   </div>
 
-                  <div class="fz">
+                  <div class="fz" style="display:none">
                     <b>提示：</b>
-                    <p>{{items.tips}}</p>
                   </div>
                 </li>
               </ul>
@@ -250,16 +237,16 @@
 </template>
 
 <script>
+import $ from 'jquery'
 import qs from "qs";
 import Vue from 'vue'
 export default {
   data() {
     return {
       time:'',
-      uid: "45",
+      uid: "",
       token: "",
-      shijuanid: "13",
-      kaoshi_id: "2",
+      shijuanid: "14",
       data: [],
       tit: "",
       datalist1: [],
@@ -308,7 +295,7 @@ export default {
       id2:"",//单选题id
       raduo3:'',//判断题答案
       id3:"",//判断题id
-      raduo4:'',//填空题答案
+      // raduo4:'',//填空题答案
       id4:"",//填空题id,
       ss:0,
       mm:0,
@@ -321,20 +308,23 @@ export default {
       replay3:{},
       radio_id:'',
       radio_answer:'',
-      arrcheck:[]
-
+      checkeboxs:[],
+        times:''
     };
   },
   created() {
     var that=this
-    // this.uid= localStorage.getItem('uid') 
-    //   this.token=localStorage.getItem('token')
+    this.uid= localStorage.getItem('uid') 
+      // this.token=localStorage.getItem('token')
     this.token =this.$route.query.token
     this.getshijuan();
-    // this.getAnswer();
-    setInterval(function(){
+    this.getAnswer();
+    this.times=setInterval(function(){
       that.usetime ()
     },1000)
+    
+    //console.log($)
+    
   },
   watch: {},
   methods: {
@@ -351,29 +341,25 @@ export default {
      }   
       this.ss_str=(this.ss<10 ? "0" + this.ss : this.ss); //格式化秒数   
      this.mm_str=(this.mm<10 ? "0" + this.mm : this.mm); //格式化分钟数   
-      this.tMsg="考试用时: " + this.hh + "小时" + this.mm_str + "分" + this.ss_str + "秒"; //输出的字串   
-      this.time=this.tMsg;
+      // this.tMsg="考试用时: " + this.hh + "小时" + this.mm_str + "分" + this.ss_str + "秒"; //输出的字串   
+      this.tMsg= this.mm_str + "分" + this.ss_str + "秒";
+     this.time=this.tMsg;
     },
     //获取单选按钮的值
     radio(e,id,num) {
-      Vue.set(this.answers,num,{'shiti_id':id,'answer':e.target.value})
+      // Vue.set(this.answers,num,{'shiti_id':id,'answer':e.target.value})
     },
     //获取多选按钮的值
     checkbox(e,id,num) {
-      console.log(e.target.value,id,num)
-       this.arrcheck.push(e.target.value)
-       Vue.set(this.replay2,'shiti_id',id)
-      Vue.set(this.replay2,'answer',this.arrcheck)
-        // Vue.set(this.answers,num,{'shiti_id':id,'answer':arr})
-      this.answers.push(Object.assign({},this.replay2))
+      // console.log(e.target.value,id,num)
+      // console.log(this.checkeboxs)
+      // Vue.set(this.answers,num,{'shiti_id':id,'answer':this.checkeboxs})
     },
     //获取判断的值
-    panduan(e,id) {
-      console.log(e.target.value,id)
-        Vue.set(this.replay3,'shiti_id',id)
-      Vue.set(this.replay3,'answer',e.target.value)
-      this.answers.push(this.replay3)
-      console.log( this.answers3)
+    panduan(e,id,num) {
+      // console.log(e.target.value,id,num)
+      // Vue.set(this.answers,num,{'shiti_id':id,'answer':e.target.value})
+      // console.log(this.answers)
     },
    // 查看解析
     lookjiexi(dat) {
@@ -385,7 +371,7 @@ export default {
       var that = this;
       this.$axios
         .post(
-          "http://jixujiaoyu_api.songlongfei.club/kaoshi/get_shijuan_info",
+          "http://jixujiaoyu_api.songlongfei.club:1012/kaoshi/get_shijuan_info",
           qs.stringify({
             uid: this.uid,
             token: this.token,
@@ -437,7 +423,7 @@ export default {
                   that.xuanze3 = jsonobj3;
                   console.log("哈哈哈");
                   console.log(that.xuanze3);
-                  that.tips = that.datalist3[i].tips;
+                  // that.tips = that.datalist3[i].tips;
                 }
               }
               if (that.data[i].type == 4) {
@@ -450,6 +436,9 @@ export default {
                   that.H = that.datalist4[f].question;
                   var jsonobj4 = JSON.parse(G);
                   that.xuanze4 = jsonobj4;
+                  console.log("杜崇")
+                  console.log(that.xuanze4)
+                  console.log( that.datalist4)
                 }
               }
             }
@@ -464,7 +453,7 @@ export default {
       var that = this;
       this.$axios
         .post(
-          "http://jixujiaoyu_api.songlongfei.club/kaoshi/get_kaoshi_log_info",
+          "http://jixujiaoyu_api.songlongfei.club:1012/kaoshi/get_kaoshi_log_info",
           qs.stringify({
             uid: this.uid,
             token: this.token,
@@ -509,35 +498,28 @@ export default {
         uid: this.uid,
         token: this.token,
         user_shijuan_id: this.shijuanid,
-        use_time: "",
-        answers:this.answers
-        //  [
-          
-          // this.replay2,
-          // this.replay3
-          // {"shiti_id": "2","answer"},
-          // {"shiti_id": this.id2,"answer":this.raduo2},
-          // {'shiti_id': this.id3, 'answer': this.raduo3 },
-          // {'shiti_id': this.id4, 'answer': this.raduo4 }
-        // ]
+        use_time:this.time,
+        answers:this.shouji_input()
       };
-      var obj={"uid":40,
-               "token":"839e72df1873d05b7c51759cfc5ddc46",
-               "user_shijuan_id":"1",
-               "use_time":"10\u520622\u79d2",
-               "answers":[{"shiti_id":"2","answer":"A"},
-               {"shiti_id":"4","answer":["A","B","D"]},
-               {"shiti_id":"5","answer":"true"},
-               {"shiti_id":"8",
-               "answer":["kong1","kong2","kong3"]}]
-               }
-      console.log("张撒N")
-      console.log(data)
       this.$axios
-        .post("http://jixujiaoyu_api.songlongfei.club",qs.stringify(data))
+        .post("http://jixujiaoyu_api.songlongfei.club:1012/kaoshi/submit_shijuan",data)
         .then(res => {
           console.log("提交考试试卷");
           console.log(res);
+          if(res.data.status=='ok'){
+            clearInterval(that.times)
+            this.time="考试结束"
+            var kaoshi_id=res.data.data.kaoshi_id
+            console.log("长时间吃饭你说的")
+            console.log(kaoshi_id)
+            this.$router.push({
+              path:'/submit',
+              query:{
+                 kaoshi_id:kaoshi_id
+              }
+            })
+           
+          }
         });
     },
     //单体模式
@@ -550,6 +532,57 @@ export default {
   //左侧按钮
     leftBtn (e){
        console.log(e.target.innerHTML)
+      
+    },
+    shouji_input(){
+      //$(".")
+      var json_data = new Array();
+      //console.log($(".shiti_select_div"));
+      $(".shiti_select_div").each(function(k,v){
+        //alert(k);
+        var shiti_id = $(v).attr("shiti_id");
+        var shiti_type = $(v).attr("shiti_type");
+        switch(shiti_type){
+          case "1"://单选
+            var val = $("input[name='danxuan_"+shiti_id+"']:checked").val();
+            if(val == undefined){
+              val = "";
+            }
+            console.log(shiti_id + "=" + val);
+            var json_data_item = {"shiti_id":shiti_id,"answer":val};
+            json_data.push(json_data_item);
+            break;
+          case "2"://多选
+            var answer = new Array();
+                  $('input[name="duoxuan_'+shiti_id+'[]"]:checked').each(function(){ 
+                          answer.push($(this).val()); 
+                          });      
+            var json_data_item = {"shiti_id":shiti_id,"answer":answer};
+            json_data.push(json_data_item);                               
+             break;
+          case "3"://判断
+            var val = $("input[name='panduan_"+shiti_id+"']:checked").val();
+            if(val == undefined){
+              val = "";
+            }
+            console.log(shiti_id + "=" + val);
+            var json_data_item = {"shiti_id":shiti_id,"answer":val};
+            json_data.push(json_data_item);          
+             break;
+          case "4"://填空
+            var answer = new Array();
+                  $('input[shiti_tiankong="tiankong_'+shiti_id+'"]').each(function(kk,vv){ 
+                      answer.push($(vv).val()); 
+                      });      
+            var json_data_item = {"shiti_id":shiti_id,"answer":answer};
+            json_data.push(json_data_item);             
+             break;
+          default:
+            console.log("错误类型编号:"+shiti_type);
+        }
+      });
+      //console.log(json_data);
+       return json_data;
     }
    
   }
