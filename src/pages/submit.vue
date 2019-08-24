@@ -53,24 +53,24 @@
             <h4>试题解析</h4>
             <!--单选题-->
             <!-- 单多选 -->
-            <li class="test-paper wrong" v-for="(item,index) in datalist1"  :key="item.id" >
+            <li class="test-paper wrong" v-for="(item,index) in datalist1"  >
               <h5>
                 <small>{{index+1}}</small>（单选题）
               </h5>
               <p></p>
               <p>{{item.question}}</p>
               <p></p>
-              <ul class="answer">
-                   <li v-for="(key,val) in xuanze">
+              <ul class="answer" >
+                   <li  v-for="(key,val) in xuanze">
                       <b>{{val}}、</b>
                       <p>{{key}}</p>
                     </li>
               </ul>
               <div class="choice"></div>
               <div class="lu-ms-tim block clearfix">
-                <em class="bgco" :id="['shiti_'+item.id]">
+                <em class="bgco">
                   您的答案
-                  <strong>{{answer==''?'未做答':answer}}</strong>
+                  <strong>{{item.user_answer['answer']==""?"未做答":item.user_answer['answer']}}</strong>
                 </em>
                 <em>
                   正确答案
@@ -84,9 +84,9 @@
             </li>
            
             <!-- 多选 -->
-            <li class="test-paper wrong"  v-for="(check,index) in datalist2"  :key="check.id">
+            <li class="test-paper wrong"  v-for="(check,index) in datalist2"  >
               <h5>
-                <small>{{index+datalist1.length+1}}</small>（多选题）
+                <small>{{index+1}}</small>（多选题）
               </h5>
               <p></p>
               <p>{{check.question}}</p>
@@ -102,13 +102,13 @@
                 
               </div>
               <div class="lu-ms-tim block clearfix">
-                <em class="bgco" >
+                <em class="bgco"  >
                   您的答案
-                  <strong>{{answer2.join("")==''?"未做答":answer2.join("")}}</strong>
+                  <strong>{{check.user_answer['answer'].join(" ")==""?"未做答":check.user_answer['answer'].join(" ")}}</strong>
                 </em>
                 <em>
                   正确答案
-                  <strong>{{check.answer.join('')}}</strong>
+                  <strong>{{check.answer.join(" ")}}</strong>
                 </em>
               </div>
               <div class="fz block">
@@ -117,9 +117,9 @@
               </div>
             </li>
             <!-- 判断题 -->
-            <li class="test-paper wrong" v-for="(dan,index) in datalist3"  :key="dan.id">
+            <li class="test-paper wrong" v-for="(dan,index) in datalist3" >
               <h5>
-                <small>{{index+datalist1.length+datalist2.length+1}}</small>（判断题）
+                <small>{{index+1}}</small>（判断题）
               </h5>
               <p></p>
               <p>{{dan.question}}</p>
@@ -134,7 +134,7 @@
               <div class="lu-ms-tim block clearfix">
                 <em class="bgco">
                   您的答案
-                  <strong>{{answer3==""?"未做答":answer3}}</strong>
+                  <strong>{{dan.user_answer['answer']==""?"未做答":dan.user_answer['answer']}}</strong>
                 </em>
                 <em >
                   正确答案
@@ -149,7 +149,7 @@
             <!-- 填空 -->
             <li class="test-paper wrong"  v-for="(tian,index) in datalist4" :key="tian.id" >
               <h5>
-                <small>{{index+datalist1.length+datalist2.length+datalist3.length+1}}</small>（填空题）
+                <small>{{index+1}}</small>（填空题）
               </h5>
               <p></p>
               <p>{{tian.question}}</p>
@@ -162,7 +162,7 @@
                   <ul>
                     <li class="co">
                       <span style="font-size:30px;font-weight:bold">
-                       {{answer4.join(" ")==""?"未做答":answer4.join(" ")}}
+                       {{tian.user_answer['answer'].join(" ")==" "?"未做答":tian.user_answer['answer'].join(" ")}}
                       </span>
                     </li>
                   </ul>
@@ -172,7 +172,7 @@
                   <ul>
                     <li>
                       <span>
-                        {{tian.answer}}
+                        {{tian.answer.join(" ")}}
                       </span>
                     </li>
                   </ul>
@@ -230,7 +230,10 @@ export default {
       D: "",
       F: "",
       H: "",
-      
+      bankuai:[],
+      shiti:[],
+      user_answer:{},
+      shiti_arr:[]
 
     };
   },
@@ -273,9 +276,58 @@ export default {
             //  console.log(that.datalist)
              console.log(JSON.parse(that.datalist))
              that.jsondata=JSON.parse(that.datalist)
-            
-
+             ///////////////////////////////
+               console.log("start");
+            that.bankuai = res.data.data.shijuan.shijuan_bankuai;
+            var answer = JSON.parse(res.data.data.answer);
+            that.num=answer.length
+            console.log(that.bankuai);
+            console.log(answer);
+            for(var i=0;i<that.bankuai.length;i++){
+              that.shiti_arr = that.bankuai[i]['shiti'];
+              for(var j=0;j<that.shiti_arr.length;j++){
+                var shiti_id = that.shiti_arr[j]['id'];
+                for(var n=0;n<answer.length;n++){
+                  if(answer[n]['shiti_id'] == shiti_id){
+                      that.bankuai[i]['shiti'][j]["user_answer"] = answer[n];
+                    break;
+                  }
+                }
+                 if(that.shiti_arr[j].type==1){
+                   var A = that.shiti_arr[j].answer_options;
+                   var jsonobj = JSON.parse(A);
+                   that.xuanze = jsonobj;
+                   that.datalist1 = that.bankuai[i]['shiti'];
+                 }
+                  if(that.shiti_arr[j].type==2){
+                   var C = that.shiti_arr[j].answer_options;
+                   var jsonobj2 = JSON.parse(C);
+                   that.xuanze2 = jsonobj2;
+                    that.datalist2 = that.bankuai[i]['shiti'];
+                 }
+                 if(that.shiti_arr[j].type==3){
+                   var E = that.shiti_arr[j].answer_options;
+                   var jsonobj3 = JSON.parse(E);
+                   that.xuanze3 = jsonobj3;
+                     that.datalist3 = that.bankuai[i]['shiti'];
+                 }
+                 if(that.shiti_arr[j].type==4){
+                   var G = that.shiti_arr[j].answer_options;
+                   var jsonobj4 = JSON.parse(G);
+                   that.xuanze4 = jsonobj4;
+                     that.datalist4 = that.bankuai[i]['shiti'];
+                 }
+              }
+           
+            }
+            console.log("杜崇")
+             console.log(that.bankuai);
+            console.log("end");
+             ///////////////////////////
+             /*
             for(var i=0; i<that.data.length;i++){
+              var shiti_arr = that.data[i];//试题
+              
             for (var i = 0; i < that.data.length; i++) {
               if (that.data[i].type == 1) {
                 that.datalist1 = that.data[i].shiti;
@@ -341,7 +393,7 @@ export default {
               }
             }
         } 
-          
+          */
           }
         });
     },
