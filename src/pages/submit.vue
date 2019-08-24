@@ -12,397 +12,157 @@
     <div class="content w">
       <div class="exam-score">
         <div class="exam-score-head">考试结果</div>
-        <h3>国际商务与国际营销</h3>
-        <p>交卷时间：2019-08-16 12:26:15</p>
+        <h3>{{title}}</h3>
+        <p>交卷时间：{{time}}</p>
         <ul class="clearfix">
           <li class="bg01">
             <h5>得分</h5>
-            <p>0</p>
+            <p>{{score}}</p>
           </li>
           <li class="bg02">
             <h5>用时</h5>
-            <p>30分0秒</p>
+            <p>{{usetime}}</p>
           </li>
           <li class="bg03">
             <h5>完成率</h5>
-            <p>0%</p>
+            <p>{{getnum}}</p>
           </li>
           <li class="bg04">
             <h5>错题数量</h5>
-            <p>8</p>
+            <p>{{error_num}}</p>
           </li>
         </ul>
       </div>
-      <div class="screen-outer ">
-        <div class="score-left clearfix" style="position: static; top: 20px; bottom: auto; margin-top: 0px;">
+      <div class="screen-outer">
+        <div
+          class="score-left clearfix"
+          style="position: static; top: 20px; bottom: auto; margin-top: 0px;"
+        >
           <!--错题列表-->
           <div class="error-exam fl">
             <dl class="clearfix">
               <dt>错题记录</dt>
-             <dd>1</dd>
-             <dd>2</dd>
-             <dd>3</dd>
-             <dd>4</dd>
-             <dd>5</dd>
-             <dd>6</dd>
-             <dd>7</dd>
-             <dd>8</dd>
+              <dd v-for="n in num">{{n}}</dd>
             </dl>
           </div>
         </div>
         <!--答题-->
         <div class="score-content fl">
-          <ul class="test-paper-box">
+          <ul class="test-paper-box" style="padding-left:10px;box-sizing:border-box" 
+          >
             <h4>试题解析</h4>
             <!--单选题-->
             <!-- 单多选 -->
-            <li class="test-paper wrong" id="ex64">
+            <li class="test-paper wrong" v-for="(item,index) in datalist1"  :key="item.id" >
               <h5>
-                <small>1</small>（单选题）
+                <small>{{index+1}}</small>（单选题）
               </h5>
               <p></p>
-              <p>1+8=？</p>
+              <p>{{item.question}}</p>
               <p></p>
               <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>3</p>
-                </li>
-                <li>
-                  <b>B、</b>
-                  <p>9</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>23</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>32</p>
-                </li>
+                   <li v-for="(key,val) in xuanze">
+                      <b>{{val}}、</b>
+                      <p>{{key}}</p>
+                    </li>
               </ul>
-              <div class="choice">
-              </div>
+              <div class="choice"></div>
               <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
+                <em class="bgco" :id="['shiti_'+item.id]">
                   您的答案
-                  <strong>未作答</strong>
+                  <strong>{{answer==''?'未做答':answer}}</strong>
                 </em>
                 <em>
                   正确答案
-                  <strong>B</strong>
+                  <strong>{{item.answer}}</strong>
                 </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
               </div>
               <div class="fz block">
                 <b>解析：</b>
-                <p>小学老师教的8</p>
+                <p>{{item.jiexi}}</p>
               </div>
             </li>
-            <li class="test-paper wrong" id="ex64">
+           
+            <!-- 多选 -->
+            <li class="test-paper wrong"  v-for="(check,index) in datalist2"  :key="check.id">
               <h5>
-                <small>1</small>（单选题）
+                <small>{{index+datalist1.length+1}}</small>（多选题）
               </h5>
               <p></p>
-              <p>1+8=？</p>
+              <p>{{check.question}}</p>
               <p></p>
               <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>3</p>
+                <li v-for="(key,val) in xuanze2" :key="val">
+                  <b>{{val}}、</b>
+                  <p>{{key}}</p>
                 </li>
-                <li>
-                  <b>B、</b>
-                  <p>9</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>23</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>32</p>
-                </li>
+                
               </ul>
               <div class="choice">
+                
               </div>
               <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
+                <em class="bgco" >
                   您的答案
-                  <strong>未作答</strong>
+                  <strong>{{answer2.join("")==''?"未做答":answer2.join("")}}</strong>
                 </em>
                 <em>
                   正确答案
-                  <strong>B</strong>
+                  <strong>{{check.answer.join('')}}</strong>
                 </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
               </div>
               <div class="fz block">
                 <b>解析：</b>
-                <p>小学老师教的8</p>
+                <p>{{check.jiexi}}</p>
               </div>
             </li>
-            <li class="test-paper wrong" id="ex64">
+            <!-- 判断题 -->
+            <li class="test-paper wrong" v-for="(dan,index) in datalist3"  :key="dan.id">
               <h5>
-                <small>1</small>（单选题）
+                <small>{{index+datalist1.length+datalist2.length+1}}</small>（判断题）
               </h5>
               <p></p>
-              <p>1+8=？</p>
+              <p>{{dan.question}}</p>
               <p></p>
               <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>3</p>
-                </li>
-                <li>
-                  <b>B、</b>
-                  <p>9</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>23</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>32</p>
-                </li>
+                 <li v-for="(key,val) in xuanze3">
+                      <b>{{key}}</b>
+                    </li>
               </ul>
               <div class="choice">
               </div>
               <div class="lu-ms-tim block clearfix">
                 <em class="bgco">
                   您的答案
-                  <strong>未作答</strong>
+                  <strong>{{answer3==""?"未做答":answer3}}</strong>
                 </em>
-                <em>
+                <em >
                   正确答案
-                  <strong>B</strong>
+                  <strong>{{dan.answer}}</strong>
                 </em>
-              </div>
-              <div class="block kd" >
-                <b>考点：</b>变量
               </div>
               <div class="fz block">
                 <b>解析：</b>
-                <p>小学老师教的8</p>
-              </div>
-            </li>
-            <li class="test-paper wrong" id="ex64">
-              <h5>
-                <small>1</small>（单选题）
-              </h5>
-              <p></p>
-              <p>1+8=？</p>
-              <p></p>
-              <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>3</p>
-                </li>
-                <li>
-                  <b>B、</b>
-                  <p>9</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>23</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>32</p>
-                </li>
-              </ul>
-              <div class="choice">
-              </div>
-              <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
-                  您的答案
-                  <strong>未作答</strong>
-                </em>
-                <em>
-                  正确答案
-                  <strong>B</strong>
-                </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
-              </div>
-              <div class="fz block">
-                <b>解析：</b>
-                <p>小学老师教的8</p>
-              </div>
-            </li>
-            <li class="test-paper wrong" id="ex64">
-              <h5>
-                <small>1</small>（单选题）
-              </h5>
-              <p></p>
-              <p>1+8=？</p>
-              <p></p>
-              <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>3</p>
-                </li>
-                <li>
-                  <b>B、</b>
-                  <p>9</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>23</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>32</p>
-                </li>
-              </ul>
-              <div class="choice">
-              </div>
-              <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
-                  您的答案
-                  <strong>未作答</strong>
-                </em>
-                <em>
-                  正确答案
-                  <strong>B</strong>
-                </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
-              </div>
-              <div class="fz block">
-                <b>解析：</b>
-                <p>小学老师教的8</p>
-              </div>
-            </li>
-            <!-- 单多选 -->
-            <li class="test-paper wrong" id="ex76">
-              <h5>
-                <small>6</small>（多选题）
-              </h5>
-              <p></p>
-              <p>以下城市那些是中国古代的都城？</p>
-              <p></p>
-              <ul class="answer">
-                <li>
-                  <b>A、</b>
-                  <p>北京</p>
-                </li>
-                <li>
-                  <b>B、</b>
-                  <p>南京</p>
-                </li>
-                <li>
-                  <b>C、</b>
-                  <p>洛阳</p>
-                </li>
-                <li>
-                  <b>D、</b>
-                  <p>开封</p>
-                </li>
-              </ul>
-              <div class="choice">
-                <div class="collection">
-                  <span class="like" style="display:none;" data-question_id="76" data-action="1">
-                    <i class="icon iconlike"></i>
-                    <small>收藏题目</small>
-                  </span>
-                </div>
-              </div>
-              <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
-                  您的答案
-                  <strong>未作答</strong>
-                </em>
-                <em>
-                  正确答案
-                  <strong>ABCD</strong>
-                </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
-              </div>
-              <div class="fz block">
-                <b>解析：</b>
-                <p>中国的历史古都...</p>
-              </div>
-            </li>
-            <!-- 单多选 -->
-            <li class="test-paper wrong" id="ex77">
-              <h5>
-                <small>7</small>（判断题）
-              </h5>
-              <p></p>
-              <p>中国的首都是北京吗？</p>
-              <p></p>
-              <ul class="answer">
-                <li>
-                  <b>A、</b>正确
-                </li>
-                <li>
-                  <b>B、</b>错误
-                </li>
-              </ul>
-              <div class="choice">
-                <div class="collection">
-                  <span class="like" style="display:none;" data-question_id="77" data-action="1">
-                    <i class="icon iconlike"></i>
-                    <small>收藏题目</small>
-                  </span>
-                </div>
-              </div>
-              <div class="lu-ms-tim block clearfix">
-                <em class="bgco">
-                  您的答案
-                  <strong>未作答</strong>
-                </em>
-                <em>
-                  正确答案
-                  <strong>A</strong>
-                </em>
-              </div>
-              <div class="block kd">
-                <b>考点：</b>变量
-              </div>
-              <div class="fz block">
-                <b>解析：</b>
-                <p>首都北京</p>
+                <p>{{dan.jiexi}}</p>
               </div>
             </li>
             <!-- 填空 -->
-            <li class="test-paper wrong" id="ex78">
+            <li class="test-paper wrong"  v-for="(tian,index) in datalist4" :key="tian.id" >
               <h5>
-                <small>8</small>（填空题）
+                <small>{{index+datalist1.length+datalist2.length+datalist3.length+1}}</small>（填空题）
               </h5>
               <p></p>
-              <p>_________中国的首都，_________是河南的省会</p>
+              <p>{{tian.question}}</p>
               <p></p>
               <div class="choice">
-                <div class="collection">
-                  <span class="like" style="display:none;" data-question_id="78" data-action="1">
-                    <i class="icon iconlike"></i>
-                    <small>收藏题目</small>
-                  </span>
-                </div>
               </div>
               <div class="lu-ms-tim block clearfix">
                 <em class="blank-cls bgco">
                   您的答案
                   <ul>
                     <li class="co">
-                      <span>
-                        <b>1</b>、未作答
-                      </span>
-                    </li>
-                    <li class="co">
-                      <span>
-                        <b>2</b>、未作答
+                      <span style="font-size:30px;font-weight:bold">
+                       {{answer4.join(" ")==""?"未做答":answer4.join(" ")}}
                       </span>
                     </li>
                   </ul>
@@ -412,23 +172,15 @@
                   <ul>
                     <li>
                       <span>
-                        <b>1</b>、北京
-                      </span>
-                    </li>
-                    <li>
-                      <span>
-                        <b>2</b>、郑州
+                        {{tian.answer}}
                       </span>
                     </li>
                   </ul>
                 </em>
               </div>
-              <div class="block kd">
-                <b>考点：</b>变量
-              </div>
               <div class="fz block">
                 <b>解析：</b>
-                <p>省会判断</p>
+                <p>{{tian.jiexi}}</p>
               </div>
             </li>
           </ul>
@@ -439,37 +191,162 @@
 </template>
 
 <script>
-import qs from 'qs'
+import qs from "qs";
+import Vue from 'vue'
 export default {
   name: "submit",
-  data (){
+  data() {
     return {
-      paperdata:[]
-        
-    }
-  },
-  created (){
-    this.getpaperdata ()
+      paperdata: [],
+      uid: localStorage.getItem('uid'),
+      token: localStorage.getItem('token'),
+      kaoshi_id: "",
+      datalist:'',
+      data:[],
+      title:'',
+      usetime:'',
+      time:'',
+      title:"",
+      error_num:'',
+      empty_num:'',
+      right_num:'',
+      score:'',
+       xuanze: {},
+      xuanze2: {},
+      xuanze3: {},
+      xuanze4: {},
+      datalist1: [],
+      datalist2: [],
+      datalist3: [],
+      datalist4: [],
+      jsondata:[],
+      answer:'',
+      answer2:[],
+      answer3:'',
+      answer4:[],
+      answer5:[],
+      num:'',
+       B: "",
+      D: "",
+      F: "",
+      H: "",
+      
 
+    };
   },
-  methods:{
-       getpaperdata (){
-          var that=this
-          this.$axios.post('http://jixujiaoyu_api.songlongfei.club/kaoshi/get_kaoshi_log',
-            qs.stringify({
-                 uid: "45",
-                 token: "641ec4adcc15913536861f9f5596ca48",
-            })
-          ).then(res =>{
-            console.log("获取考试记录")
-            console.log(res)
-            if(res.data.status=="ok"){
-                 that.paperdata=that.paperdata.concat(res.data.data)
+  computed:{
+     getnum (){
+        return this.right_num/this.num
+     }
+  },
+  created() {
+    this.kaoshi_id = this.$route.query.kaoshi_id;
+    this.getpaperdata();
+     
+  },
+  methods: {
+    getpaperdata() {
+      var that = this;
+      var data = {
+        uid: this.uid,
+        token: this.token,
+        kaoshi_id: this.kaoshi_id
+      };
+      this.$axios
+        .post(
+          "http://jixujiaoyu_api.songlongfei.club:1012/kaoshi/get_kaoshi_log_info",
+          qs.stringify(data)
+        )
+        .then(res => {
+          console.log(res);
+          if(res.data.status=="ok"){
+             that.datalist=res.data.data.answer
+             that.data=res.data.data.shijuan.shijuan_bankuai
+             that.title=res.data.data.shijuan.title
+             that.time=res.data.data.time
+             that.usetime=res.data.data.use_time
+             that.empty_num=res.data.data.empty_num
+             that.error_num=res.data.data.error_num
+             this.right_num=res.data.data.right_num
+             that.score=res.data.data.score
+            //  that.getshijuan ()
+            //  console.log(that.datalist)
+             console.log(JSON.parse(that.datalist))
+             that.jsondata=JSON.parse(that.datalist)
+            
+
+            for(var i=0; i<that.data.length;i++){
+            for (var i = 0; i < that.data.length; i++) {
+              if (that.data[i].type == 1) {
+                that.datalist1 = that.data[i].shiti;
+                for (var j = 0; j < that.datalist1.length; j++) {
+                  var A = that.datalist1[j].answer_options;
+                  that.B = that.datalist1[j].question;
+                  var jsonobj = JSON.parse(A);
+                  that.xuanze = jsonobj;
+                  that.num=that.jsondata.length
+                   for(var e=0;e<that.jsondata.length;e++){
+                    if(that.datalist1[j].id===that.jsondata[e].shiti_id){
+                        that.answer=that.jsondata[e].answer
+                    }
+                 }
+                 }
+              }
+              if (that.data[i].type == 2) {
+                that.datalist2 =that.data[i].shiti;
+                for (var k = 0; k < that.datalist2.length; k++) {
+                  var C = that.datalist2[k].answer_options;
+                  that.D = that.datalist2[k].question;
+                  var jsonobj2 = JSON.parse(C);
+                  that.xuanze2 = jsonobj2;
+                   for(var z=0;z<that.jsondata.length;z++){
+                    if(that.datalist2[k].id===that.jsondata[z].shiti_id){
+                        that.answer2=that.jsondata[z].answer
+                    }
+                 }
+                }
+                
+              }
+              if (that.data[i].type == 3) {
+                that.datalist3 = that.data[i].shiti;
+                for (var h = 0; h < that.datalist3.length; h++) {
+                  var E = that.datalist3[h].answer_options;
+                  that.F = that.datalist3[h].question;
+                  var jsonobj3 = JSON.parse(E);
+                  that.xuanze3 = jsonobj3;
+                  // that.tips = that.datalist3[i].tips;
+                   for(var w=0;w<that.jsondata.length;w++){
+                    if(that.datalist3[h].id===that.jsondata[w].shiti_id){
+                        that.answer3=that.jsondata[w].answer
+                    }
+                 }
+                }
+                
+              }
+              if (that.data[i].type == 4) {
+                that.datalist4 = that.data[i].shiti;
+                console.log(that.datalist4)
+                for (var f = 0; f < that.datalist4.length; f++) {
+                  var G = that.datalist4[f].answer_options;
+                  that.H = that.datalist4[f].question;
+                  var jsonobj4 = JSON.parse(G);
+                  that.xuanze4 = jsonobj4;
+                    for(var x=0;x<that.jsondata.length;x++){
+                    if(that.datalist4[f].id===that.jsondata[x].shiti_id){
+                        that.answer4=that.jsondata[x].answer
+                    }
+                 }
+                }
+               
+              }
             }
-           
-
-          }) 
-       }
+        } 
+          
+          }
+        });
+    },
+    
+    
   }
 };
 </script>
@@ -497,7 +374,6 @@ export default {
     }
   }
   .content {
-   
     .exam-score {
       display: inline-block;
       width: 100%;
@@ -552,143 +428,140 @@ export default {
         }
       }
     }
-    .screen-outer{
-        .score-left {
-            width: 280px;
-            background: #fff;
+    .screen-outer {
+      .score-left {
+        width: 280px;
+        background: #fff;
+        float: left;
+        .error-exam {
+          width: 100%;
+          box-shadow: 5px 5px 5px #ccc;
+          border-radius: 5px;
+          padding-bottom: 40px;
+          box-sizing: border-box;
+          dt {
+            width: 100%;
+            height: 60px;
+            text-align: center;
+            line-height: 60px;
+            color: #e82f24;
+            font-size: 18px;
+            border-bottom: 1px solid #e82f24;
+            margin-bottom: 20px;
+          }
+          dd {
             float: left;
-        .error-exam{
-              width: 100%;
-              box-shadow: 5px 5px 5px #ccc;
-              border-radius: 5px;
-              padding-bottom: 40px;
-              box-sizing: border-box;
-              dt{
-                  width: 100%;
-                  height: 60px;
-                  text-align: center;
-                  line-height: 60px;
-                  color: #E82F24;
-                  font-size: 18px;
-                  border-bottom: 1px solid #E82F24;
-                  margin-bottom: 20px;
-              }  
-              dd{
-                  float: left;
-                  color: #ea6c6c;
-                  border: 1px solid #ea6c6c;
-                  width: 40px;
-                  height: 40px;
-                  line-height: 40px;
-                  text-align: center;
-                  border-radius: 5px;
-                  margin:3px;
-              }
-         } 
+            color: #ea6c6c;
+            border: 1px solid #ea6c6c;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            border-radius: 5px;
+            margin: 3px;
+          }
         }
-        .score-content{
-                width: 890px;
-                margin-left:15px;
-                background-color: #fff;
-            .test-paper-box {
-              h4{
-                  color: #656565;
-                  font-size: 16px;
-                  border-left: 5px solid #E82F24;
-                  padding: 0 16px;
-                  margin-bottom: 22px;
-              }
-              .test-paper {
-                border-top: 1px solid #eee;
+      }
+      .score-content {
+        width: 890px;
+        margin-left: 15px;
+        background-color: #fff;
+        .test-paper-box {
+          h4 {
+            color: #656565;
+            font-size: 16px;
+            border-left: 5px solid #e82f24;
+            padding: 0 16px;
+            margin-bottom: 22px;
+          }
+          .test-paper {
+            border-top: 1px solid #eee;
+            display: inline-block;
+            width: 100%;
+            h5 {
+              font-size: 14px;
+              color: #e82f24;
+              line-height: 74px;
+              small {
                 display: inline-block;
-                width: 100%;
-                h5{
-                  font-size: 14px;
-                color: #E82F24;
-                line-height: 74px;
-                small{
-                  display: inline-block;
-                  width: 24px;
-                  height: 24px;
-                  line-height: 24px;
-                  text-align: center;
-                  background: #E82F24;
-                  color: #fff;
-                  border-radius: 50%;
-                }
+                width: 24px;
+                height: 24px;
+                line-height: 24px;
+                text-align: center;
+                background: #e82f24;
+                color: #fff;
+                border-radius: 50%;
+              }
             }
-            P{
+            p {
               font-size: 16px;
               color: #656565;
               display: inline-block;
             }
-              .answer {
-                  margin-left: 40px;
-                  li{
-                        color: #656565;
-                    font-size: 14px;
-                    margin-top: 25px;
-                    b{
-                      color: #9e9e9e;
-                     font-size: 14px;
-                    }
-                    P{
-                          font-size: 16px;
-                      color: #656565;
-                      display: inline-block;
-                    }
-                  }
-              }
-               .choice {
-                  width: 100%;
-                  padding: 20px 0;
+            .answer {
+              margin-left: 40px;
+              li {
+                color: #656565;
+                font-size: 14px;
+                margin-top: 25px;
+                b {
+                  color: #9e9e9e;
                   font-size: 14px;
+                }
+                p {
+                  font-size: 16px;
                   color: #656565;
-                  box-sizing: border-box;
+                  display: inline-block;
+                }
               }
+            }
+            .choice {
+              width: 100%;
+              padding: 20px 0;
+              font-size: 14px;
+              color: #656565;
+              box-sizing: border-box;
+            }
             .lu-ms-tim {
               color: #51cb96;
               // display: none;
-              em{
-                    float: left;
+              em {
+                float: left;
                 padding: 5px 50px;
                 font-size: 14px;
                 background: #f0fefa;
                 text-align: center;
                 line-height: 36px;
                 box-sizing: border-box;
-                strong{
-                      display: block;
-                      font-size: 30px;
+                strong {
+                  display: block;
+                  font-size: 30px;
                 }
-               
               }
-               .bgco {
+              .bgco {
                 background: #f7f7f7;
                 color: #6565;
-                }
-               
-          }
-          .block{
-                display: block!important;
-                padding-left:10px;
-                box-sizing: border-box;
-              b{
-                  color: #ea6c6c;
-                 font-size: 12px;
-                }
-          }
-          .fz{
-             font-size: 14px;
-             margin: 20px 20px 30px;
-          }
-          .kd{
-            margin:20px;
-          }
+              }
             }
-            
-          }    
-         }
+            .block {
+              display: block !important;
+              padding-left: 10px;
+              box-sizing: border-box;
+              b {
+                color: #ea6c6c;
+                font-size: 12px;
+              }
+            }
+            .fz {
+              font-size: 14px;
+              margin: 20px 20px 30px;
+            }
+            .kd {
+              margin: 20px;
+            }
+          }
+        }
+      }
     }
   }
 }
